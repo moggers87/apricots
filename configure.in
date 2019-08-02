@@ -44,7 +44,7 @@ dnl almost the same like KDE_SET_PEFIX but the path is /usr/local
 dnl
 unset CDPATH
 dnl make /usr/local the default for the installation
-AC_PREFIX_DEFAULT(/usr/local)
+AC_PREFIX_DEFAULT(/usr)
 
 if test "x$prefix" = "xNONE"; then
   prefix=$ac_default_prefix
