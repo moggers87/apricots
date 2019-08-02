@@ -1,0 +1,91 @@
+* 13/08/2003 Mark Snellgrove 0.2.6
+
+- Version 0.2.6 released
+
+* 08/08/2003 Mark Snellgrove
+
+- Sanity check on configuration options now applied
+- Configuration from apricots.cfg extended to all options at runtime
+- Portability Bugfixes applied to getConfig()
+- Mouse pointer now hidden during game
+- Major code cleanup in sampleio class. Looks tidier, but BUG1 still present
+- BORLAND specific options in apricots.cpp found to be redundant - Removed.
+- Game speed now properly regulated by TICK_INTERVAL parameter (Fixes BUG2)
+
+* 01/08/2003 Judebert
+
+- Limited Configuration read at runtime from apricots.cfg
+- Windows port of OpenAL audio routines in sampleio class
+- Cygwin compiler flag now checked on main
+
+* 30/07/2003 Mark Snellgrove 0.2.5
+
+- Version 0.2.5 released
+- File configure.in now checks for OpenAL (thanks to Jens Thiele)
+- Now using ANSI-C++ standard includes
+- Header cstdlib included in SDLfont.h
+- Functions max() and min() replaced by limit() in function draw_dither()
+- Windows specific options _WIN32 changed to Borland specific BORLAND in apricots.cpp
+- Several loop variables renamed to allow for evil non-ANSI scoping rules in MSVC++
+- Hardware surfaces now used (SDL_HWSURFACE) replacing software surfaces
+- New struct smoketype declared in apricots.h
+- Smoke list now changed to be of type linkedlist <smoketype>
+- Bugfix so smoke now obeys GAME_SPEED parameter correctly
+- Bugfix so bomb y-velocity now obeys GAME_SPEED parameter correctly
+- AI modified to account for change in bomb trajectory due to above
+- Bugfix now inputs font file with ios::binary flag set
+- Options in init_gamedata() function are now fully commented
+- Global parameter GAME_SPEED reduced to 0.2
+
+* 26/07/2003 Mark Snellgrove 0.2.4
+
+- Version 0.2.4 released
+- Audio via OpenAL reactivated (via conditional compiler option)
+
+* 24/07/2003 Mark Snellgrove 0.2.3
+
+- Version 0.2.3 released
+- SDLfont palettes and masks pre-rendered for speedup
+
+* 17/07/2003 Mark Snellgrove
+
+- SDLfont class for rendering fonts in SDL implemented (slow)
+
+* 13/07/2003 Mark Snellgrove 0.2.2
+
+- Version 0.2.2 released
+- Existence of apricots.shapes file checked
+- Airbase constructor included (required by Borland compiler)
+- Several minor bugs fixed in shape class
+
+* 09/07/2003 Mark Snellgrove 0.2.1
+
+- Version 0.2.1 released
+- Airbase constructors modified
+- Bugfix in shape constructor
+- Palette bluescale modified for dithering (SDL uses 5 bit blue palette)
+- Player 2 controls altered and reactivated
+- Player 2 playfield fixed
+- Compilation warnings from implicit casts fixed
+- Compilation warnings in null building definition fixed
+
+* 06/07/2003 Mark Snellgrove 0.2.0
+
+- Version 0.2.0 released (SDL version)
+- Fixed up some Linux/Windows portability issues
+- rand() now used as random number generator
+- Font routines temporarily disabled (portability problem)
+
+* 21/06/2003 Mark Harman
+
+- Windows port using the SDL graphics library
+- OpenAL Audio temporarily disabled (portability problem)
+- Controls for player 2 disabled.
+
+* 13/09/2002 Mark Snellgrove 0.1.0
+
+- Version 0.1.0 released (SVGALIB/OpenAL version)
+
+* 26/03/2002 Mark Snellgrove
+
+- SVGALIB/OpenAL version of apricots in playable form.
