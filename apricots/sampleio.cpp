@@ -74,12 +74,12 @@ void sampleio :: init(int nsamples, char filenames[][255], int nsources,
   alListenerfv(AL_ORIENTATION, front );
 
   // Load in samples
-  ALvoid* data = malloc(5 * (512 * 3) * 1024);
+  //ALvoid* data = malloc(5 * (512 * 3) * 1024);
   alGenBuffers(numsamples, samples);
 
   for (int i = 0; i < numsamples; i++){
-    ALsizei freq;
-    ALboolean fileok;
+    //ALsizei freq;
+    //ALboolean fileok;
     // Evil OpenAL portability fix done here
 #ifdef _WIN32
     ALenum format;
@@ -87,15 +87,17 @@ void sampleio :: init(int nsamples, char filenames[][255], int nsources,
     alutLoadWAVFile(filenames[i],&format,&data,&filelen,&freq,&trash);
     fileok = (alGetError() == AL_NO_ERROR);
 #else
-    ALsizei format;
-    ALsizei trash;
-    fileok = alutLoadWAV(filenames[i],&data,&format,&filelen,&trash,&freq);
+    //ALsizei format;
+    //ALsizei trash;
+    //fileok = alutLoadWAV(filenames[i],&data,&format,&filelen,&trash,&freq);
+    samples[i] = alutCreateBufferFromFile(filenames[i]);
 #endif
-    if (!fileok){
+    //if (!fileok){
+    if (samples[i] == AL_NONE){
       cerr << "sampleio: could not open " << filenames[i] << endl;
       exit(1);
     }         
-    alBufferData(samples[i], format, data, filelen, freq);
+    //alBufferData(samples[i], format, data, filelen, freq);
   }
 
   // Generate Sources
@@ -107,7 +109,7 @@ void sampleio :: init(int nsamples, char filenames[][255], int nsources,
     alSourcefv(sources[j], AL_ORIENTATION, back );
   }
   
-  free(data);
+  //free(data);
   
 }
 
