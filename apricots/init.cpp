@@ -28,7 +28,7 @@ void setup_display(gamedata &g){
   /*g.physicalscreen = SDL_SetVideoMode(640, 480, 8, 
                                       SDL_HWSURFACE|SDL_HWPALETTE);*/
   g.physicalscreen = SDL_SetVideoMode(640, 480, 8, 
-                              SDL_HWSURFACE|SDL_HWPALETTE|SDL_FULLSCREEN|SDL_HWACCEL);
+                              SDL_HWSURFACE|SDL_HWPALETTE|SDL_HWACCEL);
   if (g.physicalscreen == NULL){
     fprintf(stderr, "Couldn't set 640x480x8 physical video mode: %s\n",SDL_GetError());
     exit(1);
