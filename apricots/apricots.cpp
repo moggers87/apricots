@@ -16,6 +16,7 @@ WINAPI int WinMain(HINSTANCE, HINSTANCE, LPSTR, int){
 int main(int, char**){
 #endif
 
+atexit(SDL_Quit);
   // Initialize data
   gamedata g;
   init_data(g);
