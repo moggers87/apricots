@@ -46,7 +46,7 @@ shape :: shape(SDL_Surface *source, int x, int y, int w, int h){
     Uint8 rgb[3];
     SDL_GetRGB(c, source->format, &rgb[0], &rgb[1], &rgb[2]);
     SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
-    SDL_SetColors(surface, &col, c, 1);
+    SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
   }
 
 }
@@ -66,7 +66,7 @@ shape :: shape(const shape &s){
     Uint8 rgb[3];
     SDL_GetRGB(c, s.surface->format, &rgb[0], &rgb[1], &rgb[2]);
     SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
-    SDL_SetColors(surface, &col, c, 1);
+    SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
   }
 
 }
@@ -97,7 +97,7 @@ shape& shape :: operator= (const shape &s){
       Uint8 rgb[3];
       SDL_GetRGB(c, s.surface->format, &rgb[0], &rgb[1], &rgb[2]);
       SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
-      SDL_SetColors(surface, &col, c, 1);
+      SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
     }
 
   }
@@ -132,7 +132,7 @@ void shape :: grab(SDL_Surface *source, int x, int y, int w, int h){
     Uint8 rgb[3];
     SDL_GetRGB(c, source->format, &rgb[0], &rgb[1], &rgb[2]);
     SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
-    SDL_SetColors(surface, &col, c, 1);
+    SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
   }
 
 
@@ -206,7 +206,7 @@ bool shape :: read(SDL_Surface *palettesource, ifstream &fin){
     Uint8 rgb[3];
     SDL_GetRGB(c, palettesource->format, &rgb[0], &rgb[1], &rgb[2]);
     SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
-    SDL_SetColors(surface, &col, c, 1);
+    SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
   }
 
   return true;
@@ -233,7 +233,7 @@ bool shape :: readfile(SDL_Surface *palettesource, char* filename){
     Uint8 rgb[3];
     SDL_GetRGB(c, palettesource->format, &rgb[0], &rgb[1], &rgb[2]);
     SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
-    SDL_SetColors(surface, &col, c, 1);
+    SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
   }
 
 
@@ -244,7 +244,7 @@ bool shape :: readfile(SDL_Surface *palettesource, char* filename){
 // Shape blitter (mask on)
 
 void shape :: blit(SDL_Surface *dest,int x, int y){
-  SDL_SetColorKey(surface, SDL_SRCCOLORKEY, 0);
+  SDL_SetColorKey(surface, SDL_TRUE, 0);
   SDL_Rect srcrect;
     srcrect.x = 0;
     srcrect.y = 0;
@@ -273,7 +273,7 @@ void shape :: blit(SDL_Surface *dest,int x, int y, bool mask){
     dstrect.w = 0;
     dstrect.h = 0;
   if (mask)
-    SDL_SetColorKey(surface, SDL_SRCCOLORKEY, 0);
+    SDL_SetColorKey(surface, SDL_TRUE, 0);
   SDL_BlitSurface(surface, &srcrect, dest, &dstrect);
   if (mask)
     SDL_SetColorKey(surface, 0, 0);

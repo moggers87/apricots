@@ -301,10 +301,13 @@ void drawall(gamedata &g){
     rect.y = 0;
     rect.w = 640;
     rect.h = 480;
-  SDL_BlitSurface(g.virtualscreen, &rect, g.physicalscreen, NULL);
-
-  SDL_UpdateRect(g.physicalscreen, 0, 0, 0, 0);
-
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(g.renderer, g.virtualscreen);
+  if (texture == NULL) {
+    fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
+    exit(1);
+  }
+  SDL_RenderCopy(g.renderer, texture, &rect, NULL);
+  SDL_RenderPresent(g.renderer);
   g.sound.update();
 
 }
