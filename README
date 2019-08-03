@@ -68,14 +68,13 @@ C++ Compilers
 Requirements
 
             SDL > 1.2.0, download from www.libsdl.org
-            OpenAL, download from www.openal.org [optional]
+            OpenAL, download from www.openal.org
 
 Compilation options
 
         -DAP_PATH="datadir" Set directory where apricots looks for
                             its data files. Defaults to current directory
                             if unset.
-        -DAP_AUDIO_OPENAL   Turns on audio, using OpenAL. Off by default.
                         
 Instructions
 
@@ -117,4 +116,4 @@ Webpage
 
         For updates, bugfixes, binaries, sourcecode and more info please
         visit the apricots webpage at
-        http://www.fishies.org.uk/apricots.html        
+        http://www.fishies.org.uk/apricots.html
