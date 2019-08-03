@@ -3,5 +3,4 @@
 - Write an options screen.
 - Make game re-playable.
 - Multiplayer over LAN.
-- Remove KDE stuff from autoconf files
 - Port to SDL2 https://wiki.libsdl.org/MigrationGuide

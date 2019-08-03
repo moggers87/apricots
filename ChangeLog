@@ -2,6 +2,7 @@
 
 - Applied Fedora patches
 - Added to git repo
+- Regenerated autoconf files without KDE macros
 
 * 13/08/2003 Mark Snellgrove 0.2.6
 
