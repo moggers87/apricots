@@ -6,38 +6,44 @@ Apricots
 Overview
 --------
 
-Apricots is a game I've been writing in my spare time.  Despite the name, it
-has nothing to do with apricots.  It's a game where you fly a little plane
-around the screen and shoot things and drop bombs on enemy targets, and it's
-meant to be quick and fun.
+Apricots has nothing to do with apricots. It's a game where you fly a little
+plane around the screen and shoot things and drop bombs on enemy targets, and
+it's meant to be quick and fun.
 
 History
 -------
 
-The original version of the game dates back to around 1991. The very first
-version of the game was written on an Amiga, using the AMOS language, and the
-game was called 'Planegame'. This was a very simple affair with simplistic
-landscapes, no guns or shrapnel, and very limited computer AI. It was also
-dreadfully slow. The AMOS compiler improved things somewhat at a later date. A
-couple of years later I obtained the BLITZ language for the Amiga, and ported
-'Planegame' carefully over to that, resulting in a huge speedup. Impressed by
-the capabilites of BLITZ, in 1995 I proceeded to rewrite the game entirely from
-scratch, even using completely new graphics and sound. The result was
-'Planegame2', which, for various reasons also got dubbed 'Apricots'. This new
-version of the game added anti-aircraft guns, shrapnel, trees, towers, water,
-better airbases and a huge improvement on graphics, sound, and intelligent
-computer AI. Slightly later, in 1996, the Draks were added as a bit of
-amusement. The result was a highly playable game, which I distributed to a few
-of my friends. A few years later and I now use a PC, which can run Linux.
-Having learnt C++ by this time, at the beginning of 2002 I felt ready enough to
-port 'Apricots' cross platform from BLITZ on the Amiga to C++ on a Linux PC.
-What you see here is work in progress on that port. The game has been tweaked
-slightly while being ported over, so is not identical to the Amiga version.
+The orginal author, Mark Snellgrove, wrote the following:
+
+> The original version of the game dates back to around 1991. The very first
+> version of the game was written on an Amiga, using the AMOS language, and the
+> game was called 'Planegame'. This was a very simple affair with simplistic
+> landscapes, no guns or shrapnel, and very limited computer AI. It was also
+> dreadfully slow. The AMOS compiler improved things somewhat at a later date.
+> A couple of years later I obtained the BLITZ language for the Amiga, and
+> ported 'Planegame' carefully over to that, resulting in a huge speedup.
+> Impressed by the capabilites of BLITZ, in 1995 I proceeded to rewrite the
+> game entirely from scratch, even using completely new graphics and sound. The
+> result was 'Planegame2', which, for various reasons also got dubbed
+> 'Apricots'. This new version of the game added anti-aircraft guns, shrapnel,
+> trees, towers, water, better airbases and a huge improvement on graphics,
+> sound, and intelligent computer AI. Slightly later, in 1996, the Draks were
+> added as a bit of amusement. The result was a highly playable game, which I
+> distributed to a few of my friends. A few years later and I now use a PC,
+> which can run Linux.  Having learnt C++ by this time, at the beginning of
+> 2002 I felt ready enough to port 'Apricots' cross platform from BLITZ on the
+> Amiga to C++ on a Linux PC.  What you see here is work in progress on that
+> port. The game has been tweaked slightly while being ported over, so is not
+> identical to the Amiga version.
+
+moggers87 took over this project in 2019 as the original website had
+disappeared.
 
 Authors
 -------
 
-- Project Leader: Mark Snellgrove (Original concept and game coding)
+- Current maintainer: moggers87
+- Original author: Mark Snellgrove (Original concept and game coding)
 - Co-author: Mark Harman (First Windows port and SDL conversion)
 - Additional contributor: Judebert (Configuration file)
                                            
@@ -45,8 +51,8 @@ Status
 ------
 
 The game is still under development. Apricots-0.2.6 is a beta release using the
-SDL library. Despite this, it is highly playable. Please mail
-apricots@fishies.org.uk any bug reports, upgrades or comments.
+SDL library. Despite this, it is highly playable. Please open a Github issue to
+report bugs, feature requests, or comments. 
 
 C++ Compilers
 -------------
@@ -115,4 +121,4 @@ Webpage
 -------
 
 For updates, bugfixes, binaries, sourcecode and more info please visit the
-apricots webpage at http://www.fishies.org.uk/apricots.html
+apricots webpage at https://github.com/moggers87/apricots
