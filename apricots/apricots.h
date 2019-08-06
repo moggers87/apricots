@@ -17,6 +17,8 @@
 // Changes by M Snellgrove 3/8/2003
 //   TICK_INTERVAL moved here and set to 20
 
+#include "config.h"
+
 #include <SDL.h>
 #include <cstdlib>
 #include <ctime>
@@ -40,9 +42,6 @@ const double PI = 3.141592;
 
 // Default data directory path (current directory)
 
-#ifndef AP_PATH
-#define AP_PATH "./"
-#endif
 
 // Datatypes
 

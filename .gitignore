@@ -1,15 +1,2 @@
-# build files
-Makefile
-*.o
-.deps
-/config.h
-/config.h.in~
-/config.log
-/config.status
-/libtool
-/stamp-h1
-/autom4te.cache
-/apricots/apricots
-
 # editor files
 *.swp
