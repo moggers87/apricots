@@ -1,0 +1,32 @@
+name: Build Apricots
+on:
+  pull_request:
+    branches:
+      - runway
+  push:
+    branches:
+      - runway
+  schedule:
+    - cron: '07 04 * * *'
+
+jobs:
+  build-native:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Linux dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install libsdl-dev autotools-dev
+      - name: Install Mac dependencies
+        if: matrix.os == 'macos-latest'
+        run: brew install sdl autoconf automake
+      - name: Build
+        run: |
+          ./bootstrap
+          ./configure
+          make
