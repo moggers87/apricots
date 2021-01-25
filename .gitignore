@@ -1,15 +1,22 @@
 # build files
-Makefile
+*.in
 *.o
 .deps
+/aclocal.m4
+/apricots/apricots
+/autom4te.cache
+/compile
 /config.h
 /config.h.in~
 /config.log
 /config.status
+/configure
+/depcomp
+/install-sh
 /libtool
+/missing
 /stamp-h1
-/autom4te.cache
-/apricots/apricots
+Makefile
 
 # editor files
 *.swp
