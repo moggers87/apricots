@@ -25,9 +25,9 @@
 // Display setup (double buffered with two playfields)
 
 void setup_display(gamedata &g){
-  /*g.physicalscreen = SDL_SetVideoMode(640, 480, 8, 
+  /*g.physicalscreen = SDL_SetVideoMode(640, 480, 8,
                                       SDL_HWSURFACE|SDL_HWPALETTE);*/
-  g.physicalscreen = SDL_SetVideoMode(640, 480, 8, 
+  g.physicalscreen = SDL_SetVideoMode(640, 480, 8,
                               SDL_HWSURFACE|SDL_HWPALETTE|SDL_HWACCEL);
   if (g.physicalscreen == NULL){
     fprintf(stderr, "Couldn't set 640x480x8 physical video mode: %s\n",SDL_GetError());
@@ -60,7 +60,7 @@ void load_font(SDL_Surface *screen, SDLfont &whitefont, SDLfont &greenfont){
   whitefont.colour(screen, 1, 0);
   greenfont = whitefont;
   greenfont.colour(screen, 13, 0);
-  
+
 }
 
 // Load shapes and set palette
@@ -74,7 +74,7 @@ void load_shapes(gamedata &g,shape images[]){
   if(fin.fail()){
     fprintf(stderr, "Could not open file: %s\n", filename);
     exit(-1);
-  }  
+  }
 
   {
     char dummy[14];
@@ -132,7 +132,7 @@ void init_sound(sampleio &sound){
   char filenames[14][255];
   for (int i=0;i<14;i++){
     strcpy(filenames[i],AP_PATH);
-  } 
+  }
   strcat(filenames[0],"engine.wav");
   strcat(filenames[1],"jet.wav");
   strcat(filenames[2],"explode.wav");
@@ -219,7 +219,7 @@ string getConfig(string config, string name, string defval)
 {
   // Pull out just the name line
   unsigned int ndx = config.find(name);
-  
+
   if (ndx == string::npos)
   {
     return defval;
@@ -242,7 +242,7 @@ int getConfig(string config, string name, int defval, int min, int max)
 {
   // Pull out just the name line
   unsigned int ndx = config.find(name);
-  
+
   if (ndx == string::npos)
   {
     return defval;
@@ -297,7 +297,7 @@ void init_gamedata(gamedata &g){
 
   // Number of planes (1-6)
   g.planes = getConfig(config, "NUM_PLANES", 2, 1, 6);
-  
+
   // Number of players (1 or 2)
   g.players = getConfig(config, "NUM_HUMANS", 1, 1, 2);
   // Error check
@@ -371,12 +371,12 @@ void init_gamedata(gamedata &g){
 
   // Number of neutral anti-aircraft guns
   g.guns = getConfig(config, "NUM_GUNS", 5, 0, 20);
-  
+
   // Number of other buildings
   g.buildings = getConfig(config, "NUM_BUILDINGS", 20, 0 ,50);
-  
+
   // Number of trees (max)
-  g.trees = getConfig(config, "NUM_TREES", 50, 0, 100); 
+  g.trees = getConfig(config, "NUM_TREES", 50, 0, 100);
 
   // Draks: 0=Never, 1=5% probability, 2=Always
   string drakval = getConfig(config, "DRAK", "sometimes");
@@ -419,11 +419,11 @@ void init_data(gamedata &g){
 
   // Hide cursor
   SDL_ShowCursor(0);
-  
+
   load_shapes(g, g.images);
 
   load_font(g.virtualscreen, g.whitefont, g.greenfont);
-  
+
   init_sound(g.sound);
 
 }

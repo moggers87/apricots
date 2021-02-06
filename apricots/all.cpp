@@ -168,7 +168,7 @@ void clone_planes(linkedlist <plane> &p, linkedlist <planeclone> &dp,
          (!p().drak)){
       winner = p().side;
       p().targetx = -10;
-    }      
+    }
   }
 
 }
@@ -238,7 +238,7 @@ void plane_collisions(gamedata &g){
       g.fall.add(shrapnel);
     }
   }
-      
+
 }
 
 // Move falls
@@ -337,10 +337,10 @@ void fire_guns(linkedlist <guntype> &gun, linkedlist <plane> &p, sampleio &sound
       while (p.next()){
         if (p().id == gun().target){
           p().gunthreat = gun().xpos;
-          double dx = p().x - double(gun().x);        
+          double dx = p().x - double(gun().x);
           double dy = double(gun().y) - p().y;
 // Rotate gun
-          if ((gun().rotate == 0) && (dy > 0)){        
+          if ((gun().rotate == 0) && (dy > 0)){
             double smartsine = (dy*p().xs+dx*p().ys)/
                                (8.0*GAME_SPEED*sqrt(dx*dx+dy*dy));
             smartsine = dlimit(smartsine, -1.0, 1.0);

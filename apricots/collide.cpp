@@ -440,9 +440,9 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side){
     shrapnel.image = b.shrapnelimage + int(drand()*3);
     shrapnel.type = 1;
     g.fall.add(shrapnel);
-  }  
+  }
 // Explosion at top
-  firetype boom; 
+  firetype boom;
   boom.x = b.x;
   boom.y = b.y - h*16;
   boom.time = 0;

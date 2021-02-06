@@ -1,14 +1,11 @@
-####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = apricots
 
-## INCLUDES were found outside kdevelop specific part
+apricots_SOURCES = SDLfont.cpp shape.cpp setup.cpp sampleio.cpp init.cpp game.cpp finish.cpp fall.cpp drawall.cpp drak.cpp collide.cpp apricots.cpp all.cpp ai.cpp
+apricots_LDADD   =
 
-apricots_SOURCES = SDLfont.cpp shape.cpp setup.cpp sampleio.cpp init.cpp game.cpp finish.cpp fall.cpp drawall.cpp drak.cpp collide.cpp apricots.cpp all.cpp ai.cpp 
-apricots_LDADD   = 
+SUBDIRS = docs
 
-SUBDIRS = docs 
-
-EXTRA_DIST = ai.cpp all.cpp apricots.cpp apricots.h collide.cpp drak.cpp drawall.cpp fall.cpp finish.cpp game.cpp init.cpp linkedlist.h sampleio.cpp sampleio.h setup.cpp shape.cpp shape.h apricots.shapes SDLfont.cpp SDLfont.h alt-8x16.psf afterburner.wav bomb.wav engine.wav explode.wav finish.wav fuelexplode.wav groundhit.wav gunshot.wav gunshot2.wav jet.wav laser.wav shot.wav splash.wav stall.wav apricots.cfg 
+EXTRA_DIST = ai.cpp all.cpp apricots.cpp apricots.h collide.cpp drak.cpp drawall.cpp fall.cpp finish.cpp game.cpp init.cpp linkedlist.h sampleio.cpp sampleio.h setup.cpp shape.cpp shape.h apricots.shapes SDLfont.cpp SDLfont.h alt-8x16.psf afterburner.wav bomb.wav engine.wav explode.wav finish.wav fuelexplode.wav groundhit.wav gunshot.wav gunshot2.wav jet.wav laser.wav shot.wav splash.wav stall.wav apricots.cfg
 
 install-data-local:
 	$(mkinstalldirs) $(pkgdatadir)/
@@ -65,10 +62,8 @@ uninstall-local:
 	-rm -f $(pkgdatadir)/stall.wav
 	-rm -f $(pkgdatadir)/apricots.cfg
 
-####### kdevelop will overwrite this part!!! (end)############
 # set the include path found by configure
 INCLUDES= $(all_includes)
- 
+
 # the library search path.
-apricots_LDFLAGS = $(all_libraries) 
-                                                                                
+apricots_LDFLAGS = $(all_libraries)

@@ -60,7 +60,7 @@ void drop_bomb(plane &p, linkedlist <falltype> &fall, sampleio &sound,
     case 10: case 11: case 12: case 13: case 14: case 15: case 16:
       bomb.bombrotate = 1;
       break;
-  } 
+  }
   bomb.rotatedelay = 0;
   fall.add(bomb);
   p.bombs--;
@@ -159,7 +159,7 @@ void act(gamedata &g, int jx, int jy, bool jb){
           // Check for shotfire
           if (g.p().shotdelay == 0){
             if ((jb) && (g.p().ammo > 0)){
-              fire_shot(g.p(), g.shot, g.sound, g.xmove, g.ymove);              
+              fire_shot(g.p(), g.shot, g.sound, g.xmove, g.ymove);
             }
             // Check for bombdrop
             if ((jy == 1) && (g.p().bombs > 0)){
@@ -303,7 +303,7 @@ void act(gamedata &g, int jx, int jy, bool jb){
 
     case 4: // Expunged drak fighter (NB: shouldn't get here!)
       break;
- 
+
 
   }
   // Move the planes

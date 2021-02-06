@@ -46,13 +46,13 @@ Authors
 - Original author: Mark Snellgrove (Original concept and game coding)
 - Co-author: Mark Harman (First Windows port and SDL conversion)
 - Additional contributor: Judebert (Configuration file)
-                                           
+
 Status
 ------
 
 The game is still under development. Apricots-0.2.6 is a beta release using the
 SDL library. Despite this, it is highly playable. Please open a Github issue to
-report bugs, feature requests, or comments. 
+report bugs, feature requests, or comments.
 
 C++ Compilers
 -------------
@@ -68,7 +68,7 @@ configurations
 
 It may build successfuly on other platforms, but this has not been tested. Let
 me know!
-                
+
 Requirements
 ------------
 
@@ -80,7 +80,7 @@ Compilation options
         -DAP_PATH="datadir" Set directory where apricots looks for
                             its data files. Defaults to current directory
                             if unset.
-                        
+
 Instructions
 ------------
 

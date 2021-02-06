@@ -199,7 +199,7 @@ struct airbase{
   int planey;
   building buildlist[15];
 
-  // Explicit constructor required else Borland C++ Compiler gives errors  
+  // Explicit constructor required else Borland C++ Compiler gives errors
   airbase() {
   }
 
@@ -359,7 +359,7 @@ const airbase SHOOTY_AIRBASE(80,80,6,80,13,0,0,0,GUN,FUEL,GUN,CONTROLTOWER,
                                  RADAR,NB,NB,NB,NB,NB,NB,HANGAR,GUN,FUEL,GUN);
 const airbase TWOGUN_AIRBASE(48,96,5,128,5,0,0,0,RADAR,GUN,HANGAR,NB,NB,
                                  NB,NB,NB,NB,NB,CONTROLTOWER,GUN,RADAR);
-                                 
+
 // Sample definitions
 
 const int SOUND_ENGINE = 0;
@@ -414,7 +414,7 @@ const drakguntype DGUN_SIDE_LEFT = {0, -4, 20, 7, 0, 0, 0, 0,{0, 0, 0, 0, 287, 2
                                     291, 292, 293, 294, 0, 0, 0, 0, 0}};
 const drakguntype DGUN_SIDE_RIGHT = {0, 84, 20, 11, 0, 0, 0, 0,{0, 0, 0, 0, 0, 0, 0, 303, 302,
                                      301, 300, 299, 298, 297, 296, 0, 0}};
-                                     
+
 // Function prototypes
 
 void setup_game(gamedata &);

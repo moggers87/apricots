@@ -96,7 +96,7 @@ void sampleio :: init(int nsamples, char filenames[][255], int nsources,
     if (samples[i] == AL_NONE){
       cerr << "sampleio: could not open " << filenames[i] << endl;
       exit(1);
-    }         
+    }
     //alBufferData(samples[i], format, data, filelen, freq);
   }
 
@@ -108,9 +108,9 @@ void sampleio :: init(int nsamples, char filenames[][255], int nsources,
     alSourcefv(sources[j], AL_VELOCITY, zeroes );
     alSourcefv(sources[j], AL_ORIENTATION, back );
   }
-  
+
   //free(data);
-  
+
 }
 
 // Clearup routine
@@ -140,12 +140,12 @@ void sampleio :: channel(int chan, int sample){
     return;
   }
   if ((chan < 0) || (chan >= numsources)){
-    cerr << "sampleio: attempt to play nonexistant source " << chan 
+    cerr << "sampleio: attempt to play nonexistant source " << chan
          << endl;
     return;
   }
   if ((sample < 0) || (sample >= numsamples)){
-    cerr << "sampleio: attempt to play nonexistant sample " << sample 
+    cerr << "sampleio: attempt to play nonexistant sample " << sample
          << endl;
     return;
   }
@@ -162,12 +162,12 @@ void sampleio :: loop(int chan, int sample){
     return;
   }
   if ((chan < 0) || (chan >= numsources)){
-    cerr << "sampleio: attempt to play nonexistant source " << chan 
+    cerr << "sampleio: attempt to play nonexistant source " << chan
          << endl;
     return;
   }
   if ((sample < 0) || (sample >= numsamples)){
-    cerr << "sampleio: attempt to play nonexistant sample " << sample 
+    cerr << "sampleio: attempt to play nonexistant sample " << sample
          << endl;
     return;
   }
@@ -188,7 +188,7 @@ void sampleio :: play(int sample){
     return;
   }
   if ((sample < 0) || (sample >= numsamples)){
-    cerr << "sampleio: attempt to play nonexistant sample " << sample 
+    cerr << "sampleio: attempt to play nonexistant sample " << sample
          << endl;
     return;
   }
@@ -248,7 +248,7 @@ void sampleio :: volume(int i, double vol){
     return;
   }
   if ((i < 0) || (i >= numsources)){
-    cerr << "sampleio: attempt to volume nonexistant source " << i 
+    cerr << "sampleio: attempt to volume nonexistant source " << i
          << endl;
     return;
   }

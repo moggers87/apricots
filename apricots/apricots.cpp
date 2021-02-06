@@ -33,7 +33,7 @@ atexit(SDL_Quit);
   // Shutdown
   SDL_Quit();
   g.sound.close();
-  
+
   return 0;
 
 }

@@ -1,4 +1,4 @@
-SUBDIRS = apricots 
+SUBDIRS = apricots
 
 EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README
 

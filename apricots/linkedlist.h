@@ -137,12 +137,12 @@ template <class T> T& linkedlist <T> :: operator() (){
 // False Node Deleter
 
 template <class T> void linkedlist <T> :: falsekill(node <T> *dienode){
- 
+
   if (dienode == 0){
     cerr << "ERROR: Attempt to kill nonexistant node" << endl;
     exit(EXIT_FAILURE);
   }
- 
+
   if (dienode == head) head = dienode->next;
   if (dienode == current_step) current_step = 0;
   if (dienode == next_step) next_step = dienode->next;
@@ -158,15 +158,15 @@ template <class T> void linkedlist <T> :: falsekill(linkedlist <T> &a){
 // Node Deleter
 
 template <class T> void linkedlist <T> :: kill(node <T> *dienode){
- 
+
   if (dienode == 0){
     cerr << "ERROR: Attempt to kill nonexistant node" << endl;
     exit(EXIT_FAILURE);
   }
- 
+
   if (dienode->next != 0)
     dienode->next->prev = dienode->prev;
-  
+
   if (dienode->prev != 0)
     dienode->prev->next = dienode->next;
 

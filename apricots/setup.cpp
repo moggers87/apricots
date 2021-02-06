@@ -693,7 +693,7 @@ void draw_dither(SDL_Surface *gamescreen,
         double chance = ditherfactor - int(ditherfactor);
         if (drand()<chance) colour--;
         if (colour < 16) colour = 16;
-        pixels[y * gamescreen->pitch + x] = colour;        
+        pixels[y * gamescreen->pitch + x] = colour;
       }
     }
   }

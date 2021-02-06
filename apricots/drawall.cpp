@@ -158,7 +158,7 @@ void display_score(SDL_Surface *virtualscreen, plane &p, int x, int y, int missi
     }else{
       whitefont.write(virtualscreen, x+72, y, targetstring);
     }
-  }  
+  }
 
 }
 
@@ -241,7 +241,7 @@ void drawall(gamedata &g){
       desrect.x = 0;
       desrect.y = 240;
       desrect.w = 640;
-      desrect.h = screenheight;      
+      desrect.h = screenheight;
     SDL_BlitSurface(g.gamescreen, &srcrect, g.virtualscreen, &desrect);
     SDL_Rect cliprect;
       cliprect.x = 0;
@@ -273,7 +273,7 @@ void drawall(gamedata &g){
           }else{
             if (g.p().targetscore < bestp.targetscore){
               bestp = g.p();
-            }          
+            }
           }
         }
       }

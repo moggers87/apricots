@@ -126,7 +126,7 @@ void fire_drakguns(gamedata &g, linkedlist <drakguntype> &drakgun, drakmstype &d
   while (drakgun.next()){
     if (drakgun().type != 0){
 // Fire the laser
-      fire_laser(g, drakgun(), drakms, sound, b, laser, groundheight);     
+      fire_laser(g, drakgun(), drakms, sound, b, laser, groundheight);
     }else{
 // Fire more normal drakgun
 // Find new target for drakgun if untargeted
@@ -174,7 +174,7 @@ void fire_drakguns(gamedata &g, linkedlist <drakguntype> &drakgun, drakmstype &d
             }
 // Shoot drakgun
             if ((drakgun().reload == 0) && (drakgun().target > 0) && (abs(int(dx))<150)){
-              drakgunshoot(drakgun(), drakms, shot, sound, xmove, ymove);              
+              drakgunshoot(drakgun(), drakms, shot, sound, xmove, ymove);
             }
 // Lose target
             if ((abs(int(dx))>200) || (p().state>1) || (p().hide)){
@@ -351,7 +351,7 @@ void drak_main(gamedata &g){
           gunshrapnel.type = 2;
           g.fall.add(gunshrapnel);
           g.drakgun.kill();
-        }         
+        }
         g.drakms.exist = 2;
         g.sound.play(SOUND_FUELEXPLODE);
       }

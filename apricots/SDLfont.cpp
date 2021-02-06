@@ -35,9 +35,9 @@ SDLfont :: SDLfont(const SDLfont &f){
       symbol[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i],width,height,
                                            8,width,0,0,0,0);
       symbolmask[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i],width,height,
-                                           8,width,0,0,0,0);    
+                                           8,width,0,0,0,0);
       SDL_SetColorKey(symbolmask[i], SDL_SRCCOLORKEY, 0);
-    }    
+    }
   }
 
 }
@@ -68,9 +68,9 @@ SDLfont& SDLfont :: operator= (const SDLfont &f){
         symbol[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i],width,height,
                                              8,width,0,0,0,0);
         symbolmask[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i],width,height,
-                                             8,width,0,0,0,0);      
+                                             8,width,0,0,0,0);
         SDL_SetColorKey(symbolmask[i], SDL_SRCCOLORKEY, 0);
-      }    
+      }
     }
   }
   return *this;
@@ -82,7 +82,7 @@ SDLfont :: ~SDLfont(){
 
   for(int i=0;i<256;i++){
     if (symbol[i] != NULL) SDL_FreeSurface(symbol[i]);
-    if (symbolmask[i] != NULL) SDL_FreeSurface(symbolmask[i]);    
+    if (symbolmask[i] != NULL) SDL_FreeSurface(symbolmask[i]);
     if (symbolbuffer[i] != NULL) delete [] symbolbuffer[i];
   }
 
@@ -116,7 +116,7 @@ void SDLfont :: loadpsf(char* filename, int w, int h){
         int factor = 256;
         for(int bit=0;bit<8;bit++){
           factor = factor/2;
-          if ((byte & factor) == 0){ 
+          if ((byte & factor) == 0){
             symbolbuffer[i][w*y + 8*x + bit] = 0;
           }else{
             symbolbuffer[i][w*y + 8*x + bit] = 1;
@@ -124,7 +124,7 @@ void SDLfont :: loadpsf(char* filename, int w, int h){
         }
       }
     }
-        
+
     symbol[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i],w,h,8,w,0,0,0,0);
     symbolmask[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i],w,h,8,w,0,0,0,0);
     SDL_SetColorKey(symbolmask[i], SDL_SRCCOLORKEY, 0);
@@ -134,30 +134,30 @@ void SDLfont :: loadpsf(char* filename, int w, int h){
 }
 
 // Set colours 0 and 1 to be chosen font colour
-  
+
 void SDLfont :: colour(SDL_Surface* surface, int fgc, int bgc){
-  
+
   SDL_Color palette[2];
   Uint8 rgb[3];
   SDL_GetRGB(bgc, surface->format, &rgb[0], &rgb[1], &rgb[2]);
   palette[0].r=rgb[0];
   palette[0].g=rgb[1];
-  palette[0].b=rgb[2];  
+  palette[0].b=rgb[2];
   SDL_GetRGB(fgc, surface->format, &rgb[0], &rgb[1], &rgb[2]);
   palette[1].r=rgb[0];
   palette[1].g=rgb[1];
   palette[1].b=rgb[2];
   for (int i=0;i<256;i++){
     SDL_SetColors(symbol[i], palette, 0, 2);
-    SDL_SetColors(symbolmask[i], palette, 0, 2);    
+    SDL_SetColors(symbolmask[i], palette, 0, 2);
   }
 
 }
-  
+
 // Write text at x,y with mask
 
 void SDLfont :: writemask(SDL_Surface* surface, int x, int y, char* text){
-  
+
   // Blit each letter in turn
   int letter = 0;
 
@@ -177,7 +177,7 @@ void SDLfont :: writemask(SDL_Surface* surface, int x, int y, char* text){
 
     letter++;
   }
-  
+
 }
 
 // Write text at x,y without mask

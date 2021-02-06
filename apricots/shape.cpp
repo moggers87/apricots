@@ -276,7 +276,7 @@ void shape :: blit(SDL_Surface *dest,int x, int y, bool mask){
     SDL_SetColorKey(surface, SDL_SRCCOLORKEY, 0);
   SDL_BlitSurface(surface, &srcrect, dest, &dstrect);
   if (mask)
-    SDL_SetColorKey(surface, 0, 0); 
+    SDL_SetColorKey(surface, 0, 0);
 }
 
 // Shape file write function (reference file)

@@ -14,11 +14,11 @@ bool fall_collision(gamedata &g, falltype &fall){
         (int(fall.y) > GAME_HEIGHT)){
     switch(fall.type){
       case 1: // Shrapnel
-        { int px = limit(int((fall.x+18.0)/32),0,MAP_W-1); 
+        { int px = limit(int((fall.x+18.0)/32),0,MAP_W-1);
           if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) &&
               (fall.y > GAME_HEIGHT - 11)){ // hits sea
             firetype splash;
-            splash.x = int(fall.x) - 5; 
+            splash.x = int(fall.x) - 5;
             splash.y = GAME_HEIGHT - 20;
             splash.time = 0;
             splash.type = 4;
@@ -36,7 +36,7 @@ bool fall_collision(gamedata &g, falltype &fall){
 
       case 2: case 3: // Large bits and bombs
         if (fall.type == 3) fall.x -= 5;
-        { int px = limit(int((fall.x+24.0)/32),0,MAP_W-1); 
+        { int px = limit(int((fall.x+24.0)/32),0,MAP_W-1);
           if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) &&
               (fall.y > GAME_HEIGHT - 21)){ // hits sea
             firetype splash;
@@ -57,7 +57,7 @@ bool fall_collision(gamedata &g, falltype &fall){
           }
         }
         break;
-      
+
     }
     return true;
   }
@@ -137,7 +137,7 @@ bool fall_collision(gamedata &g, falltype &fall){
 
       case 2: // towers
         { int ty = limit(int(fall.y),
-                    g.gamemap.b[x].y -g.gamemap.b[x].towersize*16,int(fall.y));       
+                    g.gamemap.b[x].y -g.gamemap.b[x].towersize*16,int(fall.y));
           if (g.images[197].collide(g.gamemap.b[x].x,ty,
               g.images[fall.image],(int)fall.x,(int)fall.y)){
 // Calculate height of tower strike
@@ -163,7 +163,7 @@ bool fall_collision(gamedata &g, falltype &fall){
 // Drak gun collisions
   if (g.drakms.exist == 1){
     g.drakgun.reset();
-    while (g.drakgun.next()){ 
+    while (g.drakgun.next()){
       if (g.images[g.drakgun().image[g.drakgun().d]].collide(
             (int)g.drakms.x+g.drakgun().x, (int)g.drakms.y+g.drakgun().y,
             g.images[fall.image], (int)fall.x, (int)fall.y)){

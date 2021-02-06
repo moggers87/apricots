@@ -26,7 +26,7 @@ void followtarget(plane &p, int &jx, int &jy, int rx, int ry, bool reverse){
 // Afterburner if available
     if ((targetd == 0) && (p.burner) && (abs(rx) > 200)) jy = -1;
   }else{
-// Track target directly    
+// Track target directly
      targetd = wrap(int((atan2(double(ry),double(-rx))/PI*8)+13.5) - p.d, -7, 9);
 // Go other way if reverse flag set
      if (reverse) targetd = wrap(targetd+8, -7, 9);
@@ -76,9 +76,9 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb){
           if ((p.d > 2) && (p.d < 8)) px = limit(px-1, 0, MAP_W*2-1);
           if ((p.d > 10) && (p.d < 16)) px = limit(px+1, 0, MAP_W*2-1);
           if (p.ys < 0.0){
-            if ((p.y+5.0 > g.gamemap.smoothheight[px]) || 
+            if ((p.y+5.0 > g.gamemap.smoothheight[px]) ||
                 (p.y+5.0 > g.gamemap.smoothheight[px+1])) p.coms = 1;
-    
+
           }else{
             if ((p.y+40.0 > g.gamemap.smoothheight[px]) ||
                 (p.y+40.0 > g.gamemap.smoothheight[px+1])) p.coms = 1;
@@ -126,8 +126,8 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb){
             if (p.targetx == 0){
 // Try a building
               p.targetx = int(drand()*(MAP_W*2-3))+2;
-              if ((g.gamemap.b[p.targetx].type < 3) || (g.gamemap.b[p.targetx].points < 0) || 
-                  (g.gamemap.b[p.targetx].side == p.side) || (p.bombs == 0) || 
+              if ((g.gamemap.b[p.targetx].type < 3) || (g.gamemap.b[p.targetx].points < 0) ||
+                  (g.gamemap.b[p.targetx].side == p.side) || (p.bombs == 0) ||
                   ((g.gamemap.b[p.targetx].side == 0) && (g.mission == 2))){
 // Building unsuitable target so try plane instead
                 p.targetx = 0;
@@ -188,7 +188,7 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb){
                     int ry = int(p.y - g.dp().y);
                     followtarget(p, jx, jy, rx, ry, (rx*rx + ry*ry < 2500));
                   }
-                }         
+                }
               }
             }
 // Target is runway
@@ -199,14 +199,14 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb){
               followtarget(p, jx, jy, rx, ry, false);
             }
             break;
-  
+
           case 1: // Go upwards
             if ((p.d > 3) && (p.d < 9)) jx = 1;
             if ((p.d > 9) && (p.d < 15)) jx = -1;
             if (p.d == 9){
               if (int(p.x) < 100) jx = -1;
               if (int(p.x) > GAME_WIDTH - 116) jx = 1;
-              if (jx == 0){            
+              if (jx == 0){
                 int px = int(p.x+8)/16 - 1;
                 jx = sign(g.gamemap.smoothheight[px] - g.gamemap.smoothheight[px+3]);
                 if (jx == 0) jx = int(drand()*2.0)*2 -1;
@@ -352,7 +352,7 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb){
                 if (bogied == p.d) jb = true;
               }
             }
-          } 
+          }
         }
       }
       break;
