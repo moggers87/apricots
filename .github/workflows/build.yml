@@ -13,6 +13,7 @@ jobs:
   build-native:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
@@ -21,10 +22,10 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install libsdl-dev autotools-dev
+          sudo apt-get install libsdl2-dev autotools-dev
       - name: Install Mac dependencies
         if: matrix.os == 'macos-latest'
-        run: brew install sdl autoconf automake
+        run: brew install sdl2 autoconf automake
       - name: Build
         run: |
           ./bootstrap

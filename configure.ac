@@ -12,7 +12,7 @@ AC_PROG_CXX
 AC_PROG_CC
 
 # sdl
-AC_PATH_PROG([SDL_CONFIG], sdl-config)
+AC_PATH_PROG([SDL_CONFIG], sdl2-config)
 
 CPPFLAGS="$CPPFLAGS `$SDL_CONFIG --cflags` `$SDL_CONFIG --libs`"
 SDL_LIBS=`"$SDL_CONFIG" --libs`

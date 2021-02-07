@@ -313,9 +313,9 @@ struct gamedata{
   plane* player2;
   airbase base[7];
   info planeinfo[7];
-  SDL_Surface *physicalscreen;
   SDL_Surface *virtualscreen;
   SDL_Surface *gamescreen;
+  SDL_Renderer *renderer;
   shape images[319];
   map gamemap;
   linkedlist <radartype> radar;

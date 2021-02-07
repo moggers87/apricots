@@ -25,12 +25,12 @@
 // Display setup (double buffered with two playfields)
 
 void setup_display(gamedata &g){
-  /*g.physicalscreen = SDL_SetVideoMode(640, 480, 8,
-                                      SDL_HWSURFACE|SDL_HWPALETTE);*/
-  g.physicalscreen = SDL_SetVideoMode(640, 480, 8,
-                              SDL_HWSURFACE|SDL_HWPALETTE|SDL_HWACCEL);
-  if (g.physicalscreen == NULL){
-    fprintf(stderr, "Couldn't set 640x480x8 physical video mode: %s\n",SDL_GetError());
+  SDL_Window *window = SDL_CreateWindow("Apricots", SDL_WINDOWPOS_UNDEFINED,
+          SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+
+  g.renderer = SDL_CreateRenderer(window, -1, 0);
+  if (g.renderer == NULL){
+    fprintf(stderr, "Couldn't create renderer: %s\n",SDL_GetError());
     exit(1);
   }
 
@@ -84,25 +84,24 @@ void load_shapes(gamedata &g,shape images[]){
     int red, green, blue;
     for( int c1=0;c1<256;c1++) {
       SDL_Color col = { 0, 0, 0, 0 };
-      SDL_SetColors(g.physicalscreen, &col, c1, 1);
+      SDL_SetPaletteColors(g.virtualscreen->format->palette, &col, c1, 1);
     }
     for (int c2=0;c2<16;c2++){
       fin >> red >> green >> blue;
       SDL_Color col = { red * 4, green * 4, blue * 4, 0 };
-      SDL_SetColors(g.physicalscreen, &col, c2, 1);
+      SDL_SetPaletteColors(g.virtualscreen->format->palette, &col, c2, 1);
     }
     for (int c3=0;c3<25;c3++){
       int green = ((2*c3) % 64) * 4;
       int blue = ((15+2*c3) % 64) * 4;
       SDL_Color col = { 0, green, blue, 0 };
-      SDL_SetColors(g.physicalscreen, &col, c3+16, 1);
+      SDL_SetPaletteColors(g.virtualscreen->format->palette, &col, c3+16, 1);
     }
     for (int c4=0;c4<256;c4++){
       Uint8 rgb[3];
-      SDL_GetRGB(c4, g.physicalscreen->format, &rgb[0], &rgb[1], &rgb[2]);
+      SDL_GetRGB(c4, g.virtualscreen->format, &rgb[0], &rgb[1], &rgb[2]);
       SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
-      SDL_SetColors(g.virtualscreen, &col, c4, 1);
-      SDL_SetColors(g.gamescreen, &col, c4, 1);
+      SDL_SetPaletteColors(g.gamescreen->format->palette, &col, c4, 1);
     }
     fin.read(dummy, 1);
   }
@@ -113,11 +112,11 @@ void load_shapes(gamedata &g,shape images[]){
 
   for (int c=0;c<256;c++){
     Uint8 rgb[3];
-    SDL_GetRGB(c, g.physicalscreen->format, &rgb[0], &rgb[1], &rgb[2]);
+    SDL_GetRGB(c, g.virtualscreen->format, &rgb[0], &rgb[1], &rgb[2]);
     SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
     for (int i=0;i<=318;i++){
       if (images[i].getSurface() != NULL)
-        SDL_SetColors(images[i].getSurface(), &col, c, 1);
+        SDL_SetPaletteColors(images[i].getSurface()->format->palette, &col, c, 1);
     }
   }
 
@@ -413,9 +412,6 @@ void init_data(gamedata &g){
   }
 
   setup_display(g);
-
-  // Set Window title
-  SDL_WM_SetCaption("Apricots", NULL);
 
   // Hide cursor
   SDL_ShowCursor(0);
