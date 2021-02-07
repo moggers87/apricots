@@ -19,7 +19,6 @@ SDL_LIBS=`"$SDL_CONFIG" --libs`
 SDL_CFLAGS=`"$SDL_CONFIG" --cflags`
 CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
-CXXFLAGS="$CXXFLAGS -DAP_PATH=\\\"$prefix/share/apricots/\\\""
 
 # check for openal
 AC_CHECK_HEADER(AL/al.h,[CXXFLAGS="$CXXFLAGS -DAP_AUDIO_OPENAL"])
