@@ -2,6 +2,8 @@
 *.in
 *.o
 .deps
+/ChangeLog
+/INSTALL
 /aclocal.m4
 /apricots/apricots
 /autom4te.cache
@@ -17,6 +19,9 @@
 /missing
 /stamp-h1
 Makefile
+
+# make dist
+apricots-*.tar.gz
 
 # editor files
 *.swp

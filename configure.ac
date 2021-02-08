@@ -5,7 +5,9 @@ AC_PREREQ([2.69])
 AC_INIT([apricots], [0.2.7], [moggers87+git@moggers87.co.uk])
 AC_CONFIG_SRCDIR([apricots/game.cpp])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([foreign dist-bzip2 dist-zip subdir-objects])
+AC_CONFIG_MACRO_DIR([m4])
+AM_INIT_AUTOMAKE([subdir-objects])
+AX_GENERATE_CHANGELOG
 
 # Checks for programs.
 AC_PROG_CXX
