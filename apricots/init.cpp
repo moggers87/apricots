@@ -271,12 +271,46 @@ int getConfig(string config, string name, int defval, int min, int max)
 // Initialize the game parameters
 // Edit the values here to set game options
 
+string find_config_file() {
+  string filename("apricots.cfg");
+
+  std::filesystem::path user_path("/");
+  const char* xdg_config_home = std::getenv("XDG_CONFIG_HOME");
+  if (xdg_config_home == NULL) {
+    const char* home_dir = std::getenv("HOME");
+    if (home_dir == NULL) {
+      fprintf(stderr, "Neither XDG_CONFIG_HOME nor HOME were set, unable to locate per user configuration\n");
+    } else {
+        user_path /= home_dir;
+        user_path /= ".config";
+    }
+  } else {
+      user_path /= xdg_config_home;
+  }
+  user_path /= "apricots";
+  user_path /= filename;
+
+  std::filesystem::path sysconfig_path(SYSCONFIG_PATH);
+  sysconfig_path /= filename;
+
+  std::filesystem::path data_path(AP_PATH);
+  data_path /= filename;
+
+  if (std::filesystem::exists(user_path)) {
+    return user_path;
+  }
+  else if (std::filesystem::exists(sysconfig_path)) {
+    return sysconfig_path;
+  } else {
+    return data_path;
+  }
+}
+
 void init_gamedata(gamedata &g){
 
+  string filename = find_config_file();
+  ifstream config_stream(filename);
   //--JAM: Read from config file
-  string filename(AP_PATH);
-  filename += "apricots.cfg";
-  ifstream config_stream(filename.c_str());
   string config;
   if (!config_stream.fail()){
     // Read config file line by line

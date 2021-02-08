@@ -9,9 +9,9 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([subdir-objects])
 AX_GENERATE_CHANGELOG
 
-# Checks for programs.
+# set up compiler
 AC_PROG_CXX
-AC_PROG_CC
+AX_CXX_COMPILE_STDCXX_17([noext])
 
 # sdl
 AC_PATH_PROG([SDL_CONFIG], sdl2-config)

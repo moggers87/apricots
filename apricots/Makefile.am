@@ -63,7 +63,7 @@ uninstall-local:
 	-rm -f $(pkgdatadir)/apricots.cfg
 
 # set the include path found by configure
-AM_CPPFLAGS= $(all_includes) -DAP_PATH="\"@prefix@/share/apricots/\""
+AM_CPPFLAGS= $(all_includes) -DAP_PATH="\"@prefix@/share/apricots/\"" -DSYSCONFIG_PATH="\"@sysconfdir@\""
 
 # the library search path.
 apricots_LDFLAGS = $(all_libraries)
