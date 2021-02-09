@@ -22,6 +22,7 @@
 #include <ctime>
 #include <cmath>
 #include <cstring>
+#include <filesystem>
 #include "shape.h"
 #include "linkedlist.h"
 #include "sampleio.h"
@@ -37,12 +38,6 @@ const int MAP_H = GAME_HEIGHT / 32;
 const double GAME_SPEED = 0.5;
 const int TICK_INTERVAL = 20;
 const double PI = 3.141592;
-
-// Default data directory path (current directory)
-
-#ifndef AP_PATH
-#define AP_PATH "./"
-#endif
 
 // Datatypes
 
