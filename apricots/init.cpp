@@ -88,13 +88,16 @@ void load_shapes(gamedata &g,shape images[]){
     }
     for (int c2=0;c2<16;c2++){
       fin >> red >> green >> blue;
-      SDL_Color col = { red * 4, green * 4, blue * 4, 0 };
+      Uint8 new_red = red * 4;
+      Uint8 new_green = green * 4;
+      Uint8 new_blue = blue * 4;
+      SDL_Color col = { new_red, new_green, new_blue, 0 };
       SDL_SetPaletteColors(g.virtualscreen->format->palette, &col, c2, 1);
     }
     for (int c3=0;c3<25;c3++){
-      int green = ((2*c3) % 64) * 4;
-      int blue = ((15+2*c3) % 64) * 4;
-      SDL_Color col = { 0, green, blue, 0 };
+      Uint8 new_green = ((2*c3) % 64) * 4;
+      Uint8 new_blue = ((15+2*c3) % 64) * 4;
+      SDL_Color col = { 0, new_green, new_blue, 0 };
       SDL_SetPaletteColors(g.virtualscreen->format->palette, &col, c3+16, 1);
     }
     for (int c4=0;c4<256;c4++){
