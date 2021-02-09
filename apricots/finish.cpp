@@ -82,6 +82,7 @@ void finish_game(gamedata &g){
 // Wait 4 Seconds
    int then = time(0);
    while (time(0) - then < 4){}
+   SDL_DestroyTexture(texture);
   }
 // Clean up linkedlists
   g.radar.clearlist();
@@ -95,5 +96,4 @@ void finish_game(gamedata &g){
   g.shot.clearlist();
   g.drakgun.clearlist();
   g.laser.clearlist();
-
 }

@@ -309,6 +309,6 @@ void drawall(gamedata &g){
   SDL_RenderCopy(g.renderer, texture, &rect, NULL);
   SDL_RenderPresent(g.renderer);
   g.sound.update();
-
+  SDL_DestroyTexture(texture);
 }
 
