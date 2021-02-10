@@ -13,64 +13,63 @@
 
 // Draw a winnerbox
 
-void winnerbox(gamedata &g, int winner, int player, int y, int control){
+void winnerbox(gamedata &g, int winner, int player, int y, int control) {
 
   int boxcolour = 4; // red for losers
-  if (player == control){
+  if (player == control) {
     boxcolour = 13; // green if winner
   }
   SDL_Rect rect;
-    rect.x = 200;
-    rect.y = 64+y;
-    rect.w = 240;
-    rect.h = 80;
-  SDL_FillRect(g.virtualscreen,&rect,1);
-    rect.x = 201;
-    rect.y = 65+y;
-    rect.w = 238;
-    rect.h = 78;
-  SDL_FillRect(g.virtualscreen,&rect,boxcolour);
+  rect.x = 200;
+  rect.y = 64 + y;
+  rect.w = 240;
+  rect.h = 80;
+  SDL_FillRect(g.virtualscreen, &rect, 1);
+  rect.x = 201;
+  rect.y = 65 + y;
+  rect.w = 238;
+  rect.h = 78;
+  SDL_FillRect(g.virtualscreen, &rect, boxcolour);
 
-  if (player == control){
+  if (player == control) {
     char winstring[] = "You win!";
-    g.whitefont.writemask(g.virtualscreen, 288, 72+y, winstring);
+    g.whitefont.writemask(g.virtualscreen, 288, 72 + y, winstring);
     char congrats[] = "Congratulations";
-    g.whitefont.writemask(g.virtualscreen, 260, 122+y, congrats);
-  }else{
+    g.whitefont.writemask(g.virtualscreen, 260, 122 + y, congrats);
+  } else {
     char losestring[] = "You lose";
-    g.whitefont.writemask(g.virtualscreen, 288, 72+y, losestring);
-    if (control > 0){
+    g.whitefont.writemask(g.virtualscreen, 288, 72 + y, losestring);
+    if (control > 0) {
       char winstring[] = "Player x wins";
       winstring[7] = '0' + control;
-      g.whitefont.writemask(g.virtualscreen, 268, 112+y, winstring);
-    }else{
+      g.whitefont.writemask(g.virtualscreen, 268, 112 + y, winstring);
+    } else {
       char winstring[] = "Computer (Plane x) wins";
       winstring[16] = '0' + winner;
-      g.whitefont.writemask(g.virtualscreen, 228, 112+y, winstring);
+      g.whitefont.writemask(g.virtualscreen, 228, 112 + y, winstring);
     }
   }
-
 }
 
 // Main finish game routine
 
-void finish_game(gamedata &g){
+void finish_game(gamedata &g) {
 
-// Stop enginenoise
+  // Stop enginenoise
   g.sound.stop(0);
   g.sound.stop(1);
-// Display winnerbox
-  if (g.winner > 0){
+  // Display winnerbox
+  if (g.winner > 0) {
     winnerbox(g, g.winner, 1, 0, g.planeinfo[g.winner].control);
-    if (g.players == 2){
+    if (g.players == 2) {
       winnerbox(g, g.winner, 2, 240, g.planeinfo[g.winner].control);
     }
-// Update display
+    // Update display
     SDL_Rect rect;
-      rect.x = 0;
-      rect.y = 0;
-      rect.w = 640;
-      rect.h = 480;
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = 640;
+    rect.h = 480;
     SDL_Texture *texture = SDL_CreateTextureFromSurface(g.renderer, g.virtualscreen);
     if (texture == NULL) {
       fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
@@ -79,12 +78,13 @@ void finish_game(gamedata &g){
     SDL_RenderCopy(g.renderer, texture, &rect, NULL);
     SDL_RenderPresent(g.renderer);
     g.sound.play(SOUND_FINISH);
-// Wait 4 Seconds
-   int then = time(0);
-   while (time(0) - then < 4){}
-   SDL_DestroyTexture(texture);
+    // Wait 4 Seconds
+    int then = time(0);
+    while (time(0) - then < 4) {
+    }
+    SDL_DestroyTexture(texture);
   }
-// Clean up linkedlists
+  // Clean up linkedlists
   g.radar.clearlist();
   g.gun.clearlist();
   g.p.clearlist();

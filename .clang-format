@@ -1,0 +1,9 @@
+---
+Language:        Cpp
+BasedOnStyle:    LLVM
+ColumnLimit:     119
+Standard:        c++17
+UseCRLF:         false
+UseTab:          Never
+...
+

@@ -17,16 +17,17 @@
 // Changes by M Snellgrove 3/8/2003
 //   TICK_INTERVAL moved here and set to 20
 
-#include <SDL.h>
-#include <cstdlib>
-#include <ctime>
-#include <cmath>
-#include <cstring>
-#include <filesystem>
-#include "shape.h"
+#include "SDLfont.h"
 #include "linkedlist.h"
 #include "sampleio.h"
-#include "SDLfont.h"
+#include "shape.h"
+#include <SDL.h>
+#include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <filesystem>
 using namespace std;
 
 // Global constants
@@ -41,7 +42,7 @@ const double PI = 3.141592;
 
 // Datatypes
 
-struct building{
+struct building {
   int type; // 0 = none, 1 = tree, 2 = tower, 3 = building, 4 = radar, 5 = gun
   int id;
   int x;
@@ -57,7 +58,7 @@ struct building{
 
 // Building definitions
 
-const building NB = {0,0,0,0,0,0,0,0,0,0,0}; // null building
+const building NB = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // null building
 const building CONTROLTOWER = {3, 0, 0, 0, 69, 73, 240, 0, 0, 140, 225};
 const building FUEL = {3, 0, 0, 0, 71, 75, 60, 0, 0, 140, 140};
 const building HANGAR = {3, 0, 0, 0, 70, 74, 160, 0, 0, 228, 140};
@@ -75,27 +76,27 @@ const building CIVILIAN_3 = {3, 0, 0, 0, 202, 203, -40, 0, 0, 219, 140};
 const building FIRTREE = {1, 0, 0, 0, 258, 259, -10, 0, 0, 143, 143};
 const building PALMTREE = {1, 0, 0, 0, 192, 193, -10, 0, 0, 143, 222};
 
-struct firetype{
+struct firetype {
   int x;
   int y;
-  int time;
-  int type;
+  int time = 0;
+  int type = 0;
 };
 
-struct smoketype{
+struct smoketype {
   int x;
   double y;
   int time;
 };
 
-struct lasertype{
+struct lasertype {
   int x;
   int y;
   int image;
   int time;
 };
 
-struct radartype{
+struct radartype {
   int x;
   int y;
   int image;
@@ -104,7 +105,7 @@ struct radartype{
   int id;
 };
 
-struct guntype{
+struct guntype {
   int x;
   int y;
   int d;
@@ -118,19 +119,19 @@ struct guntype{
   int target;
 };
 
-struct falltype{
+struct falltype {
   double x;
   double y;
   double xs;
   double ys;
   int image;
-  int side;
+  int side = 0;
   int type; // 0 = treebits, 1 = shrapnel, 2 = large bits, 3 = bomb
-  int bombrotate;
-  int rotatedelay;
+  int bombrotate = 0;
+  int rotatedelay = 0;
 };
 
-struct shottype{
+struct shottype {
   double x;
   double y;
   double xs;
@@ -139,23 +140,23 @@ struct shottype{
   int time;
 };
 
-struct map{
+struct map {
   int image[MAP_W][MAP_H];
   int groundheight[MAP_W];
-  building b[MAP_W*2];
-  int realheight[MAP_W*2+1];
-  int smoothheight[MAP_W*2+1];
-  int steepheight[MAP_W*2+1];
+  building b[MAP_W * 2];
+  int realheight[MAP_W * 2 + 1];
+  int smoothheight[MAP_W * 2 + 1];
+  int steepheight[MAP_W * 2 + 1];
   shape ground;
 };
 
-struct info{
+struct info {
   int planetype;
   int basetype;
   int control;
 };
 
-struct drakmstype{
+struct drakmstype {
   double x;
   double y;
   double xs;
@@ -171,7 +172,7 @@ struct drakmstype{
   bool fighter[3];
 };
 
-struct drakguntype{
+struct drakguntype {
   int type;
   int x;
   int y;
@@ -183,7 +184,7 @@ struct drakguntype{
   int image[17];
 };
 
-struct airbase{
+struct airbase {
   int runwayx;
   int runwaylength;
   int size;
@@ -195,53 +196,39 @@ struct airbase{
   building buildlist[15];
 
   // Explicit constructor required else Borland C++ Compiler gives errors
-  airbase() {
-  }
+  airbase() {}
 
-  airbase(int runwayx,int runwaylength,int size,int planepos,int planed,int mapx,int planex,int planey,
-  	building b0 = NB,
-  	building b1 = NB,
-  	building b2 = NB,
-  	building b3 = NB,
-  	building b4 = NB,
-  	building b5 = NB,
-  	building b6 = NB,
-  	building b7 = NB,
-  	building b8 = NB,
-  	building b9 = NB,
-  	building b10 = NB,
-  	building b11 = NB,
-  	building b12 = NB,
-  	building b13 = NB,
-  	building b14 = NB
-  	){
-      this->runwayx = runwayx;
-      this->runwaylength = runwaylength;
-      this->size = size;
-      this->planepos = planepos;
-      this->planed = planed;
-      this->mapx = mapx;
-      this->planex = planex;
-      this->planey = planey;
-      this->buildlist[0] = b0;
-      this->buildlist[1] = b1;
-      this->buildlist[2] = b2;
-      this->buildlist[3] = b3;
-      this->buildlist[4] = b4;
-      this->buildlist[5] = b5;
-      this->buildlist[6] = b6;
-      this->buildlist[7] = b7;
-      this->buildlist[8] = b8;
-      this->buildlist[9] = b9;
-      this->buildlist[10] = b10;
-      this->buildlist[11] = b11;
-      this->buildlist[12] = b12;
-      this->buildlist[13] = b13;
-      this->buildlist[14] = b14;
+  airbase(int rx, int rlength, int bsize, int ppos, int pd, int mx, int px, int py, building b0 = NB, building b1 = NB,
+          building b2 = NB, building b3 = NB, building b4 = NB, building b5 = NB, building b6 = NB, building b7 = NB,
+          building b8 = NB, building b9 = NB, building b10 = NB, building b11 = NB, building b12 = NB,
+          building b13 = NB, building b14 = NB) {
+    this->runwayx = rx;
+    this->runwaylength = rlength;
+    this->size = bsize;
+    this->planepos = ppos;
+    this->planed = pd;
+    this->mapx = mx;
+    this->planex = px;
+    this->planey = py;
+    this->buildlist[0] = b0;
+    this->buildlist[1] = b1;
+    this->buildlist[2] = b2;
+    this->buildlist[3] = b3;
+    this->buildlist[4] = b4;
+    this->buildlist[5] = b5;
+    this->buildlist[6] = b6;
+    this->buildlist[7] = b7;
+    this->buildlist[8] = b8;
+    this->buildlist[9] = b9;
+    this->buildlist[10] = b10;
+    this->buildlist[11] = b11;
+    this->buildlist[12] = b12;
+    this->buildlist[13] = b13;
+    this->buildlist[14] = b14;
   }
 };
 
-struct plane{
+struct plane {
   double x;
   double y;
   double xs;
@@ -278,7 +265,7 @@ struct plane{
   int gunthreat;    //
 };
 
-struct planeclone{
+struct planeclone {
   double x;
   double y;
   double xs;
@@ -294,7 +281,7 @@ struct planeclone{
   int buildingwin;
 };
 
-struct gamedata{
+struct gamedata {
   int planes;
   int towers;
   int guns;
@@ -304,8 +291,8 @@ struct gamedata{
   int targetscore;
   int mission;
   int winner;
-  plane* player1;
-  plane* player2;
+  plane *player1;
+  plane *player2;
   airbase base[7];
   info planeinfo[7];
   SDL_Surface *virtualscreen;
@@ -313,15 +300,15 @@ struct gamedata{
   SDL_Renderer *renderer;
   shape images[319];
   map gamemap;
-  linkedlist <radartype> radar;
-  linkedlist <guntype> gun;
-  linkedlist <plane> p;
-  linkedlist <planeclone> dp;
-  linkedlist <firetype> explosion;
-  linkedlist <firetype> flame;
-  linkedlist <smoketype> smoke;
-  linkedlist <falltype> fall;
-  linkedlist <shottype> shot;
+  linkedlist<radartype> radar;
+  linkedlist<guntype> gun;
+  linkedlist<plane> p;
+  linkedlist<planeclone> dp;
+  linkedlist<firetype> explosion;
+  linkedlist<firetype> flame;
+  linkedlist<smoketype> smoke;
+  linkedlist<falltype> fall;
+  linkedlist<shottype> shot;
   sampleio sound;
   SDLfont whitefont;
   SDLfont greenfont;
@@ -334,26 +321,25 @@ struct gamedata{
   int drakoption;
   bool drak;
   drakmstype drakms;
-  linkedlist <drakguntype> drakgun;
-  linkedlist <lasertype> laser;
+  linkedlist<drakguntype> drakgun;
+  linkedlist<lasertype> laser;
 };
 
 // Airbase definitions
 
-const airbase EMPTY_AIRBASE(0,0,0,0,0,0,0,0);
-const airbase STANDARD_AIRBASE(48,80,4,48,13,0,0,0,CONTROLTOWER,RADAR,GUN,NB,NB,NB,NB,NB,NB,FUEL,HANGAR);
-const airbase REVERSED_AIRBASE(32,80,4,96,5,0,0,0,HANGAR,FUEL,NB,NB,NB,NB,NB,
-                                 NB,GUN,RADAR,CONTROLTOWER);
-const airbase LITTLE_AIRBASE(16,80,2,16,13,0,0,0,CONTROLTOWER,NB,
-                                 NB,NB,NB,NB,NB);
-const airbase LONG_AIRBASE(16,192,6,16,13,0,0,0,CONTROLTOWER,NB,NB,NB,NB,NB,
-                                 NB,NB,NB,NB,NB,NB,NB,NB,HANGAR);
-const airbase ORIGINAL_AIRBASE(32,80,3,32,13,0,0,0,CONTROLTOWER,RADAR,NB,
-                                 NB,NB,NB,NB,NB,HANGAR);
-const airbase SHOOTY_AIRBASE(80,80,6,80,13,0,0,0,GUN,FUEL,GUN,CONTROLTOWER,
-                                 RADAR,NB,NB,NB,NB,NB,NB,HANGAR,GUN,FUEL,GUN);
-const airbase TWOGUN_AIRBASE(48,96,5,128,5,0,0,0,RADAR,GUN,HANGAR,NB,NB,
-                                 NB,NB,NB,NB,NB,CONTROLTOWER,GUN,RADAR);
+const airbase EMPTY_AIRBASE(0, 0, 0, 0, 0, 0, 0, 0);
+const airbase STANDARD_AIRBASE(48, 80, 4, 48, 13, 0, 0, 0, CONTROLTOWER, RADAR, GUN, NB, NB, NB, NB, NB, NB, FUEL,
+                               HANGAR);
+const airbase REVERSED_AIRBASE(32, 80, 4, 96, 5, 0, 0, 0, HANGAR, FUEL, NB, NB, NB, NB, NB, NB, GUN, RADAR,
+                               CONTROLTOWER);
+const airbase LITTLE_AIRBASE(16, 80, 2, 16, 13, 0, 0, 0, CONTROLTOWER, NB, NB, NB, NB, NB, NB);
+const airbase LONG_AIRBASE(16, 192, 6, 16, 13, 0, 0, 0, CONTROLTOWER, NB, NB, NB, NB, NB, NB, NB, NB, NB, NB, NB, NB,
+                           NB, HANGAR);
+const airbase ORIGINAL_AIRBASE(32, 80, 3, 32, 13, 0, 0, 0, CONTROLTOWER, RADAR, NB, NB, NB, NB, NB, NB, HANGAR);
+const airbase SHOOTY_AIRBASE(80, 80, 6, 80, 13, 0, 0, 0, GUN, FUEL, GUN, CONTROLTOWER, RADAR, NB, NB, NB, NB, NB, NB,
+                             HANGAR, GUN, FUEL, GUN);
+const airbase TWOGUN_AIRBASE(48, 96, 5, 128, 5, 0, 0, 0, RADAR, GUN, HANGAR, NB, NB, NB, NB, NB, NB, NB, CONTROLTOWER,
+                             GUN, RADAR);
 
 // Sample definitions
 
@@ -374,83 +360,163 @@ const int SOUND_FINISH = 13;
 
 // Plane definitions
 
-const plane SPITFIRE = {0.0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0,
-                        122, 0, int(3/GAME_SPEED)-1,
-                        false, false, false, false, 0, 8, 8, 4, 4, 143,
-                        SOUND_ENGINE, false, 0, 0, 0, 0, 0, 0, 0};
-const plane JET = {0.0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0,
-                        76, 0, int(2/GAME_SPEED)-1,
-                        false, true, false, false, 0, 12, 12, 5, 5, 140,
-                        SOUND_JET, false, 0, 0, 0, 0, 0, 0, 0};
-const plane STEALTH = {0.0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0,
-                        174, 0, int(4/GAME_SPEED)-1,
-                        false, false, false, true, 0, 3, 3, 6, 6, 235,
-                        SOUND_JET, false, 0, 0, 0, 0, 0, 0, 0};
-const plane DRAK_FIGHTER = {0.0, 0.0, 0.0, 2.0*GAME_SPEED, 2.0*GAME_SPEED, 9, 0, 2, 1, 0, 0, 0,
-                        259, 0, int(1/GAME_SPEED)-1,
-                        false, true, false, false, 0, 1000, 1000, 0, 0, 235,
-                        SOUND_JET, true, 0, 0, 0, 0, 0, 0, 0};
-
+const plane SPITFIRE = {0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        122,
+                        0,
+                        int(3 / GAME_SPEED) - 1,
+                        false,
+                        false,
+                        false,
+                        false,
+                        0,
+                        8,
+                        8,
+                        4,
+                        4,
+                        143,
+                        SOUND_ENGINE,
+                        false,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0};
+const plane JET = {0.0,   0.0,  0.0,   0.0,   0.0, 0,  0,  0, 0, 0,   0,         0,     76, 0, int(2 / GAME_SPEED) - 1,
+                   false, true, false, false, 0,   12, 12, 5, 5, 140, SOUND_JET, false, 0,  0, 0,
+                   0,     0,    0,     0};
+const plane STEALTH = {
+    0.0,   0.0,   0.0,   0.0,  0.0, 0, 0, 0, 0, 0,   0,         0,     174, 0, int(4 / GAME_SPEED) - 1,
+    false, false, false, true, 0,   3, 3, 6, 6, 235, SOUND_JET, false, 0,   0, 0,
+    0,     0,     0,     0};
+const plane DRAK_FIGHTER = {0.0,
+                            0.0,
+                            0.0,
+                            2.0 * GAME_SPEED,
+                            2.0 * GAME_SPEED,
+                            9,
+                            0,
+                            2,
+                            1,
+                            0,
+                            0,
+                            0,
+                            259,
+                            0,
+                            int(1 / GAME_SPEED) - 1,
+                            false,
+                            true,
+                            false,
+                            false,
+                            0,
+                            1000,
+                            1000,
+                            0,
+                            0,
+                            235,
+                            SOUND_JET,
+                            true,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0};
 
 // Drak mothership initial state
 
-const drakmstype DRAKMSINIT = {0.0, -32.0, 0.0, 0, 0, 0, 0, int(200/GAME_SPEED), true, true, 0, 0,
-                           {false, false, false}};
+const drakmstype DRAKMSINIT = {
+    0.0, -32.0, 0.0, 0, 0, 0, 0, int(200 / GAME_SPEED), true, true, 0, 0, {false, false, false}};
 
-const drakguntype DGUN_LASER_LEFT = {-1, 24, 27, 0, 0, 0, 0, 0,{305, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                     0, 0, 0, 0, 0, 0, 0}};
-const drakguntype DGUN_LASER_RIGHT = {1, 56, 27, 0, 0, 0, 0, 0,{305, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                      0, 0, 0, 0, 0, 0, 0}};
-const drakguntype DGUN_TOP_LEFT = {0, 2, -3, 1, 0, 0, 0, 0,{0, 281, 280, 279, 278, 277, 0, 0, 0,
-                                   0, 0, 0, 0, 0, 284, 283, 282}};
-const drakguntype DGUN_TOP_RIGHT = {0, 78, -3, 1, 0, 0, 0, 0,{0, 281, 280, 279, 278, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 285, 284, 283, 282}};
-const drakguntype DGUN_SIDE_LEFT = {0, -4, 20, 7, 0, 0, 0, 0,{0, 0, 0, 0, 287, 288, 289, 290,
-                                    291, 292, 293, 294, 0, 0, 0, 0, 0}};
-const drakguntype DGUN_SIDE_RIGHT = {0, 84, 20, 11, 0, 0, 0, 0,{0, 0, 0, 0, 0, 0, 0, 303, 302,
-                                     301, 300, 299, 298, 297, 296, 0, 0}};
+const drakguntype DGUN_LASER_LEFT = {-1, 24, 27, 0, 0, 0, 0, 0, {305, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+const drakguntype DGUN_LASER_RIGHT = {1, 56, 27, 0, 0, 0, 0, 0, {305, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+const drakguntype DGUN_TOP_LEFT = {
+    0, 2, -3, 1, 0, 0, 0, 0, {0, 281, 280, 279, 278, 277, 0, 0, 0, 0, 0, 0, 0, 0, 284, 283, 282}};
+const drakguntype DGUN_TOP_RIGHT = {
+    0, 78, -3, 1, 0, 0, 0, 0, {0, 281, 280, 279, 278, 0, 0, 0, 0, 0, 0, 0, 0, 285, 284, 283, 282}};
+const drakguntype DGUN_SIDE_LEFT = {
+    0, -4, 20, 7, 0, 0, 0, 0, {0, 0, 0, 0, 287, 288, 289, 290, 291, 292, 293, 294, 0, 0, 0, 0, 0}};
+const drakguntype DGUN_SIDE_RIGHT = {
+    0, 84, 20, 11, 0, 0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 303, 302, 301, 300, 299, 298, 297, 296, 0, 0}};
 
 // Function prototypes
 
-void setup_game(gamedata &);
-
-void init_data(gamedata &);
-
-void drawall(gamedata &);
-
-void game(gamedata &);
-
-void all(gamedata &);
-
-int wrap(int, int, int);
-
-int limit(int, int, int);
-
-double dlimit(double, double, double);
-
-int sign(int);
-
-void draw_dither(SDL_Surface *, int, int, int, int);
-
-void computer_ai(gamedata &, plane &, int &, int &, bool &);
-
-void detect_collisions(gamedata &);
-
-void killbuilding(gamedata &, building &);
-
-void killtower(gamedata &, building &, double, double, int, int);
-
-void setup_intelligence(map &);
-
+Uint32 time_left(Uint32);
 bool fall_collision(gamedata &, falltype &);
-
-void gunshoot(guntype &, linkedlist <shottype> &, sampleio &, double[17],
-              double[17]);
-
-void finish_game(gamedata &);
-
-void setup_draks(drakmstype &, linkedlist <drakguntype> &);
-
-void drak_main(gamedata &);
-
 double drand();
+int getConfig(string, string, int, int, int);
+int randomland(int, int);
+int sign(int);
+int wrap(int, int, int);
+string find_config_file();
+string getConfig(string, string, string);
+void act(gamedata &, int, int, bool);
+void all(gamedata &);
+void animate_explosions(linkedlist<firetype> &);
+void animate_flames(linkedlist<firetype> &, linkedlist<smoketype> &);
+void animate_smoke(linkedlist<smoketype> &);
+void clone_planes(linkedlist<plane> &, linkedlist<planeclone> &, int, int &);
+void computer_ai(gamedata &, plane &, int &, int &, bool &);
+void control(gamedata &, const Uint8 *, int &, int &, bool &);
+void create_airbases(airbase *, info *, int);
+void decay_lasers(linkedlist<lasertype> &);
+void detect_collisions(gamedata &);
+void display_playinfo(SDL_Surface *, int, plane &, int, shape *, int, int, SDLfont &, SDLfont &);
+void display_score(SDL_Surface *, plane &, int, int, int, int, SDLfont &, SDLfont &);
+void drak_main(gamedata &);
+void drakgunshoot(drakguntype &, drakmstype &, linkedlist<shottype> &, sampleio &, double *, double *);
+void draw_buildings(building *, SDL_Surface *, shape *);
+void draw_dither(SDL_Surface *, int, int, int, int);
+void draw_map(int[MAP_W][MAP_H], SDL_Surface *, shape *, shape &);
+void draw_mapblocks(int[MAP_W][MAP_H], SDL_Surface *, shape *);
+void draw_runways(airbase *, int, int *, SDL_Surface *);
+void drawall(gamedata &);
+void drawblits(gamedata &, int, int);
+void drop_bomb(plane &, linkedlist<falltype> &, sampleio &, int *);
+void finish_game(gamedata &);
+void fire_drakguns(gamedata &, linkedlist<drakguntype> &, drakmstype &, linkedlist<plane> &, sampleio &,
+                   linkedlist<lasertype> &, building *, linkedlist<shottype> &, int *, double *, double *);
+void fire_guns(linkedlist<guntype> &, linkedlist<plane> &, sampleio &, building[MAP_W * 2], linkedlist<shottype> &,
+               double[17], double[17]);
+void fire_laser(gamedata &, drakguntype &, drakmstype &, sampleio &, building *, linkedlist<lasertype> &, int *);
+void fire_shot(plane &, linkedlist<shottype> &, sampleio &, double *, double *);
+void followtarget(plane &, int &, int &, int, int, bool);
+void game(gamedata &);
+void gunshoot(guntype &, linkedlist<shottype> &, sampleio &, double[17], double[17]);
+void init_data(gamedata &);
+void init_gameconstants(gamedata &);
+void init_gamedata(gamedata &);
+void init_sound(sampleio &);
+void keyboard(const Uint8 *, int &, int &, bool &, SDL_Scancode, SDL_Scancode, SDL_Scancode, SDL_Scancode,
+              SDL_Scancode);
+void killbuilding(gamedata &, building &);
+void killtower(gamedata &, building &, double, double, int, int);
+void launch_drakfighter(drakmstype &, linkedlist<plane> &, linkedlist<planeclone> &);
+void load_font(SDL_Surface *, SDLfont &, SDLfont &);
+void load_shapes(gamedata &, shape *);
+void move_falls(gamedata &);
+void move_shots(linkedlist<shottype> &, shape &, shape &, shape &, drakmstype &);
+void plane_collisions(gamedata &);
+void rotate_radars(linkedlist<radartype> &);
+void setup_buildings(gamedata &, bool *);
+void setup_display(gamedata &);
+void setup_draks(drakmstype &, linkedlist<drakguntype> &);
+void setup_game(gamedata &);
+void setup_intelligence(map &);
+void setup_map(map &, int, airbase *, bool *);
+void setup_planes(linkedlist<plane> &, linkedlist<planeclone> &, airbase *, int, info *, plane *&, plane *&);
+void switch_bad_default(const char *, const char *, int);
+void winnerbox(gamedata &, int, int, int, int);

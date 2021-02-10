@@ -11,12 +11,12 @@
 // Definition of Main
 // Cygwin expects a WinMain function
 #ifdef CYGWIN
-WINAPI int WinMain(HINSTANCE, HINSTANCE, LPSTR, int){
+WINAPI int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #else
-int main(int, char**){
+int main(int, char **) {
 #endif
 
-atexit(SDL_Quit);
+  atexit(SDL_Quit);
   // Initialize data
   gamedata g;
   init_data(g);
@@ -35,5 +35,4 @@ atexit(SDL_Quit);
   g.sound.close();
 
   return 0;
-
 }

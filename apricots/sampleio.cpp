@@ -15,38 +15,33 @@
 #include "sampleio.h"
 
 // Empty Noaudio sound routines
-#if AP_AUDIO==AUDIO_NOAUDIO
+#if AP_AUDIO == AUDIO_NOAUDIO
 
-sampleio :: sampleio(){}
-void sampleio :: init(int, char [][255], int, int){}
-void sampleio :: close(){}
-void sampleio :: update(){}
-void sampleio :: channel(int, int){}
-void sampleio :: loop(int, int){}
-void sampleio :: play(int){}
-void sampleio :: stop(int){}
-void sampleio :: psource(int, int, bool){}
-void sampleio :: volume(int, double){}
-ALboolean sampleio :: sourceisplaying(ALuint){return false;}
+sampleio ::sampleio() {}
+void sampleio ::init(int, char[][255], int, int) {}
+void sampleio ::close() {}
+void sampleio ::update() {}
+void sampleio ::channel(int, int) {}
+void sampleio ::loop(int, int) {}
+void sampleio ::play(int) {}
+void sampleio ::stop(int) {}
+void sampleio ::psource(int, int, bool) {}
+void sampleio ::volume(int, double) {}
+ALboolean sampleio ::sourceisplaying(ALuint) { return false; }
 
 #endif
 
 // OpenAL sound routines
-#if AP_AUDIO==AUDIO_OPENAL
+#if AP_AUDIO == AUDIO_OPENAL
 
 // Constructor
 
-sampleio :: sampleio(){
-
-  initdone = false;
-
-}
+sampleio ::sampleio() { initdone = false; }
 
 // Initialize OpenAL
 
-void sampleio :: init(int nsamples, char filenames[][255], int nsources,
-                      int npool){
-  if (initdone){
+void sampleio ::init(int nsamples, char filenames[][255], int nsources, int npool) {
+  if (initdone) {
     cerr << "sampleio: call to init when already in use" << endl;
     exit(1);
   }
@@ -56,97 +51,92 @@ void sampleio :: init(int nsamples, char filenames[][255], int nsources,
   numsources = nsources;
   numpool = npool;
   samples = new ALuint[numsamples];
-  sources = new ALuint[numsources+numpool];
+  sources = new ALuint[numsources + numpool];
   poolcount = numsources;
 
   // Initialize audio device
   alutInit(0, NULL);
 
-  ALfloat zeroes[] = { 0.0f, 0.0f,  0.0f };
-  ALfloat back[]   = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f };
-  ALfloat front[]  = { 0.0f, 0.0f,  1.0f, 0.0f, 1.0f, 0.0f };
-  ALfloat position[] = { 0.0f, 0.0f, -4.0f };
-  ALsizei filelen;
+  ALfloat zeroes[] = {0.0f, 0.0f, 0.0f};
+  ALfloat back[] = {0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f};
+  ALfloat front[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f};
+  ALfloat position[] = {0.0f, 0.0f, -4.0f};
 
   // Setup Listener
-  alListenerfv(AL_POSITION, zeroes );
-  alListenerfv(AL_VELOCITY, zeroes );
-  alListenerfv(AL_ORIENTATION, front );
+  alListenerfv(AL_POSITION, zeroes);
+  alListenerfv(AL_VELOCITY, zeroes);
+  alListenerfv(AL_ORIENTATION, front);
 
   // Load in samples
-  //ALvoid* data = malloc(5 * (512 * 3) * 1024);
+  // ALvoid* data = malloc(5 * (512 * 3) * 1024);
   alGenBuffers(numsamples, samples);
 
-  for (int i = 0; i < numsamples; i++){
-    //ALsizei freq;
-    //ALboolean fileok;
+  for (int i = 0; i < numsamples; i++) {
+    // ALsizei freq;
+    // ALboolean fileok;
     // Evil OpenAL portability fix done here
 #ifdef _WIN32
     ALenum format;
     ALboolean trash;
-    alutLoadWAVFile(filenames[i],&format,&data,&filelen,&freq,&trash);
+    ALsizei filelen;
+    alutLoadWAVFile(filenames[i], &format, &data, &filelen, &freq, &trash);
     fileok = (alGetError() == AL_NO_ERROR);
 #else
-    //ALsizei format;
-    //ALsizei trash;
-    //fileok = alutLoadWAV(filenames[i],&data,&format,&filelen,&trash,&freq);
+    // ALsizei format;
+    // ALsizei trash;
+    // ALsizei filelen;
+    // fileok = alutLoadWAV(filenames[i],&data,&format,&filelen,&trash,&freq);
     samples[i] = alutCreateBufferFromFile(filenames[i]);
 #endif
-    //if (!fileok){
-    if (samples[i] == AL_NONE){
+    // if (!fileok){
+    if (samples[i] == AL_NONE) {
       cerr << "sampleio: could not open " << filenames[i] << endl;
       exit(1);
     }
-    //alBufferData(samples[i], format, data, filelen, freq);
+    // alBufferData(samples[i], format, data, filelen, freq);
   }
 
   // Generate Sources
-  alGenSources(numsources+numpool, sources);
+  alGenSources(numsources + numpool, sources);
 
-  for(int j=0;j<numsources+numpool;j++){
-    alSourcefv(sources[j], AL_POSITION, position );
-    alSourcefv(sources[j], AL_VELOCITY, zeroes );
-    alSourcefv(sources[j], AL_ORIENTATION, back );
+  for (int j = 0; j < numsources + numpool; j++) {
+    alSourcefv(sources[j], AL_POSITION, position);
+    alSourcefv(sources[j], AL_VELOCITY, zeroes);
+    alSourcefv(sources[j], AL_ORIENTATION, back);
   }
 
-  //free(data);
-
+  // free(data);
 }
 
 // Clearup routine
 
-void sampleio :: close(){
+void sampleio ::close() {
 
-  if (initdone){
-    delete [] samples;
-    delete [] sources;
+  if (initdone) {
+    delete[] samples;
+    delete[] sources;
     initdone = false;
     alutExit();
   }
-
 }
 
 // Update method (blank)
 
-void sampleio :: update(){
-
-}
+void sampleio ::update() {}
 
 // Play a channel
 
-void sampleio :: channel(int chan, int sample){
-  if (!initdone){
+void sampleio ::channel(int chan, int sample) {
+  if (!initdone) {
     cerr << "sampleio: initialize before use" << endl;
     return;
   }
-  if ((chan < 0) || (chan >= numsources)){
-    cerr << "sampleio: attempt to play nonexistant source " << chan
-         << endl;
+  if ((chan < 0) || (chan >= numsources)) {
+    cerr << "sampleio: attempt to play nonexistant source " << chan << endl;
     return;
   }
-  if ((sample < 0) || (sample >= numsamples)){
-    cerr << "sampleio: attempt to play nonexistant sample " << sample
-         << endl;
+  if ((sample < 0) || (sample >= numsamples)) {
+    cerr << "sampleio: attempt to play nonexistant sample " << sample << endl;
     return;
   }
 
@@ -155,114 +145,105 @@ void sampleio :: channel(int chan, int sample){
 
 // Loop a sample
 
-void sampleio :: loop(int chan, int sample){
+void sampleio ::loop(int chan, int sample) {
 
-  if (!initdone){
+  if (!initdone) {
     cerr << "sampleio: initialize before use" << endl;
     return;
   }
-  if ((chan < 0) || (chan >= numsources)){
-    cerr << "sampleio: attempt to play nonexistant source " << chan
-         << endl;
+  if ((chan < 0) || (chan >= numsources)) {
+    cerr << "sampleio: attempt to play nonexistant source " << chan << endl;
     return;
   }
-  if ((sample < 0) || (sample >= numsamples)){
-    cerr << "sampleio: attempt to play nonexistant sample " << sample
-         << endl;
+  if ((sample < 0) || (sample >= numsamples)) {
+    cerr << "sampleio: attempt to play nonexistant sample " << sample << endl;
     return;
   }
   psource(chan, sample, true);
-
 }
 
 // Play a sample
 
-void sampleio :: play(int sample){
+void sampleio ::play(int sample) {
 
-  if (!initdone){
+  if (!initdone) {
     cerr << "sampleio: initialize before use" << endl;
     return;
   }
-  if (numpool == 0){
+  if (numpool == 0) {
     cerr << "sampleio: attempt to play nonexistant pool " << endl;
     return;
   }
-  if ((sample < 0) || (sample >= numsamples)){
-    cerr << "sampleio: attempt to play nonexistant sample " << sample
-         << endl;
+  if ((sample < 0) || (sample >= numsamples)) {
+    cerr << "sampleio: attempt to play nonexistant sample " << sample << endl;
     return;
   }
   poolcount++;
-  if (poolcount == numsources + numpool) poolcount = numsources;
+  if (poolcount == numsources + numpool)
+    poolcount = numsources;
   psource(poolcount, sample, false);
-
 }
 
 // Stop current sample
 
-void sampleio :: stop(int i){
+void sampleio ::stop(int i) {
 
-  if (!initdone){
+  if (!initdone) {
     cerr << "sampleio: initialize before use" << endl;
     return;
   }
-  if ((i < 0) || (i >= numsources)){
-    cerr << "sampleio: attempt to stop nonexistant source " << i
-         << endl;
+  if ((i < 0) || (i >= numsources)) {
+    cerr << "sampleio: attempt to stop nonexistant source " << i << endl;
     return;
   }
-  if (sourceisplaying(sources[i])){
+  if (sourceisplaying(sources[i])) {
     alSourceStop(sources[i]);
   }
-
 }
 
 // Actaully start a sample
 
-void sampleio :: psource(int i, int sample, bool loop){
+void sampleio ::psource(int i, int sample, bool loop) {
 
   // Stop current sample
-  if (sourceisplaying(sources[i])){
+  if (sourceisplaying(sources[i])) {
     alSourceStop(sources[i]);
   }
 
   // Change to new sample
   alSourcei(sources[i], AL_BUFFER, samples[sample]);
-  if (loop){
+  if (loop) {
     alSourcei(sources[i], AL_LOOPING, AL_TRUE);
-  }else{
+  } else {
     alSourcei(sources[i], AL_LOOPING, AL_FALSE);
   }
 
   // Play new sample
   alSourcePlay(sources[i]);
-
 }
 
 // Volume control function
 
-void sampleio :: volume(int i, double vol){
+void sampleio ::volume(int i, double vol) {
 
-  if (!initdone){
+  if (!initdone) {
     cerr << "sampleio: initialize before use" << endl;
     return;
   }
-  if ((i < 0) || (i >= numsources)){
-    cerr << "sampleio: attempt to volume nonexistant source " << i
-         << endl;
+  if ((i < 0) || (i >= numsources)) {
+    cerr << "sampleio: attempt to volume nonexistant source " << i << endl;
     return;
   }
   ALfloat volf = ALfloat(vol);
   alSourcef(sources[i], AL_GAIN, volf);
-
 }
 
 // Check on playing sources function
 
-ALboolean sampleio ::  sourceisplaying(ALuint sid) {
+ALboolean sampleio ::sourceisplaying(ALuint sid) {
 
   ALint state;
-  if(alIsSource(sid) == AL_FALSE){
+  if (alIsSource(sid) == AL_FALSE) {
     return AL_FALSE;
   }
   state = AL_INITIAL;
@@ -274,14 +255,14 @@ ALboolean sampleio ::  sourceisplaying(ALuint sid) {
   alGetSourceiv(sid, AL_SOURCE_STATE, &state);
 #endif
 
-  switch(state) {
-    case AL_PLAYING: case AL_PAUSED:
-      return AL_TRUE;
-    default:
-      break;
+  switch (state) {
+  case AL_PLAYING:
+  case AL_PAUSED:
+    return AL_TRUE;
+  default:
+    break;
   }
   return AL_FALSE;
-
 }
 
 #endif

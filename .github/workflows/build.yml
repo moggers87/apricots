@@ -22,7 +22,7 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu-')
         run: |
           sudo apt-get update
-          sudo apt-get install libsdl2-dev autotools-dev
+          sudo apt-get install libsdl2-dev autotools-dev clang-format cppcheck
       - name: Install Mac dependencies
         if: startsWith(matrix.os, 'macos-')
         run: brew install sdl2 autoconf automake
@@ -31,6 +31,10 @@ jobs:
           ./bootstrap
           ./configure
           make
+      - name: Checks
+        if: startsWith(matrix.os, 'ubuntu-')
+        run: |
+          make check
   build-source:
     runs-on: ubuntu-latest
     strategy:
