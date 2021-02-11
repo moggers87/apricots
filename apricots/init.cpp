@@ -24,54 +24,50 @@
 
 // Display setup (double buffered with two playfields)
 
-void setup_display(gamedata &g){
-  SDL_Window *window = SDL_CreateWindow("Apricots", SDL_WINDOWPOS_UNDEFINED,
-          SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+void setup_display(gamedata &g) {
+  SDL_Window *window = SDL_CreateWindow("Apricots", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
 
   g.renderer = SDL_CreateRenderer(window, -1, 0);
-  if (g.renderer == NULL){
-    fprintf(stderr, "Couldn't create renderer: %s\n",SDL_GetError());
+  if (g.renderer == NULL) {
+    fprintf(stderr, "Couldn't create renderer: %s\n", SDL_GetError());
     exit(1);
   }
 
-  g.virtualscreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 480, 8,
-                                         0, 0, 0, 0);
-  if (g.virtualscreen == NULL){
-    fprintf(stderr, "Couldn't set 640x480x8 virtual video mode: %s\n",SDL_GetError());
+  g.virtualscreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 480, 8, 0, 0, 0, 0);
+  if (g.virtualscreen == NULL) {
+    fprintf(stderr, "Couldn't set 640x480x8 virtual video mode: %s\n", SDL_GetError());
     exit(1);
   }
 
-  g.gamescreen = SDL_CreateRGBSurface(SDL_SWSURFACE, GAME_WIDTH, GAME_HEIGHT, 8,
-                                      0, 0, 0, 0);
-  if (g.gamescreen == NULL){
-    fprintf(stderr, "Couldn't set game video mode: %s\n",SDL_GetError());
+  g.gamescreen = SDL_CreateRGBSurface(SDL_SWSURFACE, GAME_WIDTH, GAME_HEIGHT, 8, 0, 0, 0, 0);
+  if (g.gamescreen == NULL) {
+    fprintf(stderr, "Couldn't set game video mode: %s\n", SDL_GetError());
     exit(1);
   }
 }
 
 // Load font and set font colours
 
-void load_font(SDL_Surface *screen, SDLfont &whitefont, SDLfont &greenfont){
+void load_font(SDL_Surface *screen, SDLfont &whitefont, SDLfont &greenfont) {
 
   char filename[255];
-  strcpy(filename,AP_PATH);
-  strcat(filename,"alt-8x16.psf");
+  strcpy(filename, AP_PATH);
+  strcat(filename, "alt-8x16.psf");
   whitefont.loadpsf(filename, 8, 16);
   whitefont.colour(screen, 1, 0);
   greenfont = whitefont;
   greenfont.colour(screen, 13, 0);
-
 }
 
 // Load shapes and set palette
 
-void load_shapes(gamedata &g,shape images[]){
+void load_shapes(gamedata &g, shape images[]) {
 
   char filename[255];
-  strcpy(filename,AP_PATH);
-  strcat(filename,"apricots.shapes");
+  strcpy(filename, AP_PATH);
+  strcat(filename, "apricots.shapes");
   ifstream fin(filename, ios::binary);
-  if(fin.fail()){
+  if (fin.fail()) {
     fprintf(stderr, "Could not open file: %s\n", filename);
     exit(-1);
   }
@@ -82,90 +78,88 @@ void load_shapes(gamedata &g,shape images[]){
     int dummyb;
     fin >> dummyb;
     int red, green, blue;
-    for( int c1=0;c1<256;c1++) {
-      SDL_Color col = { 0, 0, 0, 0 };
+    for (int c1 = 0; c1 < 256; c1++) {
+      SDL_Color col = {0, 0, 0, 0};
       SDL_SetPaletteColors(g.virtualscreen->format->palette, &col, c1, 1);
     }
-    for (int c2=0;c2<16;c2++){
+    for (int c2 = 0; c2 < 16; c2++) {
       fin >> red >> green >> blue;
       Uint8 new_red = red * 4;
       Uint8 new_green = green * 4;
       Uint8 new_blue = blue * 4;
-      SDL_Color col = { new_red, new_green, new_blue, 0 };
+      SDL_Color col = {new_red, new_green, new_blue, 0};
       SDL_SetPaletteColors(g.virtualscreen->format->palette, &col, c2, 1);
     }
-    for (int c3=0;c3<25;c3++){
-      Uint8 new_green = ((2*c3) % 64) * 4;
-      Uint8 new_blue = ((15+2*c3) % 64) * 4;
-      SDL_Color col = { 0, new_green, new_blue, 0 };
-      SDL_SetPaletteColors(g.virtualscreen->format->palette, &col, c3+16, 1);
+    for (int c3 = 0; c3 < 25; c3++) {
+      Uint8 new_green = ((2 * c3) % 64) * 4;
+      Uint8 new_blue = ((15 + 2 * c3) % 64) * 4;
+      SDL_Color col = {0, new_green, new_blue, 0};
+      SDL_SetPaletteColors(g.virtualscreen->format->palette, &col, c3 + 16, 1);
     }
-    for (int c4=0;c4<256;c4++){
+    for (int c4 = 0; c4 < 256; c4++) {
       Uint8 rgb[3];
       SDL_GetRGB(c4, g.virtualscreen->format, &rgb[0], &rgb[1], &rgb[2]);
-      SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
+      SDL_Color col = {rgb[0], rgb[1], rgb[2], 0};
       SDL_SetPaletteColors(g.gamescreen->format->palette, &col, c4, 1);
     }
     fin.read(dummy, 1);
   }
-  for (int i=1;i<=34;i++)
+  for (int i = 1; i <= 34; i++)
     images[i].read(fin);
-  for (int j=69;j<=318;j++)
+  for (int j = 69; j <= 318; j++)
     images[j].read(fin);
 
-  for (int c=0;c<256;c++){
+  for (int c = 0; c < 256; c++) {
     Uint8 rgb[3];
     SDL_GetRGB(c, g.virtualscreen->format, &rgb[0], &rgb[1], &rgb[2]);
-    SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
-    for (int i=0;i<=318;i++){
+    SDL_Color col = {rgb[0], rgb[1], rgb[2], 0};
+    for (int i = 0; i <= 318; i++) {
       if (images[i].getSurface() != NULL)
         SDL_SetPaletteColors(images[i].getSurface()->format->palette, &col, c, 1);
     }
   }
 
   fin.close();
-
 }
 
 // Sound initialization
 
-void init_sound(sampleio &sound){
+void init_sound(sampleio &sound) {
 
   char filenames[14][255];
-  for (int i=0;i<14;i++){
-    strcpy(filenames[i],AP_PATH);
+  for (int i = 0; i < 14; i++) {
+    strcpy(filenames[i], AP_PATH);
   }
-  strcat(filenames[0],"engine.wav");
-  strcat(filenames[1],"jet.wav");
-  strcat(filenames[2],"explode.wav");
-  strcat(filenames[3],"groundhit.wav");
-  strcat(filenames[4],"fuelexplode.wav");
-  strcat(filenames[5],"shot.wav");
-  strcat(filenames[6],"gunshot.wav");
-  strcat(filenames[7],"bomb.wav");
-  strcat(filenames[8],"splash.wav");
-  strcat(filenames[9],"laser.wav");
-  strcat(filenames[10],"stall.wav");
-  strcat(filenames[11],"gunshot2.wav");
-  strcat(filenames[12],"afterburner.wav");
-  strcat(filenames[13],"finish.wav");
+  strcat(filenames[0], "engine.wav");
+  strcat(filenames[1], "jet.wav");
+  strcat(filenames[2], "explode.wav");
+  strcat(filenames[3], "groundhit.wav");
+  strcat(filenames[4], "fuelexplode.wav");
+  strcat(filenames[5], "shot.wav");
+  strcat(filenames[6], "gunshot.wav");
+  strcat(filenames[7], "bomb.wav");
+  strcat(filenames[8], "splash.wav");
+  strcat(filenames[9], "laser.wav");
+  strcat(filenames[10], "stall.wav");
+  strcat(filenames[11], "gunshot2.wav");
+  strcat(filenames[12], "afterburner.wav");
+  strcat(filenames[13], "finish.wav");
 
   sound.init(14, filenames, 2, 6);
-
 }
 
 // Initialize the game constants
 
-void init_gameconstants(gamedata &g){
+void init_gameconstants(gamedata &g) {
 
-// Initialize sin/cos arrays and afterburner co-ordinates
-  for (int i=1;i<=16;i++){
-    g.xmove[i] = -sin((i-1)*PI/8.0);
-    g.ymove[i] = -cos((i-1)*PI/8.0);
+  // Initialize sin/cos arrays and afterburner co-ordinates
+  for (int i = 1; i <= 16; i++) {
+    g.xmove[i] = -sin((i - 1) * PI / 8.0);
+    g.ymove[i] = -cos((i - 1) * PI / 8.0);
     g.xboost[i] = 6 - int(9 * g.xmove[i]);
     g.yboost[i] = 6 - int(10 * g.ymove[i]);
   }
-// Corrections
+  // Corrections
   g.ymove[5] = 0.0;
   g.ymove[13] = 0.0;
   g.xmove[1] = 0.0;
@@ -175,7 +169,7 @@ void init_gameconstants(gamedata &g){
   g.yboost[5] = 7;
   g.xboost[13] = -5;
   g.yboost[13] = 7;
-// Initialize flight data
+  // Initialize flight data
   g.accel[1] = -0.18;
   g.accel[2] = -0.12;
   g.accel[3] = -0.04;
@@ -192,7 +186,7 @@ void init_gameconstants(gamedata &g){
   g.accel[14] = -0.005;
   g.accel[15] = -0.04;
   g.accel[16] = -0.12;
-// Initialize the bomb images
+  // Initialize the bomb images
   g.bombimage[1] = 115;
   g.bombimage[2] = 122;
   g.bombimage[3] = 122;
@@ -209,7 +203,6 @@ void init_gameconstants(gamedata &g){
   g.bombimage[14] = 116;
   g.bombimage[15] = 116;
   g.bombimage[16] = 116;
-
 }
 
 //--JAM: Gets a line from the config string with format:
@@ -217,21 +210,19 @@ void init_gameconstants(gamedata &g){
 // and returns it as a string.  If there is no line for the
 // name, returns the default.
 
-string getConfig(string config, string name, string defval)
-{
+string getConfig(string config, string name, string defval) {
   // Pull out just the name line
   unsigned int ndx = config.find(name);
 
-  if (ndx == string::npos)
-  {
+  if (ndx == string::npos) {
     return defval;
   }
   ndx = config.find(":", ndx);
 
   // Advance past spaces
-  while (config.at(++ndx) == ' '){};
-  if (ndx == string::npos)
-  {
+  while (config.at(++ndx) == ' ') {
+  };
+  if (ndx == string::npos) {
     return defval;
   }
 
@@ -240,35 +231,32 @@ string getConfig(string config, string name, string defval)
 
 // Similar to above, but this returns integers, and includes error checking.
 
-int getConfig(string config, string name, int defval, int min, int max)
-{
+int getConfig(string config, string name, int defval, int min, int max) {
   // Pull out just the name line
   unsigned int ndx = config.find(name);
 
-  if (ndx == string::npos)
-  {
+  if (ndx == string::npos) {
     return defval;
   }
   ndx = config.find(":", ndx);
 
   // Advance past spaces
-  while (config.at(++ndx) == ' '){};
-  if (ndx == string::npos)
-  {
+  while (config.at(++ndx) == ' ') {
+  };
+  if (ndx == string::npos) {
     return defval;
   }
 
-  int value = strtol(config.substr(ndx, config.find("\n", ndx) - ndx).c_str(),0,10);
+  int value = strtol(config.substr(ndx, config.find("\n", ndx) - ndx).c_str(), 0, 10);
 
   // Bounds checking
-  if ((value < min) || (value > max)){
+  if ((value < min) || (value > max)) {
     cerr << "Entry " << name.c_str() << " out of bounds in apricots.cfg" << endl;
     cerr << name.c_str() << " must take values between " << min << " and " << max << endl;
     exit(EXIT_FAILURE);
   }
 
   return value;
-
 }
 
 // Initialize the game parameters
@@ -278,17 +266,17 @@ string find_config_file() {
   string filename("apricots.cfg");
 
   std::filesystem::path user_path("/");
-  const char* xdg_config_home = std::getenv("XDG_CONFIG_HOME");
+  const char *xdg_config_home = std::getenv("XDG_CONFIG_HOME");
   if (xdg_config_home == NULL) {
-    const char* home_dir = std::getenv("HOME");
+    const char *home_dir = std::getenv("HOME");
     if (home_dir == NULL) {
       fprintf(stderr, "Neither XDG_CONFIG_HOME nor HOME were set, unable to locate per user configuration\n");
     } else {
-        user_path /= home_dir;
-        user_path /= ".config";
+      user_path /= home_dir;
+      user_path /= ".config";
     }
   } else {
-      user_path /= xdg_config_home;
+    user_path /= xdg_config_home;
   }
   user_path /= "apricots";
   user_path /= filename;
@@ -301,32 +289,31 @@ string find_config_file() {
 
   if (std::filesystem::exists(user_path)) {
     return user_path;
-  }
-  else if (std::filesystem::exists(sysconfig_path)) {
+  } else if (std::filesystem::exists(sysconfig_path)) {
     return sysconfig_path;
   } else {
     return data_path;
   }
 }
 
-void init_gamedata(gamedata &g){
+void init_gamedata(gamedata &g) {
 
   string filename = find_config_file();
   ifstream config_stream(filename);
   //--JAM: Read from config file
   string config;
-  if (!config_stream.fail()){
+  if (!config_stream.fail()) {
     // Read config file line by line
     char line[256];
-    while (!config_stream.eof()){
+    while (!config_stream.eof()) {
       config_stream.getline(line, 255);
-      if (line[0] != '#'){
+      if (line[0] != '#') {
         config.append(line);
         config += "\n";
       }
     }
-  }else{
-  // Config file not found
+  } else {
+    // Config file not found
     config = "\n";
   }
   config_stream.close();
@@ -337,7 +324,7 @@ void init_gamedata(gamedata &g){
   // Number of players (1 or 2)
   g.players = getConfig(config, "NUM_HUMANS", 1, 1, 2);
   // Error check
-  if (g.players > g.planes){
+  if (g.players > g.planes) {
     cerr << "Invalid configuration in apricots.cfg" << endl;
     cerr << "Number of human players cannot exceed number of planes" << endl;
     exit(EXIT_FAILURE);
@@ -360,7 +347,6 @@ void init_gamedata(gamedata &g){
   g.planeinfo[5].planetype = getConfig(config, "PLANE5", 1, 1, 3);
   g.planeinfo[6].planetype = getConfig(config, "PLANE6", 1, 1, 3);
 
-
   // Basetype: See create_airbases in setup.cpp
   g.planeinfo[1].basetype = getConfig(config, "BASE1", 1, 1, 7);
   g.planeinfo[2].basetype = getConfig(config, "BASE2", 1, 1, 7);
@@ -368,7 +354,6 @@ void init_gamedata(gamedata &g){
   g.planeinfo[4].basetype = getConfig(config, "BASE4", 1, 1, 7);
   g.planeinfo[5].basetype = getConfig(config, "BASE5", 1, 1, 7);
   g.planeinfo[6].basetype = getConfig(config, "BASE6", 1, 1, 7);
-
 
   // Control: 1=Player 1, 2=Player 2, 0=AI
   g.planeinfo[1].control = getConfig(config, "CONTROL1", 1, 0, 2);
@@ -382,21 +367,21 @@ void init_gamedata(gamedata &g){
   count[0] = 0;
   count[1] = 0;
   count[2] = 0;
-  for (int i=1; i<=g.planes; i++){
-  count[g.planeinfo[i].control]++;
+  for (int i = 1; i <= g.planes; i++) {
+    count[g.planeinfo[i].control]++;
   }
-  if (count[1] != 1){
+  if (count[1] != 1) {
     cerr << "Invalid configuration in apricots.cfg" << endl;
     cerr << "Invalid control selection for player 1" << endl;
     exit(EXIT_FAILURE);
   }
-  if (count[2] != (g.players-1)){
+  if (count[2] != (g.players - 1)) {
     cerr << "Invalid configuration in apricots.cfg" << endl;
     cerr << "Invalid control selection for player 2" << endl;
     exit(EXIT_FAILURE);
   }
-  for (int j=g.planes+1;j<=6;j++){
-  if (g.planeinfo[j].control > 0){
+  for (int j = g.planes + 1; j <= 6; j++) {
+    if (g.planeinfo[j].control > 0) {
       cerr << "Invalid configuration in apricots.cfg" << endl;
       cerr << "Human controls specified for non-playing plane" << endl;
       exit(EXIT_FAILURE);
@@ -409,31 +394,25 @@ void init_gamedata(gamedata &g){
   g.guns = getConfig(config, "NUM_GUNS", 5, 0, 20);
 
   // Number of other buildings
-  g.buildings = getConfig(config, "NUM_BUILDINGS", 20, 0 ,50);
+  g.buildings = getConfig(config, "NUM_BUILDINGS", 20, 0, 50);
 
   // Number of trees (max)
   g.trees = getConfig(config, "NUM_TREES", 50, 0, 100);
 
   // Draks: 0=Never, 1=5% probability, 2=Always
   string drakval = getConfig(config, "DRAK", "sometimes");
-  if (!drakval.compare("always"))
-  {
+  if (!drakval.compare("always")) {
     g.drakoption = 2;
-  }
-  else if (!drakval.compare("sometimes"))
-  {
+  } else if (!drakval.compare("sometimes")) {
     g.drakoption = 1;
-  }
-  else
-  {
+  } else {
     g.drakoption = 0;
   }
-
 }
 
 // Main Initialization routine
 
-void init_data(gamedata &g){
+void init_data(gamedata &g) {
 
   init_gameconstants(g);
 
@@ -443,7 +422,7 @@ void init_data(gamedata &g){
   srand(time(0));
 
   /* Initialize defaults, Video and Audio */
-  if((SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO)==-1)){
+  if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1)) {
     fprintf(stderr, "Could not initialize SDL: %s.\n", SDL_GetError());
     exit(-1);
   }
@@ -458,5 +437,4 @@ void init_data(gamedata &g){
   load_font(g.virtualscreen, g.whitefont, g.greenfont);
 
   init_sound(g.sound);
-
 }

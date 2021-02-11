@@ -21,7 +21,7 @@ const int BYTESPERPIXEL = 1;
 
 // Default Constructor
 
-shape :: shape(){
+shape ::shape() {
   surface = NULL;
   width = 0;
   height = 0;
@@ -30,182 +30,182 @@ shape :: shape(){
 
 // Screengrab Constructor
 
-shape :: shape(SDL_Surface *source, int x, int y, int w, int h){
+shape ::shape(SDL_Surface *source, int x, int y, int w, int h) {
   width = w;
   height = h;
   buffer = new char[w * h * BYTESPERPIXEL];
   char *src_pixels = (char *)source->pixels;
-  for(int i=x;i<x+w;i++){
-    for(int j=y;j<y+h;j++){
-      buffer[ (j-y) * w + (i-x) ] = src_pixels[ j * source->pitch + i ];
+  for (int i = x; i < x + w; i++) {
+    for (int j = y; j < y + h; j++) {
+      buffer[(j - y) * w + (i - x)] = src_pixels[j * source->pitch + i];
     }
   }
-  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL,
-                                     width * BYTESPERPIXEL, 0, 0, 0, 0);
-  for (int c=0;c<256;c++){
+  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL, width * BYTESPERPIXEL, 0, 0, 0, 0);
+  for (int c = 0; c < 256; c++) {
     Uint8 rgb[3];
     SDL_GetRGB(c, source->format, &rgb[0], &rgb[1], &rgb[2]);
-    SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
+    SDL_Color col = {rgb[0], rgb[1], rgb[2], 0};
     SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
   }
-
 }
 
 // Copy Constructor (deep copy)
 
-shape :: shape(const shape &s){
+shape ::shape(const shape &s) {
   width = s.width;
   height = s.height;
   int buffersize = width * height * BYTESPERPIXEL;
   buffer = new char[buffersize];
   for (int i = 0; i < buffersize; i++)
     buffer[i] = s.buffer[i];
-  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL,
-                                     width * BYTESPERPIXEL, 0, 0, 0, 0);
-  for (int c=0;c<256;c++){
+  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL, width * BYTESPERPIXEL, 0, 0, 0, 0);
+  for (int c = 0; c < 256; c++) {
     Uint8 rgb[3];
     SDL_GetRGB(c, s.surface->format, &rgb[0], &rgb[1], &rgb[2]);
-    SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
+    SDL_Color col = {rgb[0], rgb[1], rgb[2], 0};
     SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
   }
-
 }
 
 // Destructor
 
-shape :: ~shape(){
+shape ::~shape() {
   if (surface != NULL)
     SDL_FreeSurface(surface);
-  if (buffer != 0) delete [ ]buffer;
+  if (buffer != 0)
+    delete[] buffer;
 }
 
 // Assignment Operator
 
-shape& shape :: operator= (const shape &s){
-  if (this != &s){
-    if (surface != NULL) SDL_FreeSurface(surface);
-    if (buffer != 0) delete [ ]buffer;
+shape &shape ::operator=(const shape &s) {
+  if (this != &s) {
+    if (surface != NULL)
+      SDL_FreeSurface(surface);
+    if (buffer != 0)
+      delete[] buffer;
     width = s.width;
     height = s.height;
     int buffersize = width * height * BYTESPERPIXEL;
     buffer = new char[buffersize];
     for (int i = 0; i < buffersize; i++)
       buffer[i] = s.buffer[i];
-    surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL,
-                                       width * BYTESPERPIXEL, 0, 0, 0, 0);
-    for (int c=0;c<256;c++){
+    surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL, width * BYTESPERPIXEL, 0, 0, 0, 0);
+    for (int c = 0; c < 256; c++) {
       Uint8 rgb[3];
       SDL_GetRGB(c, s.surface->format, &rgb[0], &rgb[1], &rgb[2]);
-      SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
+      SDL_Color col = {rgb[0], rgb[1], rgb[2], 0};
       SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
     }
-
   }
   return *this;
 }
 
 // Accessor functions for private variables
 
-int shape :: getwidth(){return width;}
-int shape :: getheight(){return height;}
-SDL_Surface* shape :: getSurface(){return surface;}
-//char* shape :: getbuffer(){return buffer;}
+int shape ::getwidth() { return width; }
+int shape ::getheight() { return height; }
+SDL_Surface *shape ::getSurface() { return surface; }
+// char* shape :: getbuffer(){return buffer;}
 
 // Shape Grabber function
 
-void shape :: grab(SDL_Surface *source, int x, int y, int w, int h){
-  if (surface != NULL) SDL_FreeSurface(surface);
-  if (buffer != 0) delete [ ]buffer;
+void shape ::grab(SDL_Surface *source, int x, int y, int w, int h) {
+  if (surface != NULL)
+    SDL_FreeSurface(surface);
+  if (buffer != 0)
+    delete[] buffer;
   width = w;
   height = h;
 
   buffer = new char[w * h * BYTESPERPIXEL];
   char *src_pixels = (char *)source->pixels;
-  for(int i=x;i<x+w;i++){
-    for(int j=y;j<y+h;j++){
-      buffer[ (j-y) * w + (i-x) ] = src_pixels[ j * source->pitch + i ];
+  for (int i = x; i < x + w; i++) {
+    for (int j = y; j < y + h; j++) {
+      buffer[(j - y) * w + (i - x)] = src_pixels[j * source->pitch + i];
     }
   }
-  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL,
-                                     width * BYTESPERPIXEL, 0, 0, 0, 0);
-  for (int c=0;c<256;c++){
+  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL, width * BYTESPERPIXEL, 0, 0, 0, 0);
+  for (int c = 0; c < 256; c++) {
     Uint8 rgb[3];
     SDL_GetRGB(c, source->format, &rgb[0], &rgb[1], &rgb[2]);
-    SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
+    SDL_Color col = {rgb[0], rgb[1], rgb[2], 0};
     SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
   }
-
-
 }
 
 // Shape file read function (reference file)
 
-bool shape :: read(ifstream &fin){
-  if (fin.fail()){
+bool shape ::read(ifstream &fin) {
+  if (fin.fail()) {
     return false;
   }
 
-  if (surface != NULL) SDL_FreeSurface(surface);
-  if (buffer != 0) delete [ ]buffer;
+  if (surface != NULL)
+    SDL_FreeSurface(surface);
+  if (buffer != 0)
+    delete[] buffer;
   fin >> width >> height;
-  if (fin.fail()){
+  if (fin.fail()) {
     return false;
   }
   int buffersize = width * height * BYTESPERPIXEL;
   buffer = new char[buffersize];
   fin.read(buffer, 1); // Read the extra byte
   fin.read(buffer, buffersize);
-  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL,
-                                     width * BYTESPERPIXEL, 0, 0, 0, 0);
+  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL, width * BYTESPERPIXEL, 0, 0, 0, 0);
 
   return true;
 }
 
 // Shape file read function (new file)
 
-bool shape :: readfile(char* filename){
+bool shape ::readfile(char *filename) {
   ifstream fin(filename, ios::binary);
 
-  if (fin.fail()) return false;
+  if (fin.fail())
+    return false;
 
-  if (surface != NULL) SDL_FreeSurface(surface);
-  if (buffer != 0) delete [ ]buffer;
+  if (surface != NULL)
+    SDL_FreeSurface(surface);
+  if (buffer != 0)
+    delete[] buffer;
   fin >> width >> height;
   int buffersize = width * height * BYTESPERPIXEL;
   buffer = new char[buffersize];
   fin.read(buffer, 1); // Read the extra byte
   fin.read(buffer, buffersize);
   fin.close();
-  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL,
-                                     width * BYTESPERPIXEL, 0, 0, 0, 0);
+  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL, width * BYTESPERPIXEL, 0, 0, 0, 0);
 
   return true;
 }
 
 // Shape file read function (reference file with palette)
 
-bool shape :: read(SDL_Surface *palettesource, ifstream &fin){
-  if (fin.fail()){
+bool shape ::read(SDL_Surface *palettesource, ifstream &fin) {
+  if (fin.fail()) {
     return false;
   }
 
-  if (surface != NULL) SDL_FreeSurface(surface);
-  if (buffer != 0) delete [ ]buffer;
+  if (surface != NULL)
+    SDL_FreeSurface(surface);
+  if (buffer != 0)
+    delete[] buffer;
   fin >> width >> height;
-  if (fin.fail()){
+  if (fin.fail()) {
     return false;
   }
   int buffersize = width * height * BYTESPERPIXEL;
   buffer = new char[buffersize];
   fin.read(buffer, 1); // Read the extra byte
   fin.read(buffer, buffersize);
-  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL,
-                                     width * BYTESPERPIXEL, 0, 0, 0, 0);
+  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL, width * BYTESPERPIXEL, 0, 0, 0, 0);
 
-  for (int c=0;c<256;c++){
+  for (int c = 0; c < 256; c++) {
     Uint8 rgb[3];
     SDL_GetRGB(c, palettesource->format, &rgb[0], &rgb[1], &rgb[2]);
-    SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
+    SDL_Color col = {rgb[0], rgb[1], rgb[2], 0};
     SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
   }
 
@@ -214,64 +214,64 @@ bool shape :: read(SDL_Surface *palettesource, ifstream &fin){
 
 // Shape file read function (new file with palette)
 
-bool shape :: readfile(SDL_Surface *palettesource, char* filename){
+bool shape ::readfile(SDL_Surface *palettesource, char *filename) {
   ifstream fin(filename, ios::binary);
 
-  if (fin.fail()) return false;
+  if (fin.fail())
+    return false;
 
-  if (surface != NULL) SDL_FreeSurface(surface);
-  if (buffer != 0) delete [ ]buffer;
+  if (surface != NULL)
+    SDL_FreeSurface(surface);
+  if (buffer != 0)
+    delete[] buffer;
   fin >> width >> height;
   int buffersize = width * height * BYTESPERPIXEL;
   buffer = new char[buffersize];
   fin.read(buffer, 1); // Read the extra byte
   fin.read(buffer, buffersize);
   fin.close();
-  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL,
-                                     width * BYTESPERPIXEL, 0, 0, 0, 0);
-  for (int c=0;c<256;c++){
+  surface = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8 * BYTESPERPIXEL, width * BYTESPERPIXEL, 0, 0, 0, 0);
+  for (int c = 0; c < 256; c++) {
     Uint8 rgb[3];
     SDL_GetRGB(c, palettesource->format, &rgb[0], &rgb[1], &rgb[2]);
-    SDL_Color col = { rgb[0], rgb[1], rgb[2], 0 };
+    SDL_Color col = {rgb[0], rgb[1], rgb[2], 0};
     SDL_SetPaletteColors(surface->format->palette, &col, c, 1);
   }
-
 
   return true;
 }
 
-
 // Shape blitter (mask on)
 
-void shape :: blit(SDL_Surface *dest,int x, int y){
+void shape ::blit(SDL_Surface *dest, int x, int y) {
   SDL_SetColorKey(surface, SDL_TRUE, 0);
   SDL_Rect srcrect;
-    srcrect.x = 0;
-    srcrect.y = 0;
-    srcrect.w = width;
-    srcrect.h = height;
+  srcrect.x = 0;
+  srcrect.y = 0;
+  srcrect.w = width;
+  srcrect.h = height;
   SDL_Rect dstrect;
-    dstrect.x = x;
-    dstrect.y = y;
-    dstrect.w = 0;
-    dstrect.h = 0;
+  dstrect.x = x;
+  dstrect.y = y;
+  dstrect.w = 0;
+  dstrect.h = 0;
   SDL_BlitSurface(surface, &srcrect, dest, &dstrect);
   SDL_SetColorKey(surface, 0, 0);
 }
 
 // Shape blitter (mask chosen)
 
-void shape :: blit(SDL_Surface *dest,int x, int y, bool mask){
+void shape ::blit(SDL_Surface *dest, int x, int y, bool mask) {
   SDL_Rect srcrect;
-    srcrect.x = 0;
-    srcrect.y = 0;
-    srcrect.w = width;
-    srcrect.h = height;
+  srcrect.x = 0;
+  srcrect.y = 0;
+  srcrect.w = width;
+  srcrect.h = height;
   SDL_Rect dstrect;
-    dstrect.x = x;
-    dstrect.y = y;
-    dstrect.w = 0;
-    dstrect.h = 0;
+  dstrect.x = x;
+  dstrect.y = y;
+  dstrect.w = 0;
+  dstrect.h = 0;
   if (mask)
     SDL_SetColorKey(surface, SDL_TRUE, 0);
   SDL_BlitSurface(surface, &srcrect, dest, &dstrect);
@@ -281,8 +281,9 @@ void shape :: blit(SDL_Surface *dest,int x, int y, bool mask){
 
 // Shape file write function (reference file)
 
-bool shape :: write(ofstream &fout){
-  if (fout.fail()) return false;
+bool shape ::write(ofstream &fout) {
+  if (fout.fail())
+    return false;
 
   fout << width << " " << height << " ";
   fout.write(buffer, width * height * BYTESPERPIXEL);
@@ -292,10 +293,11 @@ bool shape :: write(ofstream &fout){
 
 // Shape file write function (new file)
 
-bool shape :: writefile(char* filename){
+bool shape ::writefile(char *filename) {
   ofstream fout(filename, ios::binary);
 
-  if (fout.fail()) return false;
+  if (fout.fail())
+    return false;
 
   fout << width << " " << height << " ";
   fout.write(buffer, width * height * BYTESPERPIXEL);
@@ -306,15 +308,17 @@ bool shape :: writefile(char* filename){
 
 // Maximization function (for collision detection)
 
-int shape :: max(int a, int b){
-  if (a > b) return a;
+int shape ::max(int a, int b) {
+  if (a > b)
+    return a;
   return b;
 }
 
 // Minimization function (for collision detection)
 
-int shape :: min(int a, int b){
-  if (a < b) return a;
+int shape ::min(int a, int b) {
+  if (a < b)
+    return a;
   return b;
 }
 
@@ -322,11 +326,10 @@ int shape :: min(int a, int b){
 // Checks if the shape at x,y collides with another shape s at sx,sy
 // NB assumes BYTESPERPIXEL == 1
 
-bool shape :: collide(int x, int y, const shape &s, int sx, int sy){
-  for(int cx = max(x,sx);cx<min(x+width,sx+s.width);cx++){
-    for(int cy = max(y,sy);cy<min(y+height,sy+s.height);cy++){
-      if ((buffer[cx-x + width*(cy-y)] != 0) &&
-          (s.buffer[cx-sx + s.width*(cy-sy)] != 0)){
+bool shape ::collide(int x, int y, const shape &s, int sx, int sy) {
+  for (int cx = max(x, sx); cx < min(x + width, sx + s.width); cx++) {
+    for (int cy = max(y, sy); cy < min(y + height, sy + s.height); cy++) {
+      if ((buffer[cx - x + width * (cy - y)] != 0) && (s.buffer[cx - sx + s.width * (cy - sy)] != 0)) {
         return true;
       }
     }

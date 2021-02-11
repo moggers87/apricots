@@ -6,12 +6,16 @@ AC_INIT([apricots], [0.2.7], [moggers87+git@moggers87.co.uk])
 AC_CONFIG_SRCDIR([apricots/game.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE([subdir-objects])
+AM_INIT_AUTOMAKE([-Wall -Werror subdir-objects])
+AX_IS_RELEASE([git-directory])
+AX_CHECK_ENABLE_DEBUG()
 AX_GENERATE_CHANGELOG
 
 # set up compiler
 AC_PROG_CXX
 AX_CXX_COMPILE_STDCXX_17([noext])
+AX_CXXFLAGS_WARN_ALL
+AX_COMPILER_FLAGS_CXXFLAGS([CXXFLAGS])
 
 # sdl
 AC_PATH_PROG([SDL_CONFIG], sdl2-config)
@@ -26,7 +30,6 @@ LIBS="$LIBS $SDL_LIBS"
 AC_CHECK_HEADER(AL/al.h,[CXXFLAGS="$CXXFLAGS -DAP_AUDIO_OPENAL"])
 AC_CHECK_LIB( openal, alGetError)
 AC_CHECK_LIB( alut, alutInit)
-
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
