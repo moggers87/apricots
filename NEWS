@@ -1,14 +1,25 @@
-* 03/08/2019 moggers87
+* 2021-02-12 moggers87 0.2.7
+
+- Ported to SDL2
+- Cleaned up code meet modern C++ standards
+- Changelog is now generate from `git log`
+- Game now scales properly on larger screens
+- Configuration is now searched for in multiple places:
+  - ~/.config/apricots/
+  - System config directory (defaults to /usr/local/etc)
+  - Finally, defaults are stored with game data
+
+* 2019-08-03 moggers87
 
 - Applied Fedora patches
 - Added to git repo
 - Regenerated autoconf files without KDE macros
 
-* 13/08/2003 Mark Snellgrove 0.2.6
+* 2003-08-13 Mark Snellgrove 0.2.6
 
 - Version 0.2.6 released
 
-* 08/08/2003 Mark Snellgrove
+* 2003-08-08 Mark Snellgrove
 
 - Sanity check on configuration options now applied
 - Configuration from apricots.cfg extended to all options at runtime
@@ -18,13 +29,13 @@
 - BORLAND specific options in apricots.cpp found to be redundant - Removed.
 - Game speed now properly regulated by TICK_INTERVAL parameter (Fixes BUG2)
 
-* 01/08/2003 Judebert
+* 2003-08-01 Judebert
 
 - Limited Configuration read at runtime from apricots.cfg
 - Windows port of OpenAL audio routines in sampleio class
 - Cygwin compiler flag now checked on main
 
-* 30/07/2003 Mark Snellgrove 0.2.5
+* 2003-07-30 Mark Snellgrove 0.2.5
 
 - Version 0.2.5 released
 - File configure.in now checks for OpenAL (thanks to Jens Thiele)
@@ -43,28 +54,28 @@
 - Options in init_gamedata() function are now fully commented
 - Global parameter GAME_SPEED reduced to 0.2
 
-* 26/07/2003 Mark Snellgrove 0.2.4
+* 2003-07-26 Mark Snellgrove 0.2.4
 
 - Version 0.2.4 released
 - Audio via OpenAL reactivated (via conditional compiler option)
 
-* 24/07/2003 Mark Snellgrove 0.2.3
+* 2003-07-24 Mark Snellgrove 0.2.3
 
 - Version 0.2.3 released
 - SDLfont palettes and masks pre-rendered for speedup
 
-* 17/07/2003 Mark Snellgrove
+* 2003-07-17 Mark Snellgrove
 
 - SDLfont class for rendering fonts in SDL implemented (slow)
 
-* 13/07/2003 Mark Snellgrove 0.2.2
+* 2003-07-13 Mark Snellgrove 0.2.2
 
 - Version 0.2.2 released
 - Existence of apricots.shapes file checked
 - Airbase constructor included (required by Borland compiler)
 - Several minor bugs fixed in shape class
 
-* 09/07/2003 Mark Snellgrove 0.2.1
+* 2003-07-09 Mark Snellgrove 0.2.1
 
 - Version 0.2.1 released
 - Airbase constructors modified
@@ -75,23 +86,23 @@
 - Compilation warnings from implicit casts fixed
 - Compilation warnings in null building definition fixed
 
-* 06/07/2003 Mark Snellgrove 0.2.0
+* 2003-07-06 Mark Snellgrove 0.2.0
 
 - Version 0.2.0 released (SDL version)
 - Fixed up some Linux/Windows portability issues
 - rand() now used as random number generator
 - Font routines temporarily disabled (portability problem)
 
-* 21/06/2003 Mark Harman
+* 2003-06-21 Mark Harman
 
 - Windows port using the SDL graphics library
 - OpenAL Audio temporarily disabled (portability problem)
 - Controls for player 2 disabled.
 
-* 13/09/2002 Mark Snellgrove 0.1.0
+* 2002-09-13 Mark Snellgrove 0.1.0
 
 - Version 0.1.0 released (SVGALIB/OpenAL version)
 
-* 26/03/2002 Mark Snellgrove
+* 2002-03-26 Mark Snellgrove
 
 - SVGALIB/OpenAL version of apricots in playable form.
