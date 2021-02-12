@@ -68,8 +68,8 @@ void finish_game(gamedata &g) {
     SDL_Rect rect;
     rect.x = 0;
     rect.y = 0;
-    rect.w = 640;
-    rect.h = 480;
+    rect.w = SCREEN_WIDTH;
+    rect.h = SCREEN_HEIGHT;
     SDL_Texture *texture = SDL_CreateTextureFromSurface(g.renderer, g.virtualscreen);
     if (texture == NULL) {
       fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
