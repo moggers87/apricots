@@ -10,6 +10,44 @@ Apricots has nothing to do with apricots. It's a game where you fly a little
 plane around the screen and shoot things and drop bombs on enemy targets, and
 it's meant to be quick and fun.
 
+Installing
+----------
+
+Apricots has been tested on Linux and Mac OS. It should also be buildable on
+any UNIX platform that meets the requirements below.
+
+Windows support is currently unknown. There was Windows support at one point,
+but I don't have access to a Windows machine to check recent changes haven't
+broken anything. Contributions are always welcome!
+
+### Requirements
+
+
+- A C++ compiler (GCC/G++ and Clang/LLVM)
+- SDL > 2.0.0, download from www.libsdl.org
+- OpenAL, download from www.openal-soft.org
+- freealut 1.1.0, download from https://github.com/vancegroup/freealut/releases/tag/freealut_1_1_0
+
+### Buidling from source
+
+```
+./configure # use --prefix= if you want to install to somewhere other than /usr/local
+make
+make install # may require sudo if you don't have permission to write to the target prefix
+```
+
+### Building from git
+
+As well as the requirements for building from source, you will require GNU
+Autotools. The `bootstrap` script will create the `configure` script for you.
+
+```
+./bootstrap
+./configure # use --prefix= if you want to install to somewhere other than /usr/local
+make
+make install # may require sudo if you don't have permission to write to the target prefix
+```
+
 History
 -------
 
@@ -30,11 +68,11 @@ The orginal author, Mark Snellgrove, wrote the following:
 > sound, and intelligent computer AI. Slightly later, in 1996, the Draks were
 > added as a bit of amusement. The result was a highly playable game, which I
 > distributed to a few of my friends. A few years later and I now use a PC,
-> which can run Linux.  Having learnt C++ by this time, at the beginning of
-> 2002 I felt ready enough to port 'Apricots' cross platform from BLITZ on the
-> Amiga to C++ on a Linux PC.  What you see here is work in progress on that
-> port. The game has been tweaked slightly while being ported over, so is not
-> identical to the Amiga version.
+> which can run Linux  Having learnt C++ by this time, at the beginning of 2002
+> I felt ready enough to port 'Apricots' cross platform from BLITZ on the Amiga
+> to C++ on a Linux PC. What you see here is work in progress on that port. The
+> game has been tweaked slightly while being ported over, so is not identical
+> to the Amiga version.
 
 moggers87 took over this project in 2019 as the original website had
 disappeared.
@@ -42,44 +80,15 @@ disappeared.
 Authors
 -------
 
-- Current maintainer: moggers87
-- Original author: Mark Snellgrove (Original concept and game coding)
-- Co-author: Mark Harman (First Windows port and SDL conversion)
-- Additional contributor: Judebert (Configuration file)
+See AUTHORS
 
 Status
 ------
 
-The game is still under development. Apricots-0.2.6 is a beta release using the
-SDL library. Despite this, it is highly playable. Please open a Github issue to
+The game is still under development. Apricots-0.2.7 is a beta release using the
+SDL2 library. Despite this, it is highly playable. Please open a Github issue to
 report bugs, feature requests, or comments.
 
-C++ Compilers
--------------
-
-Apricots is known to successfully build under the following OS/Compiler
-configurations
-
-- Linux - gcc (reported by Mark Snellgrove)
-- OpenBSD - gcc (reported by Johan Luff)
-- Windows - Borland (reported by Mark Harman)
-- Windows - Visual C++ 6.0 (reported by Mark Snellgrove)
-- Windows/Cygwin - gcc (reported by Judebert)
-
-It may build successfuly on other platforms, but this has not been tested. Let
-me know!
-
-Requirements
-------------
-
-- SDL > 1.2.0, download from www.libsdl.org
-- OpenAL, download from www.openal.org
-
-Compilation options
-
-        -DAP_PATH="datadir" Set directory where apricots looks for
-                            its data files. Defaults to current directory
-                            if unset.
 
 Instructions
 ------------
@@ -92,18 +101,20 @@ ACCELERATE / STEALTH     |     CURSOR UP         |   S
 DROP BOMB                |     CURSOR DOWN       |   X
 FIRE SHOT                |     RETURN            |   LEFT CTRL
 
-Gameplay is fairly common sense to work out.  Stay alive, and shooting enemy
-targets gains you points, whereas being shot down or shooting the wrong things
-lose you points. You have infinite planes, and are competing against the other
-computer planes (or other player!).  First to a certain score wins once they
-land at base.  Simple!
+Stay alive, and shooting enemy targets gains you points, whereas being shot
+down or shooting the wrong things lose you points. You have infinite planes,
+and are competing against the other computer planes (or other player!). First
+to a certain score wins once they land at base.
 
 Play Options
 ------------
 
 At present there is no option screen. Options can be changed by editing the
-configuration file apricots.cfg (on UNIX systems this will probably require
-root access, user configuration files will be added soon in a future release).
+configuration file apricots.cfg. This is first searched for in
+~/.config/apricots/, then the system configuration directory (usually
+/usr/local/etc or /etc) and finally the default configuration in the data
+directory.
+
 The number and type of planes can be varied, along with the airbases, as can
 1/2 player game be chosen. The number of anti aircraft guns and scenery can be
 selected. Draks can be turned on or off, and a different condition for winning
@@ -113,12 +124,12 @@ License
 -------
 
 Apricots falls under the GPL. Please read the file COPYING included in this
-distrubution. The sourcecode of apricots-0.2.6 will either be included in the
-distrubution, or can otherwise be downloaded from the apricots webpage (see
+distrubution. The sourcecode of Apricots will either be included in the
+distrubution, or can otherwise be downloaded from the Apricots webpage (see
 below)
 
 Webpage
 -------
 
-For updates, bugfixes, binaries, sourcecode and more info please visit the
-apricots webpage at https://github.com/moggers87/apricots
+For updates, bugfixes, sourcecode and more info please visit the Apricots
+webpage at https://github.com/moggers87/apricots
