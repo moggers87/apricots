@@ -25,15 +25,22 @@
 // Display setup (double buffered with two playfields)
 
 void setup_display(gamedata &g) {
-  SDL_Window *window = SDL_CreateWindow("Apricots", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+  SDL_Window *window =
+      SDL_CreateWindow("Apricots", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
+                       SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_RESIZABLE);
 
-  g.renderer = SDL_CreateRenderer(window, -1, 0);
+  g.renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
   if (g.renderer == NULL) {
     fprintf(stderr, "Couldn't create renderer: %s\n", SDL_GetError());
     exit(1);
   }
 
-  g.virtualscreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 480, 8, 0, 0, 0, 0);
+  if (SDL_RenderSetLogicalSize(g.renderer, SCREEN_WIDTH, SCREEN_HEIGHT) != 0) {
+    fprintf(stderr, "Couldn't set logical resizing: %s\n", SDL_GetError());
+    exit(1);
+  }
+
+  g.virtualscreen = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 8, 0, 0, 0, 0);
   if (g.virtualscreen == NULL) {
     fprintf(stderr, "Couldn't set 640x480x8 virtual video mode: %s\n", SDL_GetError());
     exit(1);

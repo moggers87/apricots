@@ -197,24 +197,26 @@ void drawall(gamedata &g) {
   // Set screenheight
   int screenheight = 0;
   if (g.players == 1) {
+    // TODO where do these numbers come from?
     screenheight = clamp(GAME_HEIGHT, GAME_HEIGHT, 464);
   } else {
     screenheight = clamp(GAME_HEIGHT, GAME_HEIGHT, 224);
   }
   // Player 1
   {
-    int x1 = clamp(int(g.player1->x) - 308, 0, GAME_WIDTH - 640);
+    // TODO where do these numbers come from?
+    int x1 = clamp(int(g.player1->x) - 308, 0, GAME_WIDTH - SCREEN_WIDTH);
     int y1 = clamp(int(g.player1->y) - 54, 0, GAME_HEIGHT - screenheight);
     SDL_Rect srcrect;
     srcrect.x = x1;
     srcrect.y = y1;
-    srcrect.w = 640;
+    srcrect.w = SCREEN_WIDTH;
     srcrect.h = screenheight;
     SDL_BlitSurface(g.gamescreen, &srcrect, g.virtualscreen, NULL);
     SDL_Rect cliprect;
     cliprect.x = 0;
     cliprect.y = 0;
-    cliprect.w = 640;
+    cliprect.w = SCREEN_WIDTH;
     cliprect.h = screenheight;
     SDL_SetClipRect(g.virtualscreen, &cliprect);
     drawblits(g, x1, y1);
@@ -225,23 +227,24 @@ void drawall(gamedata &g) {
 
   // Player 2
   if (g.players == 2) {
-    int x2 = clamp(int(g.player2->x) - 308, 0, GAME_WIDTH - 640);
+    // TODO where do these numbers come from?
+    int x2 = clamp(int(g.player2->x) - 308, 0, GAME_WIDTH - SCREEN_WIDTH);
     int y2 = clamp(int(g.player2->y) - 54, 0, GAME_HEIGHT - 224);
     SDL_Rect srcrect;
     srcrect.x = x2;
     srcrect.y = y2;
-    srcrect.w = 640;
+    srcrect.w = SCREEN_WIDTH;
     srcrect.h = screenheight;
     SDL_Rect desrect;
     desrect.x = 0;
     desrect.y = 240;
-    desrect.w = 640;
+    desrect.w = SCREEN_WIDTH;
     desrect.h = screenheight;
     SDL_BlitSurface(g.gamescreen, &srcrect, g.virtualscreen, &desrect);
     SDL_Rect cliprect;
     cliprect.x = 0;
     cliprect.y = 240;
-    cliprect.w = 640;
+    cliprect.w = SCREEN_WIDTH;
     cliprect.h = screenheight;
     SDL_SetClipRect(g.virtualscreen, &cliprect);
     drawblits(g, x2, y2 - 240);
@@ -292,8 +295,8 @@ void drawall(gamedata &g) {
   SDL_Rect rect;
   rect.x = 0;
   rect.y = 0;
-  rect.w = 640;
-  rect.h = 480;
+  rect.w = SCREEN_WIDTH;
+  rect.h = SCREEN_HEIGHT;
   SDL_Texture *texture = SDL_CreateTextureFromSurface(g.renderer, g.virtualscreen);
   if (texture == NULL) {
     fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
