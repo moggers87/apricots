@@ -22,7 +22,6 @@ broken anything. Contributions are always welcome!
 
 ### Requirements
 
-
 - A C++ compiler (GCC/G++ and Clang/LLVM)
 - SDL > 2.0.0, download from www.libsdl.org
 - OpenAL, download from www.openal-soft.org
@@ -35,6 +34,10 @@ broken anything. Contributions are always welcome!
 make
 make install # may require sudo if you don't have permission to write to the target prefix
 ```
+
+Note that on MacOS you may need set `LDFLAGS` and `CPPFLAGS` environment
+variables. If you're using `brew` then it will tell you what to set these
+variables to.
 
 ### Building from git
 
