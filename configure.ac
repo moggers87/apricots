@@ -27,7 +27,6 @@ CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
 # check for openal
-AC_CHECK_HEADER(AL/al.h,[CXXFLAGS="$CXXFLAGS -DAP_AUDIO_OPENAL"])
 AC_CHECK_LIB( openal, alGetError)
 AC_CHECK_LIB( alut, alutInit)
 

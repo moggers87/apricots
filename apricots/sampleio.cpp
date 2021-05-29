@@ -14,32 +14,10 @@
 
 #include "sampleio.h"
 
-// Empty Noaudio sound routines
-#if AP_AUDIO == AUDIO_NOAUDIO
-
-sampleio ::sampleio() {}
-void sampleio ::init(int, char[][255], int, int) {}
-void sampleio ::close() {}
-void sampleio ::update() {}
-void sampleio ::channel(int, int) {}
-void sampleio ::loop(int, int) {}
-void sampleio ::play(int) {}
-void sampleio ::stop(int) {}
-void sampleio ::psource(int, int, bool) {}
-void sampleio ::volume(int, double) {}
-ALboolean sampleio ::sourceisplaying(ALuint) { return false; }
-
-#endif
-
-// OpenAL sound routines
-#if AP_AUDIO == AUDIO_OPENAL
-
 // Constructor
-
 sampleio ::sampleio() { initdone = false; }
 
 // Initialize OpenAL
-
 void sampleio ::init(int nsamples, char filenames[][255], int nsources, int npool) {
   if (initdone) {
     cerr << "sampleio: call to init when already in use" << endl;
@@ -264,5 +242,3 @@ ALboolean sampleio ::sourceisplaying(ALuint sid) {
   }
   return AL_FALSE;
 }
-
-#endif

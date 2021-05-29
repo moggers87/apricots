@@ -22,11 +22,18 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu-')
         run: |
           sudo apt-get update
-          sudo apt-get install libsdl2-dev autotools-dev clang-format cppcheck
+          sudo apt-get install libsdl2-dev autotools-dev libopenal-dev libalut-dev clang-format cppcheck
       - name: Install Mac dependencies
         if: startsWith(matrix.os, 'macos-')
-        run: brew install sdl2 autoconf automake
+        run: |
+          brew install sdl2 openal-soft freealut autoconf automake
       - name: Build
+        env:
+          # these are only required for Mac, but hopefully it won't break the
+          # Linux build
+          PKG_CONFIG_PATH: "/usr/local/opt/openal-soft/lib/pkgconfig"
+          LDFLAGS: "-L/usr/local/opt/openal-soft/lib"
+          CPPFLAGS: "-I/usr/local/opt/openal-soft/include"
         run: |
           ./bootstrap
           ./configure
@@ -44,7 +51,7 @@ jobs:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install libsdl2-dev autotools-dev
+          sudo apt-get install libsdl2-dev libopenal-dev libalut-dev autotools-dev
       - name: Build
         run: |
           ./bootstrap
