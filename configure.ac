@@ -27,8 +27,14 @@ CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
 # check for openal
-AC_CHECK_LIB( openal, alGetError)
-AC_CHECK_LIB( alut, alutInit)
+AC_CHECK_LIB(openal, alGetError, [], [
+  echo "Can't find OpenAL"
+  exit 1
+])
+AC_CHECK_LIB(alure, alureInitDevice, [], [
+  echo "Can't find ALURE"
+  exit 1
+])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL

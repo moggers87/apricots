@@ -22,11 +22,11 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu-')
         run: |
           sudo apt-get update
-          sudo apt-get install libsdl2-dev autotools-dev libopenal-dev libalut-dev clang-format cppcheck
+          sudo apt-get install libsdl2-dev autotools-dev libopenal-dev libalure-dev clang-format cppcheck
       - name: Install Mac dependencies
         if: startsWith(matrix.os, 'macos-')
         run: |
-          brew install sdl2 openal-soft freealut autoconf automake
+          brew install sdl2 openal-soft alure autoconf automake
       - name: Build
         env:
           # these are only required for Mac, but hopefully it won't break the
@@ -51,7 +51,7 @@ jobs:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install libsdl2-dev libopenal-dev libalut-dev autotools-dev
+          sudo apt-get install libsdl2-dev libopenal-dev libalure-dev autotools-dev
       - name: Build
         run: |
           ./bootstrap
