@@ -10,7 +10,11 @@
 // OpenAL includes
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <AL/alut.h>
+#if defined(__APPLE__)
+#include <OpenAL/alure.h>
+#else
+#include <AL/alure.h>
+#endif
 
 #include <cstdio>
 #include <cstdlib>

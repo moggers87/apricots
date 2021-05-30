@@ -33,7 +33,7 @@ void sampleio ::init(int nsamples, char filenames[][255], int nsources, int npoo
   poolcount = numsources;
 
   // Initialize audio device
-  alutInit(0, NULL);
+  alureInitDevice(NULL, NULL);
 
   ALfloat zeroes[] = {0.0f, 0.0f, 0.0f};
   ALfloat back[] = {0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f};
@@ -57,14 +57,14 @@ void sampleio ::init(int nsamples, char filenames[][255], int nsources, int npoo
     ALenum format;
     ALboolean trash;
     ALsizei filelen;
-    alutLoadWAVFile(filenames[i], &format, &data, &filelen, &freq, &trash);
+    alureLoadWAVFile(filenames[i], &format, &data, &filelen, &freq, &trash);
     fileok = (alGetError() == AL_NO_ERROR);
 #else
     // ALsizei format;
     // ALsizei trash;
     // ALsizei filelen;
-    // fileok = alutLoadWAV(filenames[i],&data,&format,&filelen,&trash,&freq);
-    samples[i] = alutCreateBufferFromFile(filenames[i]);
+    // fileok = alureLoadWAV(filenames[i],&data,&format,&filelen,&trash,&freq);
+    samples[i] = alureCreateBufferFromFile(filenames[i]);
 #endif
     // if (!fileok){
     if (samples[i] == AL_NONE) {
@@ -94,7 +94,7 @@ void sampleio ::close() {
     delete[] samples;
     delete[] sources;
     initdone = false;
-    alutExit();
+    alureShutdownDevice();
   }
 }
 

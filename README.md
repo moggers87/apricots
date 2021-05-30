@@ -23,9 +23,9 @@ broken anything. Contributions are always welcome!
 ### Requirements
 
 - A C++ compiler (GCC/G++ and Clang/LLVM)
-- SDL > 2.0.0, download from www.libsdl.org
-- OpenAL, download from www.openal-soft.org
-- freealut 1.1.0, download from https://github.com/vancegroup/freealut/releases/tag/freealut_1_1_0
+- SDL > 2.0.0, download from https://www.libsdl.org
+- OpenAL, download from https://www.openal-soft.org
+- ALURE 1.2.0, download from https://kcat.tomasu.net/alure.html
 
 ### Buidling from source
 
