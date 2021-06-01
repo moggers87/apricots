@@ -22,7 +22,7 @@
 
 #include "apricots.h"
 
-// Display setup (double buffered with two playfields)
+// Display setup
 
 void setup_display(gamedata &g) {
   SDL_Window *window =
@@ -133,26 +133,13 @@ void load_shapes(gamedata &g, shape images[]) {
 
 void init_sound(sampleio &sound) {
 
-  char filenames[14][255];
-  for (int i = 0; i < 14; i++) {
+  char filenames[SOUNDS_COUNT][255];
+  for (int i = 0; i < SOUNDS_COUNT; i++) {
     strcpy(filenames[i], AP_PATH);
+    strcat(filenames[i], SOUND_NAMES[i]);
   }
-  strcat(filenames[0], "engine.wav");
-  strcat(filenames[1], "jet.wav");
-  strcat(filenames[2], "explode.wav");
-  strcat(filenames[3], "groundhit.wav");
-  strcat(filenames[4], "fuelexplode.wav");
-  strcat(filenames[5], "shot.wav");
-  strcat(filenames[6], "gunshot.wav");
-  strcat(filenames[7], "bomb.wav");
-  strcat(filenames[8], "splash.wav");
-  strcat(filenames[9], "laser.wav");
-  strcat(filenames[10], "stall.wav");
-  strcat(filenames[11], "gunshot2.wav");
-  strcat(filenames[12], "afterburner.wav");
-  strcat(filenames[13], "finish.wav");
 
-  sound.init(14, filenames, 2, 6);
+  sound.init(SOUNDS_COUNT, filenames, 2, 6);
 }
 
 // Initialize the game constants
@@ -363,12 +350,12 @@ void init_gamedata(gamedata &g) {
   g.planeinfo[6].basetype = getConfig(config, "BASE6", 1, 1, 7);
 
   // Control: 1=Player 1, 2=Player 2, 0=AI
-  g.planeinfo[1].control = getConfig(config, "CONTROL1", 1, 0, 2);
-  g.planeinfo[2].control = getConfig(config, "CONTROL2", 0, 0, 2);
-  g.planeinfo[3].control = getConfig(config, "CONTROL3", 0, 0, 2);
-  g.planeinfo[4].control = getConfig(config, "CONTROL4", 0, 0, 2);
-  g.planeinfo[5].control = getConfig(config, "CONTROL5", 0, 0, 2);
-  g.planeinfo[6].control = getConfig(config, "CONTROL6", 0, 0, 2);
+  g.planeinfo[1].control = (plane::Control) getConfig(config, "CONTROL1", 1, 0, 2);
+  g.planeinfo[2].control = (plane::Control) getConfig(config, "CONTROL2", 0, 0, 2);
+  g.planeinfo[3].control = (plane::Control) getConfig(config, "CONTROL3", 0, 0, 2);
+  g.planeinfo[4].control = (plane::Control) getConfig(config, "CONTROL4", 0, 0, 2);
+  g.planeinfo[5].control = (plane::Control) getConfig(config, "CONTROL5", 0, 0, 2);
+  g.planeinfo[6].control = (plane::Control) getConfig(config, "CONTROL6", 0, 0, 2);
   // Error check
   int count[3];
   count[0] = 0;

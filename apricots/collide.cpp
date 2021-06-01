@@ -11,14 +11,14 @@
 void detect_collisions(gamedata &g) {
 
   // Check for ground collision
-  if (g.p().land == 2) {
+  if (g.p().land == plane::LandingState::FLYING) {
     if ((g.gamemap.ground.collide(0, 0, g.images[g.p().image + g.p().d], (int)g.p().x, (int)g.p().y)) ||
         (int(g.p().x) < -16) || (int(g.p().x) > GAME_WIDTH)) {
       // Check for landing plane
       int dx = int(g.p().x) - 32 * g.base[g.p().side].mapx - g.base[g.p().side].runwayx;
       if ((dx > -5) && (dx < 5 + g.base[g.p().side].runwaylength) && (g.p().state == 0) && (!g.p().drak) &&
           ((g.p().d == 12) || (g.p().d == 11) || (g.p().d == 7) || (g.p().d == 6))) {
-        g.p().land = 3;
+        g.p().land = plane::LandingState::LANDING;
         g.p().y = g.base[g.p().side].planey;
         g.p().d = 18 - g.base[g.p().side].planed;
         g.p().xs = 2.0 * g.xmove[g.p().d] * GAME_SPEED;
@@ -26,7 +26,7 @@ void detect_collisions(gamedata &g) {
       } else {
         // Crashed
         g.p().score -= 25;
-        // Mission 1 scoreloss
+        // Mission 1 score loss
         if ((g.mission == 1) && (g.p().score > g.targetscore - 200)) {
           g.p().score = g.targetscore - 200;
         }
@@ -43,8 +43,7 @@ void detect_collisions(gamedata &g) {
           firetype splash;
           splash.x = int(g.p().x);
           splash.y = GAME_HEIGHT - 20;
-          splash.time = 0;
-          splash.type = 3;
+          splash.type = firetype::Type::THREE;
           g.explosion.add(splash);
           g.sound.play(SOUND_SPLASH);
         } else { // hits land
@@ -52,9 +51,9 @@ void detect_collisions(gamedata &g) {
           if ((g.p().y > 3.0) && (g.p().x > 0) && (g.p().x < GAME_WIDTH - 16)) {
             g.images[g.p().image + 17].blit(g.gamescreen, (int)g.p().x, (int)g.p().y - 3);
           }
-          firetype boom = {int(g.p().x), int(g.p().y), 0, 0};
+          firetype boom = {int(g.p().x), int(g.p().y)};
           g.explosion.add(boom);
-          firetype fire = {int(g.p().x), int(g.p().y) - 7, int(210 / GAME_SPEED), 0};
+          firetype fire = {int(g.p().x), int(g.p().y) - 7, int(210 / GAME_SPEED)};
           g.flame.add(fire);
           for (int i = 0; i < 3; i++) {
             falltype shrapnel = {};
@@ -78,7 +77,7 @@ void detect_collisions(gamedata &g) {
                                                       g.images[g.p().image + g.p().d], (int)g.p().x, (int)g.p().y))) {
     // Crashed
     g.p().score -= 25;
-    // Mission 1 scoreloss
+    // Mission 1 score loss
     if ((g.mission == 1) && (g.p().score > g.targetscore - 200)) {
       g.p().score = g.targetscore - 200;
     }
@@ -89,7 +88,7 @@ void detect_collisions(gamedata &g) {
     g.p().s = 0.0;
     // Damage to drak mothership
     g.drakms.damage++;
-    firetype boom = {int(g.p().x), int(g.p().y), 0, 0};
+    firetype boom = {int(g.p().x), int(g.p().y)};
     g.explosion.add(boom);
     for (int i = 0; i < 3; i++) {
       falltype shrapnel = {};
@@ -118,7 +117,7 @@ void detect_collisions(gamedata &g) {
       if (g.images[g.gamemap.b[x].image].collide(g.gamemap.b[x].x, g.gamemap.b[x].y, g.images[g.p().image + g.p().d],
                                                  (int)g.p().x, (int)g.p().y)) {
         g.p().state = 2;
-        g.p().land = 2;
+        g.p().land = plane::LandingState::FLYING;
         g.p().xs = g.p().xs * 0.5;
         g.p().ys = g.p().ys * 0.5;
         g.p().s = 0.0;
@@ -139,7 +138,7 @@ void detect_collisions(gamedata &g) {
       int ty = g.gamemap.b[x].y - g.gamemap.b[x].towersize * 16;
       if (g.images[197].collide(g.gamemap.b[x].x, ty, g.images[g.p().image + g.p().d], (int)g.p().x, (int)g.p().y)) {
         g.p().state = 2;
-        g.p().land = 2;
+        g.p().land = plane::LandingState::FLYING;
         g.p().xs = g.p().xs * 0.5;
         g.p().ys = g.p().ys * 0.5;
         g.p().s = 0.0;
@@ -174,13 +173,11 @@ void detect_collisions(gamedata &g) {
         }
       }
       g.p().state = 2;
-      g.p().land = 2;
+      g.p().land = plane::LandingState::FLYING;
       g.p().s = 0.0;
       firetype boom;
       boom.x = int(g.p().x);
       boom.y = int(g.p().y);
-      boom.time = 0;
-      boom.type = 0;
       g.explosion.add(boom);
       g.shot.kill();
       g.sound.play(SOUND_EXPLODE);
@@ -198,15 +195,13 @@ void detect_collisions(gamedata &g) {
           g.p().score -= 50;
         g.p().score += 50;
         g.p().state = 2;
-        g.p().land = 2;
+        g.p().land = plane::LandingState::FLYING;
         g.p().xs = g.p().xs * 0.5;
         g.p().ys = g.p().ys * 0.5;
         g.p().s = 0.0;
         firetype boom;
         boom.x = int(g.p().x);
         boom.y = int(g.p().y);
-        boom.time = 0;
-        boom.type = 0;
         g.explosion.add(boom);
         // Reset laser flags
         if (g.drakgun().type == -1)
@@ -228,15 +223,13 @@ void detect_collisions(gamedata &g) {
                                (int)g.p().y)) {
         g.p().score -= 10;
         g.p().state = 2;
-        g.p().land = 2;
+        g.p().land = plane::LandingState::FLYING;
         g.p().xs = g.p().xs * 0.5;
         g.p().ys = g.p().ys * 0.5;
         g.p().s = 0.0;
         firetype boom;
         boom.x = int(g.p().x);
         boom.y = int(g.p().y);
-        boom.time = 0;
-        boom.type = 0;
         g.explosion.add(boom);
         g.sound.play(SOUND_EXPLODE);
       }
@@ -258,15 +251,13 @@ void detect_collisions(gamedata &g) {
           }
         }
         g.p().state = 2;
-        g.p().land = 2;
+        g.p().land = plane::LandingState::FLYING;
         g.p().xs = g.p().xs * 0.5;
         g.p().ys = g.p().ys * 0.5;
         g.p().s = 0.0;
         firetype boom;
         boom.x = int(g.p().x);
         boom.y = int(g.p().y);
-        boom.time = 0;
-        boom.type = 0;
         g.explosion.add(boom);
         g.fall.kill();
         g.sound.play(SOUND_EXPLODE);
@@ -294,9 +285,9 @@ void killbuilding(gamedata &g, building &b) {
   }
   if (b.image != 71) { // not a fuel canister
     if (b.type != 1) { // not a tree
-      firetype boom = {b.x, b.y, 0, 0};
+      firetype boom = {b.x, b.y};
       g.explosion.add(boom);
-      firetype fire = {b.x, b.y, 0, 0};
+      firetype fire = {b.x, b.y};
       g.flame.add(fire);
     }
     for (int i = 0; i < 3; i++) {
@@ -317,9 +308,9 @@ void killbuilding(gamedata &g, building &b) {
     }
     g.sound.play(SOUND_EXPLODE);
   } else { // fuel blows up
-    firetype boom = {int(b.x - 8), int(b.y - 16), 0, 1};
+    firetype boom = {int(b.x - 8), int(b.y - 16), 0, firetype::Type::ONE};
     g.explosion.add(boom);
-    firetype fire = {b.x, b.y, 0, 0};
+    firetype fire = {b.x, b.y};
     g.flame.add(fire);
     fire.x = b.x - 8;
     fire.time = int(drand() * 10.0 * GAME_SPEED);
@@ -413,11 +404,11 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
     g.fall.add(shrapnel);
   }
   // Explosion at top
-  firetype boom = {b.x, b.y - h * 16, 0, 0};
+  firetype boom = {b.x, b.y - h * 16};
   g.explosion.add(boom);
   // Fire if tower levelled
   if (h == 0) {
-    firetype fire = {b.x, b.y, 0, 0};
+    firetype fire = {b.x, b.y};
     g.flame.add(fire);
   }
   // Recalculate intelligence map

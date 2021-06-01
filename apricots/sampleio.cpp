@@ -234,11 +234,11 @@ ALboolean sampleio ::sourceisplaying(ALuint sid) {
 #endif
 
   switch (state) {
-  case AL_PLAYING:
-  case AL_PAUSED:
-    return AL_TRUE;
-  default:
-    break;
+    case AL_PLAYING:
+    case AL_PAUSED:
+      return AL_TRUE;
+    default:
+      break;
   }
   return AL_FALSE;
 }

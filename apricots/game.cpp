@@ -105,7 +105,7 @@ void act(gamedata &g, int jx, int jy, bool jb) {
       // Start Engine
       if (jy == -1) {
         g.p().s = 0.3 * GAME_SPEED * GAME_SPEED;
-        g.p().land = 1;
+        g.p().land = plane::LandingState::TAKING_OFF;
         if ((g.p().control) > 0) {
           g.sound.volume(g.p().control - 1, 0.0);
           g.sound.loop(g.p().control - 1, g.p().enginesample);
@@ -121,16 +121,16 @@ void act(gamedata &g, int jx, int jy, bool jb) {
       if ((jx == -1) && (g.p().s > 2.0 * GAME_SPEED) && (g.base[g.p().side].planed == 13)) {
         g.p().d++;
         g.p().rotate = g.p().maxrotate;
-        g.p().land = 2;
+        g.p().land = plane::LandingState::FLYING;
       }
       if ((jx == 1) && (g.p().s > 2.0 * GAME_SPEED) && (g.base[g.p().side].planed == 5)) {
         g.p().d--;
         g.p().rotate = g.p().maxrotate;
-        g.p().land = 2;
+        g.p().land = plane::LandingState::FLYING;
       }
       // Off end of runway
       if (abs(int(g.p().x - g.base[g.p().side].planex)) > g.base[g.p().side].runwaylength) {
-        g.p().land = 2;
+        g.p().land = plane::LandingState::FLYING;
       }
       break;
 
@@ -178,10 +178,10 @@ void act(gamedata &g, int jx, int jy, bool jb) {
       }
       break;
 
-    case 3: // Landing plane
+    case plane::LandingState::LANDING:
       if ((((g.p().x - g.base[g.p().side].planex) < 2.0) && (g.base[g.p().side].planed == 13)) ||
           (((g.p().x - g.base[g.p().side].planex) > -2.0) && (g.base[g.p().side].planed == 5))) {
-        g.p().land = 0;
+        g.p().land = plane::LandingState::LANDED;
         g.p().x = g.base[g.p().side].planex;
         g.p().y = g.base[g.p().side].planey;
         g.p().d = g.base[g.p().side].planed;
@@ -190,7 +190,7 @@ void act(gamedata &g, int jx, int jy, bool jb) {
         g.p().s = 0;
         g.p().ammo = g.p().maxammo;
         g.p().bombs = g.p().maxbombs;
-        g.p().coms = 0;
+        g.p().coms = plane::Coms::ACTION;
         g.p().targetx = 0;
         g.p().targety = 0;
         g.p().cruiseheight = 0;
@@ -255,7 +255,7 @@ void act(gamedata &g, int jx, int jy, bool jb) {
       g.p().state = 0;
       g.p().xs = g.p().s * g.xmove[g.p().d];
       g.p().ys = g.p().s * g.ymove[g.p().d];
-      g.p().coms = 0;
+      g.p().coms = plane::Coms::ACTION;
       if ((g.p().control) > 0) {
         double volume = g.p().s / (6.0 * GAME_SPEED);
         g.sound.volume(g.p().control - 1, volume * 0.5);
@@ -287,7 +287,7 @@ void act(gamedata &g, int jx, int jy, bool jb) {
     if (g.p().crash == int(70 / GAME_SPEED)) {
       if (!g.p().drak) {
         // Respawn plane to runway
-        g.p().land = 0;
+        g.p().land = plane::LandingState::LANDED;
         g.p().state = 0;
         g.p().rotate = 0;
         g.p().crash = 0;
@@ -299,7 +299,7 @@ void act(gamedata &g, int jx, int jy, bool jb) {
         g.p().s = 0;
         g.p().ammo = g.p().maxammo;
         g.p().bombs = g.p().maxbombs;
-        g.p().coms = 0;
+        g.p().coms = plane::Coms::ACTION;
         g.p().targetx = 0;
         g.p().targety = 0;
         g.p().cruiseheight = 0;
@@ -367,16 +367,16 @@ void keyboard(const Uint8 *keys, int &jx, int &jy, bool &jb, SDL_Scancode up, SD
 void control(gamedata &g, const Uint8 *keys, int &jx, int &jy, bool &jb) {
 
   switch (g.p().control) {
-  case 1: // Player 1
-    keyboard(keys, jx, jy, jb, SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT,
-             SDL_SCANCODE_RETURN);
-    break;
-  case 2: // Player 2
-    keyboard(keys, jx, jy, jb, SDL_SCANCODE_S, SDL_SCANCODE_X, SDL_SCANCODE_Z, SDL_SCANCODE_C, SDL_SCANCODE_LCTRL);
-    break;
-  default: // Computer controlled
-    computer_ai(g, g.p(), jx, jy, jb);
-    break;
+    case 1: // Player 1
+      keyboard(keys, jx, jy, jb, SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT,
+               SDL_SCANCODE_RETURN);
+      break;
+    case 2: // Player 2
+      keyboard(keys, jx, jy, jb, SDL_SCANCODE_S, SDL_SCANCODE_X, SDL_SCANCODE_Z, SDL_SCANCODE_C, SDL_SCANCODE_LCTRL);
+      break;
+    default: // Computer controlled
+      computer_ai(g, g.p(), jx, jy, jb);
+      break;
   }
 }
 

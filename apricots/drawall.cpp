@@ -259,7 +259,7 @@ void drawall(gamedata &g) {
     bool found = false;
     g.p.reset();
     while (g.p.next()) {
-      if ((g.p().control == 0) && (g.p().side > 0)) {
+      if ((g.p().control == plane::Control::COMPUTER) && (g.p().side > 0)) {
         if (!found) {
           bestp = g.p();
           found = true;

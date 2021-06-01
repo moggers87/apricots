@@ -67,24 +67,24 @@ void animate_explosions(linkedlist<firetype> &explosion) {
     explosion().time++;
     int maxtime = 0;
     switch (explosion().type) {
-    case 0:
-      maxtime = int(14 / GAME_SPEED);
-      break;
-    case 1:
-      maxtime = int(22 / GAME_SPEED);
-      break;
-    case 2:
-      maxtime = int(4 / GAME_SPEED);
-      break;
-    case 3:
-      maxtime = int(20 / GAME_SPEED);
-      break;
-    case 4:
-      maxtime = int(5 / GAME_SPEED);
-      break;
-    default:
-      switch_bad_default("explosion.type", __FILE__, __LINE__);
-      break;
+      case firetype::ZERO:
+        maxtime = int(14 / GAME_SPEED);
+        break;
+      case firetype::ONE:
+        maxtime = int(22 / GAME_SPEED);
+        break;
+      case firetype::TWO:
+        maxtime = int(4 / GAME_SPEED);
+        break;
+      case firetype::THREE:
+        maxtime = int(20 / GAME_SPEED);
+        break;
+      case firetype::FOUR:
+        maxtime = int(5 / GAME_SPEED);
+        break;
+      default:
+        switch_bad_default("firetype.type", __FILE__, __LINE__);
+        break;
     }
     if (explosion().time == maxtime)
       explosion.kill();
@@ -159,7 +159,7 @@ void plane_collisions(gamedata &g) {
             if (g.p().state < 2)
               g.p().score -= 25;
             g.p().state = 2;
-            g.p().land = 2;
+            g.p().land = plane::LandingState::FLYING;
             g.p().xs = g.p().xs * 0.5;
             g.p().ys = g.p().ys * 0.5;
             g.p().s = 0.0;
@@ -190,7 +190,7 @@ void plane_collisions(gamedata &g) {
       if (g.p().state < 2)
         g.p().score -= 25;
       g.p().state = 2;
-      g.p().land = 2;
+      g.p().land = plane::LandingState::FLYING;
       g.p().xs = g.p().xs * 0.5;
       g.p().ys = g.p().ys * 0.5;
       g.p().s = 0.0;
