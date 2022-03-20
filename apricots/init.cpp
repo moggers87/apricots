@@ -219,7 +219,7 @@ void init_gameconstants(gamedata &g) {
 
 string getConfig(string config, string name, string defval) {
   // Pull out just the name line
-  unsigned int ndx = config.find(name);
+  size_t ndx = config.find(name);
 
   if (ndx == string::npos) {
     return defval;
@@ -240,7 +240,7 @@ string getConfig(string config, string name, string defval) {
 
 int getConfig(string config, string name, int defval, int min, int max) {
   // Pull out just the name line
-  unsigned int ndx = config.find(name);
+  size_t ndx = config.find(name);
 
   if (ndx == string::npos) {
     return defval;
