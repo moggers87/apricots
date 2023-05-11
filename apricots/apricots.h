@@ -525,7 +525,7 @@ void winnerbox(gamedata &, int, int, int, int);
 
 // compatibility macros
 
-#if !SDL_VERSION_ATLEAST(2,0,18)
+#if !SDL_VERSION_ATLEAST(2, 0, 18)
 #warning "Old version of SDL2 detected, adding SDL_clamp macro from SDL2 2.0.18"
 #define SDL_clamp(x, a, b) ((x) < (a)) ? (a) : (((x) > (b)) ? (b) : (x))
 #endif

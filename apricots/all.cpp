@@ -195,7 +195,7 @@ void plane_collisions(gamedata &g) {
       g.p().ys = g.p().ys * 0.5;
       g.p().s = 0.0;
       g.dp().collide = false;
-      falltype shrapnel {};
+      falltype shrapnel = {};
       shrapnel.x = g.p().x + 6.0;
       shrapnel.y = g.p().y;
       shrapnel.xs = g.p().xs;

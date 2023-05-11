@@ -294,9 +294,9 @@ void killbuilding(gamedata &g, building &b) {
   }
   if (b.image != 71) { // not a fuel canister
     if (b.type != 1) { // not a tree
-      firetype boom {b.x, b.y, 0, 0};
+      firetype boom = {b.x, b.y, 0, 0};
       g.explosion.add(boom);
-      firetype fire {b.x, b.y, 0, 0};
+      firetype fire = {b.x, b.y, 0, 0};
       g.flame.add(fire);
     }
     for (int i = 0; i < 3; i++) {
@@ -317,7 +317,7 @@ void killbuilding(gamedata &g, building &b) {
     }
     g.sound.play(SOUND_EXPLODE);
   } else { // fuel blows up
-    firetype boom {int(b.x - 8), int(b.y - 16), 0, 1};
+    firetype boom = {int(b.x - 8), int(b.y - 16), 0, 1};
     g.explosion.add(boom);
     firetype fire = {b.x, b.y, 0, 0};
     g.flame.add(fire);

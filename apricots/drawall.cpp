@@ -255,7 +255,7 @@ void drawall(gamedata &g) {
 
   // Best AI Score
   if (g.planes > g.players) {
-    plane bestp;
+    plane bestp = {};
     bool found = false;
     g.p.reset();
     while (g.p.next()) {
