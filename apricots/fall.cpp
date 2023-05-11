@@ -15,7 +15,7 @@ bool fall_collision(gamedata &g, falltype &fall) {
       break;
     case 1: // Shrapnel
     {
-      int px = clamp(int((fall.x + 18.0) / 32), 0, MAP_W - 1);
+      int px = SDL_clamp(int((fall.x + 18.0) / 32), 0, MAP_W - 1);
       if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) && (fall.y > GAME_HEIGHT - 11)) { // hits sea
         firetype splash;
         splash.x = int(fall.x) - 5;
@@ -38,7 +38,7 @@ bool fall_collision(gamedata &g, falltype &fall) {
       if (fall.type == 3)
         fall.x -= 5;
       {
-        int px = clamp(int((fall.x + 24.0) / 32), 0, MAP_W - 1);
+        int px = SDL_clamp(int((fall.x + 24.0) / 32), 0, MAP_W - 1);
         if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) && (fall.y > GAME_HEIGHT - 21)) { // hits sea
           firetype splash;
           splash.x = int(fall.x);
@@ -153,10 +153,10 @@ bool fall_collision(gamedata &g, falltype &fall) {
 
     case 2: // towers
     {
-      int ty = clamp(int(fall.y), g.gamemap.b[x].y - g.gamemap.b[x].towersize * 16, int(fall.y));
+      int ty = SDL_clamp(int(fall.y), g.gamemap.b[x].y - g.gamemap.b[x].towersize * 16, int(fall.y));
       if (g.images[197].collide(g.gamemap.b[x].x, ty, g.images[fall.image], (int)fall.x, (int)fall.y)) {
         // Calculate height of tower strike
-        int h = clamp(int((g.gamemap.b[x].y - fall.y) / 16), 0, 100);
+        int h = SDL_clamp(int((g.gamemap.b[x].y - fall.y) / 16), 0, 100);
         // Find which plane (if any) the fall belongs to
         if (fall.side > 0) {
           g.p.reset();

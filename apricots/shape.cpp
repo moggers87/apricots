@@ -306,29 +306,13 @@ bool shape ::writefile(char *filename) {
   return true;
 }
 
-// Maximization function (for collision detection)
-
-int shape ::max(int a, int b) {
-  if (a > b)
-    return a;
-  return b;
-}
-
-// Minimization function (for collision detection)
-
-int shape ::min(int a, int b) {
-  if (a < b)
-    return a;
-  return b;
-}
-
 // Shape collision detection routine
 // Checks if the shape at x,y collides with another shape s at sx,sy
 // NB assumes BYTESPERPIXEL == 1
 
 bool shape ::collide(int x, int y, const shape &s, int sx, int sy) {
-  for (int cx = max(x, sx); cx < min(x + width, sx + s.width); cx++) {
-    for (int cy = max(y, sy); cy < min(y + height, sy + s.height); cy++) {
+  for (int cx = SDL_max(x, sx); cx < SDL_min(x + width, sx + s.width); cx++) {
+    for (int cy = SDL_max(y, sy); cy < SDL_min(y + height, sy + s.height); cy++) {
       if ((buffer[cx - x + width * (cy - y)] != 0) && (s.buffer[cx - sx + s.width * (cy - sy)] != 0)) {
         return true;
       }
