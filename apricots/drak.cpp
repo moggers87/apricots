@@ -154,7 +154,7 @@ void fire_drakguns(gamedata &g, linkedlist<drakguntype> &drakgun, drakmstype &dr
             // Rotate drakgun
             if (drakgun().rotate == 0) {
               double smartsine = (dy * p().xs - dx * p().ys) / (8.0 * GAME_SPEED * sqrt(dx * dx + dy * dy));
-              smartsine = clamp(smartsine, -1.0, 1.0);
+              smartsine = SDL_clamp(smartsine, -1.0, 1.0);
               double smartangle = asin(smartsine);
               int targetd = wrap(int(((atan2(dy, -dx) - smartangle) * 8.0 / PI) + 13.5), 1, 17);
               int move = sign(wrap(targetd - drakgun().d, -7, 9));
@@ -267,9 +267,9 @@ void drak_main(gamedata &g) {
         }
         // Apply Brakes
         if (g.drakms.xs > 0.0) {
-          g.drakms.xs = clamp(g.drakms.xs - 0.5 * GAME_SPEED * GAME_SPEED, 0.0, 4.0 * GAME_SPEED);
+          g.drakms.xs = SDL_clamp(g.drakms.xs - 0.5 * GAME_SPEED * GAME_SPEED, 0.0, 4.0 * GAME_SPEED);
         } else {
-          g.drakms.xs = clamp(g.drakms.xs + 0.5 * GAME_SPEED * GAME_SPEED, -4.0 * GAME_SPEED, 0.0);
+          g.drakms.xs = SDL_clamp(g.drakms.xs + 0.5 * GAME_SPEED * GAME_SPEED, -4.0 * GAME_SPEED, 0.0);
         }
       } else {
         // Follow Target
@@ -285,13 +285,13 @@ void drak_main(gamedata &g) {
         if ((abs(dx) > stopd) && (g.drakms.movedelay == 0)) {
           // Accelerate
           g.drakms.xs =
-              clamp(g.drakms.xs + 0.5 * GAME_SPEED * GAME_SPEED * sign(dx), -4.0 * GAME_SPEED, 4.0 * GAME_SPEED);
+              SDL_clamp(g.drakms.xs + 0.5 * GAME_SPEED * GAME_SPEED * sign(dx), -4.0 * GAME_SPEED, 4.0 * GAME_SPEED);
         } else {
           // Apply Brakes
           if (g.drakms.xs > 0.0) {
-            g.drakms.xs = clamp(g.drakms.xs - 0.5 * GAME_SPEED * GAME_SPEED, 0.0, 4.0 * GAME_SPEED);
+            g.drakms.xs = SDL_clamp(g.drakms.xs - 0.5 * GAME_SPEED * GAME_SPEED, 0.0, 4.0 * GAME_SPEED);
           } else {
-            g.drakms.xs = clamp(g.drakms.xs + 0.5 * GAME_SPEED * GAME_SPEED, -4.0 * GAME_SPEED, 0.0);
+            g.drakms.xs = SDL_clamp(g.drakms.xs + 0.5 * GAME_SPEED * GAME_SPEED, -4.0 * GAME_SPEED, 0.0);
           }
         }
         // Target destroyed

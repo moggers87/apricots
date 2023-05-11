@@ -298,12 +298,12 @@ void fire_guns(linkedlist<guntype> &gun, linkedlist<plane> &p, sampleio &sound, 
           // Rotate gun
           if ((gun().rotate == 0) && (dy > 0)) {
             double smartsine = (dy * p().xs + dx * p().ys) / (8.0 * GAME_SPEED * sqrt(dx * dx + dy * dy));
-            smartsine = clamp(smartsine, -1.0, 1.0);
+            smartsine = SDL_clamp(smartsine, -1.0, 1.0);
             double smartangle = asin(smartsine);
             int move = sign(int(((atan(dx / dy) + smartangle) * 8.0 / PI) + 4.5) - gun().d);
             if (move != 0) {
 
-              gun().d = clamp(gun().d + move, 1, 7);
+              gun().d = SDL_clamp(gun().d + move, 1, 7);
               b[gun().xpos].image = 162 + gun().d;
               gun().rotate = int(2 / GAME_SPEED);
             }

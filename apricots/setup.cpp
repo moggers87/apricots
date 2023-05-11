@@ -696,10 +696,10 @@ void draw_dither(SDL_Surface *gamescreen, int xbox, int ybox, int w, int h) {
   if (SDL_MUSTLOCK(gamescreen) != 0)
     SDL_LockSurface(gamescreen);
   Uint8 *pixels = (Uint8 *)gamescreen->pixels;
-  int xstart = clamp(xbox, 0, GAME_WIDTH);
-  int xend = clamp(xbox + w, 0, GAME_WIDTH);
-  int ystart = clamp(ybox, 0, GAME_HEIGHT);
-  int yend = clamp(ybox + h, 0, GAME_HEIGHT);
+  int xstart = SDL_clamp(xbox, 0, GAME_WIDTH);
+  int xend = SDL_clamp(xbox + w, 0, GAME_WIDTH);
+  int ystart = SDL_clamp(ybox, 0, GAME_HEIGHT);
+  int yend = SDL_clamp(ybox + h, 0, GAME_HEIGHT);
   for (int x = xstart; x < xend; x++) {
     for (int y = ystart; y < yend; y++) {
       if (x < 0 || x >= GAME_WIDTH || y < 0 || y >= GAME_HEIGHT) {

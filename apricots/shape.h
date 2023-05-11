@@ -16,8 +16,6 @@ private:
   int width;
   int height;
   char *buffer;
-  int max(int, int);
-  int min(int, int);
 
 public:
   shape();
