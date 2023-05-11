@@ -522,3 +522,10 @@ void setup_map(map &, int, airbase *, bool *);
 void setup_planes(linkedlist<plane> &, linkedlist<planeclone> &, airbase *, int, info *, plane *&, plane *&);
 void switch_bad_default(const char *, const char *, int);
 void winnerbox(gamedata &, int, int, int, int);
+
+// compatibility macros
+
+#if !SDL_VERSION_ATLEAST(2,0,18)
+#warning "Old version of SDL2 detected, adding SDL_clamp macro from SDL2 2.0.18"
+#define SDL_clamp(x, a, b) ((x) < (a)) ? (a) : (((x) > (b)) ? (b) : (x))
+#endif
