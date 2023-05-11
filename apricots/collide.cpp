@@ -52,19 +52,12 @@ void detect_collisions(gamedata &g) {
           if ((g.p().y > 3.0) && (g.p().x > 0) && (g.p().x < GAME_WIDTH - 16)) {
             g.images[g.p().image + 17].blit(g.gamescreen, (int)g.p().x, (int)g.p().y - 3);
           }
-          firetype boom;
-          boom.x = int(g.p().x);
-          boom.y = int(g.p().y);
-          boom.time = 0;
-          boom.type = 0;
+          firetype boom = {int(g.p().x), int(g.p().y), 0, 0};
           g.explosion.add(boom);
-          firetype fire;
-          fire.x = int(g.p().x);
-          fire.y = int(g.p().y) - 7;
-          fire.time = int(210 / GAME_SPEED);
+          firetype fire = {int(g.p().x), int(g.p().y) - 7, int(210 / GAME_SPEED), 0};
           g.flame.add(fire);
           for (int i = 0; i < 3; i++) {
-            falltype shrapnel;
+            falltype shrapnel = {};
             shrapnel.x = g.p().x + 6.0;
             shrapnel.y = g.p().y;
             shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
@@ -96,15 +89,10 @@ void detect_collisions(gamedata &g) {
     g.p().s = 0.0;
     // Damage to drak mothership
     g.drakms.damage++;
-    firetype boom;
-
-    boom.x = int(g.p().x);
-    boom.y = int(g.p().y);
-    boom.time = 0;
-    boom.type = 0;
+    firetype boom = {int(g.p().x), int(g.p().y), 0, 0};
     g.explosion.add(boom);
     for (int i = 0; i < 3; i++) {
-      falltype shrapnel;
+      falltype shrapnel = {};
       shrapnel.x = g.p().x + 6.0;
       shrapnel.y = g.p().y;
       shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
@@ -307,20 +295,13 @@ void killbuilding(gamedata &g, building &b) {
   }
   if (b.image != 71) { // not a fuel canister
     if (b.type != 1) { // not a tree
-      firetype boom;
-      boom.x = b.x;
-      boom.y = b.y;
-      boom.time = 0;
-      boom.type = 0;
+      firetype boom {b.x, b.y, 0, 0};
       g.explosion.add(boom);
-      firetype fire;
-      fire.x = b.x;
-      fire.y = b.y;
-      fire.time = 0;
+      firetype fire {b.x, b.y, 0, 0};
       g.flame.add(fire);
     }
     for (int i = 0; i < 3; i++) {
-      falltype shrapnel;
+      falltype shrapnel = {};
       shrapnel.x = double(b.x) + 6.0;
       shrapnel.y = double(b.y);
       shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
@@ -337,16 +318,9 @@ void killbuilding(gamedata &g, building &b) {
     }
     g.sound.play(SOUND_EXPLODE);
   } else { // fuel blows up
-    firetype boom;
-    boom.x = int(b.x - 8);
-    boom.y = int(b.y - 16);
-    boom.time = 0;
-    boom.type = 1;
+    firetype boom {int(b.x - 8), int(b.y - 16), 0, 1};
     g.explosion.add(boom);
-    firetype fire;
-    fire.x = b.x;
-    fire.y = b.y;
-    fire.time = 0;
+    firetype fire = {b.x, b.y, 0, 0};
     g.flame.add(fire);
     fire.x = b.x - 8;
     fire.time = int(drand() * 10.0 * GAME_SPEED);
@@ -356,7 +330,7 @@ void killbuilding(gamedata &g, building &b) {
     g.flame.add(fire);
     int shrapnelbits = 7 + int(drand() * 4);
     for (int i = 0; i < shrapnelbits; i++) {
-      falltype shrapnel;
+      falltype shrapnel = {};
       shrapnel.x = double(b.x) + 6.0;
       shrapnel.y = double(b.y);
       shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
@@ -401,7 +375,7 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
   g.images[198].blit(g.gamescreen, b.x, b.y - h * 16);
   draw_dither(g.gamescreen, b.x, b.y - b.towersize * 16 - 8, 16, (b.towersize + 1 - h) * 16 + 8);
   for (int i = h + 1; i <= b.towersize; i++) {
-    falltype fragment;
+    falltype fragment = {};
     fragment.x = double(b.x);
     fragment.y = double(b.y) - i * 16.0;
     fragment.xs = xs;
@@ -410,7 +384,7 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
     fragment.side = side;
     fragment.type = 2;
     g.fall.add(fragment);
-    falltype shrapnel;
+    falltype shrapnel = {};
     shrapnel.x = double(b.x) + 6.0;
     shrapnel.y = double(b.y) - i * 16.0;
     shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
@@ -420,7 +394,7 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
     g.fall.add(shrapnel);
   }
   if ((b.deadimage > 0) && (h < b.towersize)) {
-    falltype roof;
+    falltype roof = {};
     roof.x = double(b.x);
     roof.y = double(b.y) - (b.towersize + 1) * 16.0;
     roof.xs = xs;
@@ -430,7 +404,7 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
     g.fall.add(roof);
   }
   for (int j = 0; j < 3; j++) {
-    falltype shrapnel;
+    falltype shrapnel = {};
     shrapnel.x = double(b.x) + 6.0;
     shrapnel.y = double(b.y) - h * 16.0;
     shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
@@ -440,18 +414,11 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
     g.fall.add(shrapnel);
   }
   // Explosion at top
-  firetype boom;
-  boom.x = b.x;
-  boom.y = b.y - h * 16;
-  boom.time = 0;
-  boom.type = 0;
+  firetype boom = {b.x, b.y - h * 16, 0, 0};
   g.explosion.add(boom);
   // Fire if tower levelled
   if (h == 0) {
-    firetype fire;
-    fire.x = b.x;
-    fire.y = b.y;
-    fire.time = 0;
+    firetype fire = {b.x, b.y, 0, 0};
     g.flame.add(fire);
   }
   // Recalculate intelligence map

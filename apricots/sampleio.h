@@ -6,7 +6,6 @@
 // Changes by M Snellgrove 25/7/2003
 //   Conditional Compilation for OpenAL
 
-
 // OpenAL includes
 #include <AL/al.h>
 #include <AL/alc.h>

@@ -320,7 +320,7 @@ void drak_main(gamedata &g) {
         boom.type = 0;
         g.explosion.add(boom);
         for (int m = 1; m <= 2; m++) {
-          falltype shrapnel;
+          falltype shrapnel = {};
           shrapnel.x = double(x) + 6.0;
           shrapnel.y = g.drakms.y + 8.0;
           shrapnel.xs = g.drakms.xs + (drand() * 5.0 - 2.5) * GAME_SPEED;
@@ -328,7 +328,7 @@ void drak_main(gamedata &g) {
           shrapnel.image = 235 + int(drand() * 3);
           shrapnel.type = 1;
           g.fall.add(shrapnel);
-          falltype bigshrapnel;
+          falltype bigshrapnel = {};
           bigshrapnel.x = double(x);
           bigshrapnel.y = g.drakms.y + 8.0;
           bigshrapnel.xs = g.drakms.xs + (drand() * 5.0 - 2.5) * GAME_SPEED;
@@ -341,7 +341,7 @@ void drak_main(gamedata &g) {
       }
       g.drakgun.reset();
       while (g.drakgun.next()) {
-        falltype gunshrapnel;
+        falltype gunshrapnel = {};
         gunshrapnel.x = g.drakms.x + double(g.drakgun().x);
         gunshrapnel.y = g.drakms.y + double(g.drakgun().y);
         gunshrapnel.xs = g.drakms.xs + (drand() * 5.0 - 2.5) * GAME_SPEED;
