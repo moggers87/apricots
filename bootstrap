@@ -1,5 +1,4 @@
 #!/bin/sh
 
-aclocal --install || exit 1
 autoreconf --verbose --force --install || exit 1
 echo "Now run ./configure && make"
