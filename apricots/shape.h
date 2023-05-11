@@ -26,7 +26,6 @@ public:
   int getwidth();
   int getheight();
   SDL_Surface *getSurface();
-  // char* getbuffer();
   void grab(SDL_Surface *source, int x, int y, int w, int h);
   bool read(ifstream &);
   bool readfile(char *);

@@ -280,7 +280,6 @@ void detect_collisions(gamedata &g) {
 void killbuilding(gamedata &g, building &b) {
 
   // Draw dead image
-  // gl_setcontext(&g.gamescreen);
   g.images[b.deadimage].blit(g.gamescreen, b.x, b.y);
   draw_dither(g.gamescreen, b.x, b.y, 16, 24);
   // Subtract points if owned building
