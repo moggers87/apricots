@@ -557,7 +557,6 @@ void setup_buildings(gamedata &g, bool flatground[]) {
 // Draw mapblocks
 void draw_mapblocks(int image[MAP_W][MAP_H], SDL_Surface *gamescreen, shape images[]) {
 
-  // gl_setcontext(&gamescreen);
   for (int x = 0; x < MAP_W; x++) {
     for (int y = 0; y < MAP_H; y++) {
       if (image[x][y] > 0) {
@@ -571,7 +570,6 @@ void draw_mapblocks(int image[MAP_W][MAP_H], SDL_Surface *gamescreen, shape imag
 
 void draw_map(int image[MAP_W][MAP_H], SDL_Surface *gamescreen, shape images[], shape &ground) {
 
-  // gl_setcontext(&gamescreen);
   // First setup the ground collision map
   SDL_Rect rect;
   rect.x = 0;
@@ -593,7 +591,6 @@ void draw_map(int image[MAP_W][MAP_H], SDL_Surface *gamescreen, shape images[], 
 
 void draw_buildings(building b[], SDL_Surface *gamescreen, shape images[]) {
 
-  // gl_setcontext(&gamescreen);
   for (int x = 0; x < MAP_W * 2; x++) {
     if ((b[x].type == 1) || (b[x].type == 3)) { // buildings and trees
       // images[b[x].image].blit(gamescreen,b[x].x,b[x].y);
@@ -612,10 +609,7 @@ void draw_buildings(building b[], SDL_Surface *gamescreen, shape images[]) {
 
 void draw_runways(airbase base[], int planes, int groundheight[], SDL_Surface *gamescreen) {
 
-  // gl_setcontext(&gamescreen);
   for (int n = 1; n <= planes; n++) {
-    /*gl_fillbox(base[n].mapx*32+base[n].runwayx, groundheight[base[n].mapx]-1,
-               base[n].runwaylength,2,3);*/
     {
       SDL_Rect rect;
       rect.x = base[n].mapx * 32 + base[n].runwayx;
@@ -625,9 +619,6 @@ void draw_runways(airbase base[], int planes, int groundheight[], SDL_Surface *g
       SDL_FillRect(gamescreen, &rect, 3);
     }
     for (int m = 0; m < base[n].runwaylength / 16; m++) {
-      /*gl_hline(base[n].mapx*32+base[n].runwayx+m*16+4,
-               groundheight[base[n].mapx]-1,
-               base[n].mapx*32+base[n].runwayx+m*16+12,1);*/
       SDL_Rect rect;
       rect.x = base[n].mapx * 32 + base[n].runwayx + m * 16 + 4;
       rect.y = groundheight[base[n].mapx] - 1;
@@ -689,8 +680,6 @@ void setup_intelligence(map &gamemap) {
 // NB draws only on existing sky blue
 
 void draw_dither(SDL_Surface *gamescreen, int xbox, int ybox, int w, int h) {
-
-  // gl_setcontext(&gamescreen);
 
   // Plot dither
   if (SDL_MUSTLOCK(gamescreen) != 0)

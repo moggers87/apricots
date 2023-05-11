@@ -106,7 +106,6 @@ shape &shape ::operator=(const shape &s) {
 int shape ::getwidth() { return width; }
 int shape ::getheight() { return height; }
 SDL_Surface *shape ::getSurface() { return surface; }
-// char* shape :: getbuffer(){return buffer;}
 
 // Shape Grabber function
 
