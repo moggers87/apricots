@@ -88,7 +88,7 @@ See AUTHORS
 Status
 ------
 
-The game is still under development. Apricots-0.2.7 is a beta release using the
+The game is still under development. Apricots-0.2.8 is a beta release using the
 SDL2 library. Despite this, it is highly playable. Please open a Github issue to
 report bugs, feature requests, or comments.
 

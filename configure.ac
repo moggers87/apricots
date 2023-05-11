@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([apricots], [0.2.7], [moggers87+git@moggers87.co.uk])
+AC_INIT([apricots], [0.2.8], [moggers87+git@moggers87.co.uk])
 AC_CONFIG_SRCDIR([apricots/game.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
