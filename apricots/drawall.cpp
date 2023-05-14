@@ -198,15 +198,15 @@ void drawall(gamedata &g) {
   int screenheight = 0;
   if (g.players == 1) {
     // TODO where do these numbers come from?
-    screenheight = SDL_clamp(GAME_HEIGHT, GAME_HEIGHT, 464);
+    screenheight = clamp(GAME_HEIGHT, GAME_HEIGHT, 464);
   } else {
-    screenheight = SDL_clamp(GAME_HEIGHT, GAME_HEIGHT, 224);
+    screenheight = clamp(GAME_HEIGHT, GAME_HEIGHT, 224);
   }
   // Player 1
   {
     // TODO where do these numbers come from?
-    int x1 = SDL_clamp(int(g.player1->x) - 308, 0, GAME_WIDTH - SCREEN_WIDTH);
-    int y1 = SDL_clamp(int(g.player1->y) - 54, 0, GAME_HEIGHT - screenheight);
+    int x1 = clamp(int(g.player1->x) - 308, 0, GAME_WIDTH - SCREEN_WIDTH);
+    int y1 = clamp(int(g.player1->y) - 54, 0, GAME_HEIGHT - screenheight);
     SDL_Rect srcrect;
     srcrect.x = x1;
     srcrect.y = y1;
@@ -228,8 +228,8 @@ void drawall(gamedata &g) {
   // Player 2
   if (g.players == 2) {
     // TODO where do these numbers come from?
-    int x2 = SDL_clamp(int(g.player2->x) - 308, 0, GAME_WIDTH - SCREEN_WIDTH);
-    int y2 = SDL_clamp(int(g.player2->y) - 54, 0, GAME_HEIGHT - 224);
+    int x2 = clamp(int(g.player2->x) - 308, 0, GAME_WIDTH - SCREEN_WIDTH);
+    int y2 = clamp(int(g.player2->y) - 54, 0, GAME_HEIGHT - 224);
     SDL_Rect srcrect;
     srcrect.x = x2;
     srcrect.y = y2;
