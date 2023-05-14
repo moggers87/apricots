@@ -305,22 +305,6 @@ bool shape ::writefile(char *filename) {
   return true;
 }
 
-// Maximization function (for collision detection)
-
-int shape ::max(int a, int b) {
-  if (a > b)
-    return a;
-  return b;
-}
-
-// Minimization function (for collision detection)
-
-int shape ::min(int a, int b) {
-  if (a < b)
-    return a;
-  return b;
-}
-
 // Shape collision detection routine
 // Checks if the shape at x,y collides with another shape s at sx,sy
 // NB assumes BYTESPERPIXEL == 1
