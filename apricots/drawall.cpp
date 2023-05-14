@@ -197,10 +197,10 @@ void drawall(gamedata &g) {
   // Set screenheight
   int screenheight = 0;
   if (g.players == 1) {
-    // TODO where do these numbers come from?
-    screenheight = clamp(GAME_HEIGHT, GAME_HEIGHT, 464);
+    screenheight = GAME_HEIGHT;
   } else {
-    screenheight = clamp(GAME_HEIGHT, GAME_HEIGHT, 224);
+    // TODO where do these numbers come from?
+    screenheight = 224;
   }
   // Player 1
   {
