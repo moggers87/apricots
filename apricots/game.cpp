@@ -115,7 +115,7 @@ void act(gamedata &g, int jx, int jy, bool jb) {
 
     case 1: // Taking off plane
       if (jy == -1) {
-        g.p().s = SDL_clamp(g.p().s + 0.3 * GAME_SPEED * GAME_SPEED, 0.0, 6.0 * GAME_SPEED);
+        g.p().s = clamp(g.p().s + 0.3 * GAME_SPEED * GAME_SPEED, 0.0, 6.0 * GAME_SPEED);
       }
       // Take off plane
       if ((jx == -1) && (g.p().s > 2.0 * GAME_SPEED) && (g.base[g.p().side].planed == 13)) {
@@ -155,9 +155,9 @@ void act(gamedata &g, int jx, int jy, bool jb) {
           if ((g.p().s > 6.0 * GAME_SPEED) && (jy != -1)) {
             acceleration -= 0.3 * GAME_SPEED * GAME_SPEED;
           }
-          g.p().s = SDL_clamp(g.p().s + acceleration, 0.0, 12.0 * GAME_SPEED);
+          g.p().s = clamp(g.p().s + acceleration, 0.0, 12.0 * GAME_SPEED);
         } else {
-          g.p().s = SDL_clamp(g.p().s + acceleration, 0.0, 6.0 * GAME_SPEED);
+          g.p().s = clamp(g.p().s + acceleration, 0.0, 6.0 * GAME_SPEED);
         }
       }
       // Stealth Controls
@@ -251,7 +251,7 @@ void act(gamedata &g, int jx, int jy, bool jb) {
     }
     // Recover from Stall
     if ((g.p().ys > 3.0 * GAME_SPEED) && (g.p().d == 9)) {
-      g.p().s = SDL_clamp(g.p().ys, 3.0 * GAME_SPEED, 6.0 * GAME_SPEED);
+      g.p().s = clamp(g.p().ys, 3.0 * GAME_SPEED, 6.0 * GAME_SPEED);
       g.p().state = 0;
       g.p().xs = g.p().s * g.xmove[g.p().d];
       g.p().ys = g.p().s * g.ymove[g.p().d];

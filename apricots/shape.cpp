@@ -310,8 +310,8 @@ bool shape ::writefile(char *filename) {
 // NB assumes BYTESPERPIXEL == 1
 
 bool shape ::collide(int x, int y, const shape &s, int sx, int sy) {
-  for (int cx = SDL_max(x, sx); cx < SDL_min(x + width, sx + s.width); cx++) {
-    for (int cy = SDL_max(y, sy); cy < SDL_min(y + height, sy + s.height); cy++) {
+  for (int cx = max(x, sx); cx < min(x + width, sx + s.width); cx++) {
+    for (int cy = max(y, sy); cy < min(y + height, sy + s.height); cy++) {
       if ((buffer[cx - x + width * (cy - y)] != 0) && (s.buffer[cx - sx + s.width * (cy - sy)] != 0)) {
         return true;
       }

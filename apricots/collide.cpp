@@ -36,7 +36,7 @@ void detect_collisions(gamedata &g) {
         g.p().ys = 0;
         g.p().s = 0.0;
 
-        int px = SDL_clamp(int((g.p().x + 24.0) / 32), 0, MAP_W - 1);
+        int px = clamp(int((g.p().x + 24.0) / 32), 0, MAP_W - 1);
         if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) &&
 
             (g.p().y > GAME_HEIGHT - 21)) { // hits sea
@@ -136,7 +136,7 @@ void detect_collisions(gamedata &g) {
 
     case 2: {
       // towers
-      int ty = SDL_clamp(int(g.p().y), g.gamemap.b[x].y - g.gamemap.b[x].towersize * 16, int(g.p().y));
+      int ty = g.gamemap.b[x].y - g.gamemap.b[x].towersize * 16;
       if (g.images[197].collide(g.gamemap.b[x].x, ty, g.images[g.p().image + g.p().d], (int)g.p().x, (int)g.p().y)) {
         g.p().state = 2;
         g.p().land = 2;
@@ -144,7 +144,7 @@ void detect_collisions(gamedata &g) {
         g.p().ys = g.p().ys * 0.5;
         g.p().s = 0.0;
         // Calculate height of tower strike
-        int h = SDL_clamp(int((g.gamemap.b[x].y - g.p().y) / 16), 0, 100);
+        int h = clamp(int((g.gamemap.b[x].y - g.p().y) / 16), 0, 100);
         // Knock off score
         g.p().score -= 40 * (g.gamemap.b[x].towersize + 1 - h);
         killtower(g, g.gamemap.b[x], g.p().xs * 0.5, g.p().ys * 0.5, h, g.p().id);

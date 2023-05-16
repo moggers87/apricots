@@ -79,9 +79,9 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
             ((p.y + 20.0 > g.gamemap.steepheight[px]) || (p.y + 20.0 > g.gamemap.steepheight[px + 1])))
           p.coms = 1;
         if ((p.d > 2) && (p.d < 8))
-          px = SDL_clamp(px - 1, 0, MAP_W * 2 - 1);
+          px = clamp(px - 1, 0, MAP_W * 2 - 1);
         if ((p.d > 10) && (p.d < 16))
-          px = SDL_clamp(px + 1, 0, MAP_W * 2 - 1);
+          px = clamp(px + 1, 0, MAP_W * 2 - 1);
         if (p.ys < 0.0) {
           if ((p.y + 5.0 > g.gamemap.smoothheight[px]) || (p.y + 5.0 > g.gamemap.smoothheight[px + 1]))
             p.coms = 1;
@@ -410,7 +410,7 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
             double d = sqrt(rx * rx + ry * ry);
             if (d < 100.0) {
               double smartsine = ((ry * g.dp().xs - rx * g.dp().ys) / (8.0 * GAME_SPEED) / d);
-              smartsine = SDL_clamp(smartsine, -1.0, 1.0);
+              smartsine = clamp(smartsine, -1.0, 1.0);
               double smartangle = asin(smartsine);
               double angle = atan2(rx, ry);
               int bogied = wrap((int(((angle - smartangle) / PI * 8.0) + 1.5)), 1, 17);
