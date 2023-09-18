@@ -27,7 +27,7 @@ broken anything. Contributions are always welcome!
 - OpenAL, download from https://www.openal-soft.org
 - ALURE 1.2.0, download from https://kcat.tomasu.net/alure.html
 
-### Buidling from source
+### Building from source
 
 ```
 ./configure # use --prefix= if you want to install to somewhere other than /usr/local
@@ -54,7 +54,7 @@ make install # may require sudo if you don't have permission to write to the tar
 History
 -------
 
-The orginal author, Mark Snellgrove, wrote the following:
+The original author, Mark Snellgrove, wrote the following:
 
 > The original version of the game dates back to around 1991. The very first
 > version of the game was written on an Amiga, using the AMOS language, and the
@@ -63,7 +63,7 @@ The orginal author, Mark Snellgrove, wrote the following:
 > dreadfully slow. The AMOS compiler improved things somewhat at a later date.
 > A couple of years later I obtained the BLITZ language for the Amiga, and
 > ported 'Planegame' carefully over to that, resulting in a huge speedup.
-> Impressed by the capabilites of BLITZ, in 1995 I proceeded to rewrite the
+> Impressed by the capabilities of BLITZ, in 1995 I proceeded to rewrite the
 > game entirely from scratch, even using completely new graphics and sound. The
 > result was 'Planegame2', which, for various reasons also got dubbed
 > 'Apricots'. This new version of the game added anti-aircraft guns, shrapnel,
@@ -127,12 +127,12 @@ License
 -------
 
 Apricots falls under the GPL. Please read the file COPYING included in this
-distrubution. The sourcecode of Apricots will either be included in the
-distrubution, or can otherwise be downloaded from the Apricots webpage (see
+distribution. The source code of Apricots will either be included in the
+distribution, or can otherwise be downloaded from the Apricots webpage (see
 below)
 
 Webpage
 -------
 
-For updates, bugfixes, sourcecode and more info please visit the Apricots
+For updates, bug fixes, source code and more info please visit the Apricots
 webpage at https://github.com/moggers87/apricots
