@@ -6,8 +6,6 @@ on:
   push:
     branches:
       - runway
-  schedule:
-    - cron: '07 04 * * *'
 
 jobs:
   build-native:
