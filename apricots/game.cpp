@@ -367,16 +367,16 @@ void keyboard(const Uint8 *keys, int &jx, int &jy, bool &jb, SDL_Scancode up, SD
 void control(gamedata &g, const Uint8 *keys, int &jx, int &jy, bool &jb) {
 
   switch (g.p().control) {
-    case 1: // Player 1
-      keyboard(keys, jx, jy, jb, SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT,
-               SDL_SCANCODE_RETURN);
-      break;
-    case 2: // Player 2
-      keyboard(keys, jx, jy, jb, SDL_SCANCODE_S, SDL_SCANCODE_X, SDL_SCANCODE_Z, SDL_SCANCODE_C, SDL_SCANCODE_LCTRL);
-      break;
-    default: // Computer controlled
-      computer_ai(g, g.p(), jx, jy, jb);
-      break;
+  case 1: // Player 1
+    keyboard(keys, jx, jy, jb, SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT,
+             SDL_SCANCODE_RETURN);
+    break;
+  case 2: // Player 2
+    keyboard(keys, jx, jy, jb, SDL_SCANCODE_S, SDL_SCANCODE_X, SDL_SCANCODE_Z, SDL_SCANCODE_C, SDL_SCANCODE_LCTRL);
+    break;
+  default: // Computer controlled
+    computer_ai(g, g.p(), jx, jy, jb);
+    break;
   }
 }
 

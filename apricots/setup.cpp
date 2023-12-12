@@ -84,251 +84,251 @@ void setup_map(map &gamemap, int planes, airbase base[], bool flatground[]) {
   // Do middle portion of map
   for (int x = 1; x < MAP_W - 1; x++) {
     switch (land) {
-      case HILAND:
-        gamemap.groundheight[x] = 32 * height + 9;
-        flatground[x * 2] = true;
-        r = int(drand() * 6.0);
-        if ((airbaseflag[x] == 2) && (height == MAP_H - 3))
-          r = 5;
-        if ((airbaseflag[x] == 2) && (height == MAP_H - 2) && ((r == 2) || (r == 4)))
-          r = 5;
-        if (airbaseflag[x] == 1)
-          r = 0;
-        if ((height == MAP_H - 3) && ((r == 2) || (r == 4)))
-          r = 0;
-        if ((height == MAP_H - 1) && (r == 5))
-          r = 0;
-        switch (r) {
-          default:
-            switch_bad_default("drand", __FILE__, __LINE__);
-            [[fallthrough]];
-          case 0:
-            gamemap.image[x][height] = 9;
-            flatground[x * 2 + 1] = true;
-            break;
-          case 1:
-            gamemap.image[x][height] = 8;
-            land = LOLAND;
-            break;
-          case 2:
-            gamemap.image[x][height] = 10;
-            gamemap.image[x][height - 1] = 11;
-            height--;
-            land = LOLAND;
-            break;
-          case 3:
-            gamemap.image[x][height] = 20;
-            land = LOLAND;
-            break;
-          case 4:
-            gamemap.image[x][height] = 15;
-            land = randomland(HILAND, LOLAND);
-            gamemap.image[x][height - 1] = 19 - (2 * land);
-            height--;
-            break;
-          case 5:
-            gamemap.image[x][height] = 18;
-            if ((height != MAP_H - 2) || (drand() > 0.33) || (airbaseflag[x] == 2)) {
-              land = randomland(HILAND, LOLAND);
-              gamemap.image[x][height + 1] = 14 - (10 * land);
-              height++;
-            } else {
-              land = SEA;
-              gamemap.image[x][height + 1] = 28;
-              height++;
-            }
-            break;
-        }
-        break;
-
-      case LOLAND:
-        gamemap.groundheight[x] = 32 * height + 22;
-        flatground[x * 2] = true;
-        r = int(drand() * 6.0);
-        if ((airbaseflag[x] == 2) && (height == MAP_H - 3))
-          r = 2 + 3 * int(drand() * 2.0);
-        if ((airbaseflag[x] == 2) && (height == MAP_H - 2) && (r == 4))
-          r = 5;
-        if (airbaseflag[x] == 1)
-          r = 0;
-        if ((height == MAP_H - 3) && (r == 4))
-          r = 0;
-        if ((height == MAP_H - 1) && (r == 5))
-          r = 2;
-        if (((airbaseflag[x] == 2) || (x == MAP_W - 2)) && (height == MAP_H - 1) && (r == 2))
-          r = 0;
-        switch (r) {
-          default:
-            switch_bad_default("drand", __FILE__, __LINE__);
-            [[fallthrough]];
-          case 0:
-            gamemap.image[x][height] = 5;
-            flatground[x * 2 + 1] = true;
-            break;
-          case 1:
-            gamemap.image[x][height] = 7;
-            land = HILAND;
-            break;
-          case 2:
-            if (height < MAP_H - 1) {
-              gamemap.image[x][height] = 13;
-              gamemap.image[x][height + 1] = 12;
-              height++;
-              land = HILAND;
-            } else {
-              land = randomland(BEACH, PORTLEFT);
-              if (airbaseflag[x] == 3)
-                land = BEACH;
-              gamemap.image[x][height] = 6 + (8 * land);
-              if (land == PORTLEFT)
-                flatground[x * 2 + 1] = true;
-            }
-            break;
-          case 3:
-            gamemap.image[x][height] = 21;
-            land = HILAND;
-            break;
-          case 4:
-            gamemap.image[x][height] = 6;
-            land = randomland(HILAND, LOLAND);
-            gamemap.image[x][height - 1] = 19 - (2 * land);
-            height--;
-            break;
-          case 5:
-            gamemap.image[x][height] = 16;
-            if ((height != MAP_H - 2) || (drand() > 0.33) || (airbaseflag[x] == 2)) {
-              land = randomland(HILAND, LOLAND);
-              gamemap.image[x][height + 1] = 14 - (10 * land);
-              height++;
-            } else {
-              land = SEA;
-              gamemap.image[x][height + 1] = 28;
-              height++;
-            }
-            break;
-        }
-        break;
-
-      case BEACH:
-        gamemap.groundheight[x] = GAME_HEIGHT - 4;
-        flatground[x * 2] = true;
-        r = int(drand() * 3.0);
-        if ((airbaseflag[x] > 1) || (x == MAP_W - 2))
-          r = 1;
-        switch (r) {
-          default:
-            switch_bad_default("drand", __FILE__, __LINE__);
-            [[fallthrough]];
-          case 0:
-            gamemap.image[x][height] = 24;
-            flatground[x * 2 + 1] = true;
-            break;
-          case 1:
-            gamemap.image[x][height] = 23;
-            land = LOLAND;
-            break;
-          case 2:
-            gamemap.image[x][height] = 25;
-            land = SEA;
-            break;
-        }
-        break;
-
-      case PORTLEFT:
-        gamemap.groundheight[x] = GAME_HEIGHT - 10;
-        flatground[x * 2] = true;
-        r = int(drand() * 3.0);
-        if ((airbaseflag[x] > 1) || (x == MAP_W - 2))
-          r = 1;
-        switch (r) {
-          default:
-            switch_bad_default("drand", __FILE__, __LINE__);
-            [[fallthrough]];
-          case 0:
-            gamemap.image[x][height] = 32;
-            flatground[x * 2 + 1] = true;
-            break;
-          case 1:
-          case 2:
-            gamemap.image[x][height] = 33;
-            land = SEA;
-            break;
-        }
-        break;
-
-      case PORTRIGHT:
-        gamemap.groundheight[x] = GAME_HEIGHT - 10;
-        flatground[x * 2] = true;
-        r = int(drand() * 3.0);
-        if ((airbaseflag[x] > 1) || (x == MAP_W - 2))
-          r = 1;
-        if (r == 0) {
-          gamemap.image[x][height] = 32;
-          flatground[x * 2 + 1] = true;
-        } else if (r > 0) {
-          gamemap.image[x][height] = 31;
-          land = LOLAND;
-          flatground[x * 2 + 1] = true;
-        }
-        break;
-
-      case SEA:
-        gamemap.groundheight[x] = GAME_HEIGHT - 2;
-        r = int(drand() * 4.0);
-        if (airbaseflag[x] == 2)
-          r = 3;
-        if (airbaseflag[x] == 3)
-          r = 2;
-        if ((r == 2) && (x == MAP_W - 2))
-          r = 0;
-        switch (r) {
-          default:
-            switch_bad_default("drand", __FILE__, __LINE__);
-            [[fallthrough]];
-          case 0:
-          case 1:
-            gamemap.image[x][height] = 27;
-            break;
-          case 2:
-            land = randomland(BEACH, PORTRIGHT);
-            gamemap.image[x][height] = 18 + (4 * land);
-            break;
-          case 3:
-            gamemap.image[x][height] = 29;
-            land = randomland(HILAND, LOLAND);
-            gamemap.image[x][height - 1] = 19 - (2 * land);
-            height--;
-            break;
-        }
-        break;
+    case HILAND:
+      gamemap.groundheight[x] = 32 * height + 9;
+      flatground[x * 2] = true;
+      r = int(drand() * 6.0);
+      if ((airbaseflag[x] == 2) && (height == MAP_H - 3))
+        r = 5;
+      if ((airbaseflag[x] == 2) && (height == MAP_H - 2) && ((r == 2) || (r == 4)))
+        r = 5;
+      if (airbaseflag[x] == 1)
+        r = 0;
+      if ((height == MAP_H - 3) && ((r == 2) || (r == 4)))
+        r = 0;
+      if ((height == MAP_H - 1) && (r == 5))
+        r = 0;
+      switch (r) {
       default:
-        switch_bad_default("land", __FILE__, __LINE__);
+        switch_bad_default("drand", __FILE__, __LINE__);
+        [[fallthrough]];
+      case 0:
+        gamemap.image[x][height] = 9;
+        flatground[x * 2 + 1] = true;
         break;
+      case 1:
+        gamemap.image[x][height] = 8;
+        land = LOLAND;
+        break;
+      case 2:
+        gamemap.image[x][height] = 10;
+        gamemap.image[x][height - 1] = 11;
+        height--;
+        land = LOLAND;
+        break;
+      case 3:
+        gamemap.image[x][height] = 20;
+        land = LOLAND;
+        break;
+      case 4:
+        gamemap.image[x][height] = 15;
+        land = randomland(HILAND, LOLAND);
+        gamemap.image[x][height - 1] = 19 - (2 * land);
+        height--;
+        break;
+      case 5:
+        gamemap.image[x][height] = 18;
+        if ((height != MAP_H - 2) || (drand() > 0.33) || (airbaseflag[x] == 2)) {
+          land = randomland(HILAND, LOLAND);
+          gamemap.image[x][height + 1] = 14 - (10 * land);
+          height++;
+        } else {
+          land = SEA;
+          gamemap.image[x][height + 1] = 28;
+          height++;
+        }
+        break;
+      }
+      break;
+
+    case LOLAND:
+      gamemap.groundheight[x] = 32 * height + 22;
+      flatground[x * 2] = true;
+      r = int(drand() * 6.0);
+      if ((airbaseflag[x] == 2) && (height == MAP_H - 3))
+        r = 2 + 3 * int(drand() * 2.0);
+      if ((airbaseflag[x] == 2) && (height == MAP_H - 2) && (r == 4))
+        r = 5;
+      if (airbaseflag[x] == 1)
+        r = 0;
+      if ((height == MAP_H - 3) && (r == 4))
+        r = 0;
+      if ((height == MAP_H - 1) && (r == 5))
+        r = 2;
+      if (((airbaseflag[x] == 2) || (x == MAP_W - 2)) && (height == MAP_H - 1) && (r == 2))
+        r = 0;
+      switch (r) {
+      default:
+        switch_bad_default("drand", __FILE__, __LINE__);
+        [[fallthrough]];
+      case 0:
+        gamemap.image[x][height] = 5;
+        flatground[x * 2 + 1] = true;
+        break;
+      case 1:
+        gamemap.image[x][height] = 7;
+        land = HILAND;
+        break;
+      case 2:
+        if (height < MAP_H - 1) {
+          gamemap.image[x][height] = 13;
+          gamemap.image[x][height + 1] = 12;
+          height++;
+          land = HILAND;
+        } else {
+          land = randomland(BEACH, PORTLEFT);
+          if (airbaseflag[x] == 3)
+            land = BEACH;
+          gamemap.image[x][height] = 6 + (8 * land);
+          if (land == PORTLEFT)
+            flatground[x * 2 + 1] = true;
+        }
+        break;
+      case 3:
+        gamemap.image[x][height] = 21;
+        land = HILAND;
+        break;
+      case 4:
+        gamemap.image[x][height] = 6;
+        land = randomland(HILAND, LOLAND);
+        gamemap.image[x][height - 1] = 19 - (2 * land);
+        height--;
+        break;
+      case 5:
+        gamemap.image[x][height] = 16;
+        if ((height != MAP_H - 2) || (drand() > 0.33) || (airbaseflag[x] == 2)) {
+          land = randomland(HILAND, LOLAND);
+          gamemap.image[x][height + 1] = 14 - (10 * land);
+          height++;
+        } else {
+          land = SEA;
+          gamemap.image[x][height + 1] = 28;
+          height++;
+        }
+        break;
+      }
+      break;
+
+    case BEACH:
+      gamemap.groundheight[x] = GAME_HEIGHT - 4;
+      flatground[x * 2] = true;
+      r = int(drand() * 3.0);
+      if ((airbaseflag[x] > 1) || (x == MAP_W - 2))
+        r = 1;
+      switch (r) {
+      default:
+        switch_bad_default("drand", __FILE__, __LINE__);
+        [[fallthrough]];
+      case 0:
+        gamemap.image[x][height] = 24;
+        flatground[x * 2 + 1] = true;
+        break;
+      case 1:
+        gamemap.image[x][height] = 23;
+        land = LOLAND;
+        break;
+      case 2:
+        gamemap.image[x][height] = 25;
+        land = SEA;
+        break;
+      }
+      break;
+
+    case PORTLEFT:
+      gamemap.groundheight[x] = GAME_HEIGHT - 10;
+      flatground[x * 2] = true;
+      r = int(drand() * 3.0);
+      if ((airbaseflag[x] > 1) || (x == MAP_W - 2))
+        r = 1;
+      switch (r) {
+      default:
+        switch_bad_default("drand", __FILE__, __LINE__);
+        [[fallthrough]];
+      case 0:
+        gamemap.image[x][height] = 32;
+        flatground[x * 2 + 1] = true;
+        break;
+      case 1:
+      case 2:
+        gamemap.image[x][height] = 33;
+        land = SEA;
+        break;
+      }
+      break;
+
+    case PORTRIGHT:
+      gamemap.groundheight[x] = GAME_HEIGHT - 10;
+      flatground[x * 2] = true;
+      r = int(drand() * 3.0);
+      if ((airbaseflag[x] > 1) || (x == MAP_W - 2))
+        r = 1;
+      if (r == 0) {
+        gamemap.image[x][height] = 32;
+        flatground[x * 2 + 1] = true;
+      } else if (r > 0) {
+        gamemap.image[x][height] = 31;
+        land = LOLAND;
+        flatground[x * 2 + 1] = true;
+      }
+      break;
+
+    case SEA:
+      gamemap.groundheight[x] = GAME_HEIGHT - 2;
+      r = int(drand() * 4.0);
+      if (airbaseflag[x] == 2)
+        r = 3;
+      if (airbaseflag[x] == 3)
+        r = 2;
+      if ((r == 2) && (x == MAP_W - 2))
+        r = 0;
+      switch (r) {
+      default:
+        switch_bad_default("drand", __FILE__, __LINE__);
+        [[fallthrough]];
+      case 0:
+      case 1:
+        gamemap.image[x][height] = 27;
+        break;
+      case 2:
+        land = randomland(BEACH, PORTRIGHT);
+        gamemap.image[x][height] = 18 + (4 * land);
+        break;
+      case 3:
+        gamemap.image[x][height] = 29;
+        land = randomland(HILAND, LOLAND);
+        gamemap.image[x][height - 1] = 19 - (2 * land);
+        height--;
+        break;
+      }
+      break;
+    default:
+      switch_bad_default("land", __FILE__, __LINE__);
+      break;
     }
   }
 
   // Do right of map
   switch (land) {
-    case HILAND:
-      gamemap.image[MAP_W - 1][height] = 15;
-      gamemap.groundheight[MAP_W - 1] = 32 * height + 9;
-      flatground[(MAP_W - 1) * 2] = true;
-      break;
-    case LOLAND:
-      gamemap.image[MAP_W - 1][height] = 6;
-      gamemap.groundheight[MAP_W - 1] = 32 * height + 22;
-      flatground[(MAP_W - 1) * 2] = true;
-      break;
-    case SEA:
-      gamemap.image[MAP_W - 1][height] = 29;
-      gamemap.groundheight[MAP_W - 1] = GAME_HEIGHT - 2;
-      break;
-    case BEACH:
-    case PORTLEFT:
-    case PORTRIGHT:
-    default:
-      switch_bad_default("land", __FILE__, __LINE__);
-      break;
+  case HILAND:
+    gamemap.image[MAP_W - 1][height] = 15;
+    gamemap.groundheight[MAP_W - 1] = 32 * height + 9;
+    flatground[(MAP_W - 1) * 2] = true;
+    break;
+  case LOLAND:
+    gamemap.image[MAP_W - 1][height] = 6;
+    gamemap.groundheight[MAP_W - 1] = 32 * height + 22;
+    flatground[(MAP_W - 1) * 2] = true;
+    break;
+  case SEA:
+    gamemap.image[MAP_W - 1][height] = 29;
+    gamemap.groundheight[MAP_W - 1] = GAME_HEIGHT - 2;
+    break;
+  case BEACH:
+  case PORTLEFT:
+  case PORTRIGHT:
+  default:
+    switch_bad_default("land", __FILE__, __LINE__);
+    break;
   }
   for (int y = 0; y < height; y++) {
     gamemap.image[MAP_W - 1][y] = 3;

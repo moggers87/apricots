@@ -350,12 +350,12 @@ void init_gamedata(gamedata &g) {
   g.planeinfo[6].basetype = getConfig(config, "BASE6", 1, 1, 7);
 
   // Control: 1=Player 1, 2=Player 2, 0=AI
-  g.planeinfo[1].control = (plane::Control) getConfig(config, "CONTROL1", 1, 0, 2);
-  g.planeinfo[2].control = (plane::Control) getConfig(config, "CONTROL2", 0, 0, 2);
-  g.planeinfo[3].control = (plane::Control) getConfig(config, "CONTROL3", 0, 0, 2);
-  g.planeinfo[4].control = (plane::Control) getConfig(config, "CONTROL4", 0, 0, 2);
-  g.planeinfo[5].control = (plane::Control) getConfig(config, "CONTROL5", 0, 0, 2);
-  g.planeinfo[6].control = (plane::Control) getConfig(config, "CONTROL6", 0, 0, 2);
+  g.planeinfo[1].control = (plane::Control)getConfig(config, "CONTROL1", 1, 0, 2);
+  g.planeinfo[2].control = (plane::Control)getConfig(config, "CONTROL2", 0, 0, 2);
+  g.planeinfo[3].control = (plane::Control)getConfig(config, "CONTROL3", 0, 0, 2);
+  g.planeinfo[4].control = (plane::Control)getConfig(config, "CONTROL4", 0, 0, 2);
+  g.planeinfo[5].control = (plane::Control)getConfig(config, "CONTROL5", 0, 0, 2);
+  g.planeinfo[6].control = (plane::Control)getConfig(config, "CONTROL6", 0, 0, 2);
   // Error check
   int count[3];
   count[0] = 0;

@@ -40,10 +40,7 @@ void detect_collisions(gamedata &g) {
         if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) &&
 
             (g.p().y > GAME_HEIGHT - 21)) { // hits sea
-          firetype splash;
-          splash.x = int(g.p().x);
-          splash.y = GAME_HEIGHT - 20;
-          splash.type = firetype::Type::THREE;
+          firetype splash = {int(g.p().x), GAME_HEIGHT - 20, 0, firetype::Type::THREE};
           g.explosion.add(splash);
           g.sound.play(SOUND_SPLASH);
         } else { // hits land
@@ -175,9 +172,7 @@ void detect_collisions(gamedata &g) {
       g.p().state = 2;
       g.p().land = plane::LandingState::FLYING;
       g.p().s = 0.0;
-      firetype boom;
-      boom.x = int(g.p().x);
-      boom.y = int(g.p().y);
+      firetype boom = {int(g.p().x), int(g.p().y)};
       g.explosion.add(boom);
       g.shot.kill();
       g.sound.play(SOUND_EXPLODE);
@@ -199,9 +194,7 @@ void detect_collisions(gamedata &g) {
         g.p().xs = g.p().xs * 0.5;
         g.p().ys = g.p().ys * 0.5;
         g.p().s = 0.0;
-        firetype boom;
-        boom.x = int(g.p().x);
-        boom.y = int(g.p().y);
+        firetype boom = {int(g.p().x), int(g.p().y)};
         g.explosion.add(boom);
         // Reset laser flags
         if (g.drakgun().type == -1)
@@ -227,9 +220,7 @@ void detect_collisions(gamedata &g) {
         g.p().xs = g.p().xs * 0.5;
         g.p().ys = g.p().ys * 0.5;
         g.p().s = 0.0;
-        firetype boom;
-        boom.x = int(g.p().x);
-        boom.y = int(g.p().y);
+        firetype boom = {int(g.p().x), int(g.p().y)};
         g.explosion.add(boom);
         g.sound.play(SOUND_EXPLODE);
       }
@@ -255,9 +246,7 @@ void detect_collisions(gamedata &g) {
         g.p().xs = g.p().xs * 0.5;
         g.p().ys = g.p().ys * 0.5;
         g.p().s = 0.0;
-        firetype boom;
-        boom.x = int(g.p().x);
-        boom.y = int(g.p().y);
+        firetype boom = {int(g.p().x), int(g.p().y)};
         g.explosion.add(boom);
         g.fall.kill();
         g.sound.play(SOUND_EXPLODE);
