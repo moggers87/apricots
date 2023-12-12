@@ -350,7 +350,7 @@ void setup_buildings(gamedata &g, bool flatground[]) {
 
   // Clear building array
   for (int x = 0; x < MAP_W * 2; x++) {
-    g.gamemap.b[x].type = 0;
+    g.gamemap.b[x].type = building::Type::NONE;
   }
 
   // Place airbases
