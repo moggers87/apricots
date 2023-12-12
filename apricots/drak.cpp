@@ -73,13 +73,9 @@ void fire_laser(gamedata &g, drakguntype &drakgun, drakmstype &drakms, sampleio 
     while (g.p.next()) {
       if ((int(g.p().y) > lasery) && (abs(int(g.p().x) - laserx) < 6) && (g.p().state < 2)) {
         g.p().score -= 25;
-        g.p().land = 2;
+        g.p().land = plane::LandingState::FLYING;
         g.p().s = 0;
-        firetype boom;
-        boom.x = int(g.p().x);
-        boom.y = int(g.p().y);
-        boom.type = 0;
-        boom.time = 0;
+        firetype boom = {int(g.p().x), int(g.p().y)};
         g.explosion.add(boom);
       }
     }
@@ -313,11 +309,7 @@ void drak_main(gamedata &g) {
       // Destroy drak mothership
       for (int i = 0; i < 6; i++) {
         int x = int(g.drakms.x) + i * 16;
-        firetype boom;
-        boom.x = x + int(drand() * 16) - 8;
-        boom.y = int(g.drakms.y);
-        boom.time = 0;
-        boom.type = 0;
+        firetype boom = {x + int(drand() * 16) - 8, int(g.drakms.y)};
         g.explosion.add(boom);
         for (int m = 1; m <= 2; m++) {
           falltype shrapnel = {};

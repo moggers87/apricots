@@ -17,11 +17,11 @@ void followtarget(plane &p, int &jx, int &jy, int rx, int ry, bool reverse) {
     if (p.y < GAME_HEIGHT - 160) {
       if ((rx > 0) && (p.d == 13)) {
         targetd = -1;
-        p.coms = 9;
+        p.coms = plane::Coms::GO_LEFT_PLUS;
       }
       if ((rx < 0) && (p.d == 5)) {
         targetd = 1;
-        p.coms = 8;
+        p.coms = plane::Coms::GO_RIGHT_MINUS;
       }
     }
     // Afterburner if available
@@ -46,74 +46,70 @@ void followtarget(plane &p, int &jx, int &jy, int rx, int ry, bool reverse) {
 void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
 
   switch (g.p().land) {
-  case 0: // Landed Plane (takes off)
+  case plane::LandingState::LANDED:
     jy = -1;
     break;
-
-  case 1: // Taking off plane (accelerates)
+  case plane::LandingState::TAKING_OFF:
     jy = -1;
     if (p.s > 5.0 * GAME_SPEED) {
       jx = sign(9 - p.d);
     }
     break;
-
-  case 2: // Flying plane
+  case plane::LandingState::FLYING:
     if (p.rotate == 0) {
-      if ((p.coms == 0) && (p.state == 0)) {
+      if ((p.coms == plane::Coms::ACTION) && (p.state == 0)) {
         // Stall Avoidance
         if (((p.y < 24.0) && (p.ys < 0.0)) || (p.s < 3.0 * GAME_SPEED))
-          p.coms = 4;
+          p.coms = plane::Coms::LEVEL_OFF;
         // Drak mothership avoidance
         if (g.drakms.exist == 1) {
           double dx = p.x - g.drakms.x + (p.xs - g.drakms.xs) * 4.0 / GAME_SPEED;
           if ((dx > -40.0) && (dx < 136.0)) {
             if ((p.y > 46.0) && (p.y < 106.0) && ((p.ys < 0.0) || (p.y < 86.0)))
-              p.coms = 4;
+              p.coms = plane::Coms::LEVEL_OFF;
             if ((p.y <= 46.0) && (p.ys >= 0.0) && ((p.ys > 0.0) || (p.y > 26.0)))
-              p.coms = 1;
+              p.coms = plane::Coms::GO_UP;
           }
         }
         // Groundheight tracking
         int px = int(p.x + 8) / 16;
         if (((p.d == 5) || (p.d == 13)) &&
             ((p.y + 20.0 > g.gamemap.steepheight[px]) || (p.y + 20.0 > g.gamemap.steepheight[px + 1])))
-          p.coms = 1;
+          p.coms = plane::Coms::GO_UP;
         if ((p.d > 2) && (p.d < 8))
           px = clamp(px - 1, 0, MAP_W * 2 - 1);
         if ((p.d > 10) && (p.d < 16))
           px = clamp(px + 1, 0, MAP_W * 2 - 1);
         if (p.ys < 0.0) {
           if ((p.y + 5.0 > g.gamemap.smoothheight[px]) || (p.y + 5.0 > g.gamemap.smoothheight[px + 1]))
-            p.coms = 1;
+            p.coms = plane::Coms::GO_UP;
         } else {
           if ((p.y + 40.0 > g.gamemap.smoothheight[px]) || (p.y + 40.0 > g.gamemap.smoothheight[px + 1]))
-            p.coms = 1;
+            p.coms = plane::Coms::GO_UP;
         }
         if ((p.y - 40.0 > g.gamemap.realheight[px]) || (p.y - 40.0 > g.gamemap.realheight[px + 1]))
-          p.coms = 6;
+          p.coms = plane::Coms::GO_DOWN;
         // Landing runway approach
         if (p.targetx == -10) {
           int dx = int(p.x) - 32 * g.base[p.side].mapx - g.base[p.side].runwayx;
           if ((dx > 10) && (dx < -10 + g.base[p.side].runwaylength) &&
               ((p.d == 6) || (p.d == 7) || (p.d == 11) || (p.d == 12))) {
-            p.coms = 0;
+            p.coms = plane::Coms::ACTION;
             if (g.base[p.side].planey - int(p.y) < 50)
-              p.coms = 11;
+              p.coms = plane::Coms::START_LANDING;
           }
         }
         // Side of map avoidance
         if (int(p.x) < 100)
-          p.coms = 2;
+          p.coms = plane::Coms::GO_RIGHT;
         if (int(p.x) > GAME_WIDTH - 116)
-          p.coms = 3;
+          p.coms = plane::Coms::GO_LEFT;
       }
       // Recover from stall
       if (p.state == 1)
-        p.coms = 5;
-      // Choose action depending on coms
+        p.coms = plane::Coms::GO_DOWN;
       switch (p.coms) {
-      case 0: {
-        // Action!
+      case plane::Coms::ACTION: {
         // Land if out of shots and bombs
         if ((p.ammo == 0) && (p.bombs == 0))
           p.targetx = -10;
@@ -214,8 +210,7 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
         }
         break;
       }
-      case 1: {
-        // Go upwards
+      case plane::Coms::GO_UP: {
         if ((p.d > 3) && (p.d < 9))
           jx = 1;
         if ((p.d > 9) && (p.d < 15))
@@ -232,10 +227,10 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
               jx = int(drand() * 2.0) * 2 - 1;
           }
         }
-        p.coms = 0;
+        p.coms = plane::Coms::ACTION;
         break;
       }
-      case 2: {
+      case plane::Coms::GO_RIGHT: {
         // Go right
         if ((p.d == 1) || (p.d > 13))
           jx = 1;
@@ -252,15 +247,14 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
             jx = 1;
         }
         if (jx == 1)
-          p.coms = 7;
+          p.coms = plane::Coms::GO_RIGHT_PLUS;
         if (jx == -1)
-          p.coms = 8;
+          p.coms = plane::Coms::GO_RIGHT_MINUS;
         if (p.d == 13)
-          p.coms = 0;
+          p.coms = plane::Coms::ACTION;
         break;
       }
-      case 3: {
-        // Go left
+      case plane::Coms::GO_LEFT: {
         if (p.d < 5)
           jx = -1;
         if ((p.d > 5) && (p.d < 11))
@@ -276,15 +270,14 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
             jx = -1;
         }
         if (jx == 1)
-          p.coms = 9;
+          p.coms = plane::Coms::GO_LEFT_PLUS;
         if (jx == -1)
-          p.coms = 10;
+          p.coms = plane::Coms::GO_LEFT_MINUS;
         if (p.d == 5)
-          p.coms = 0;
+          p.coms = plane::Coms::ACTION;
         break;
       }
-      case 4: {
-        // Level off
+      case plane::Coms::LEVEL_OFF: {
         if (p.d < 8)
           jx = -1;
         if (p.d > 10)
@@ -292,10 +285,10 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
         if (p.d == 1)
           jx = int(drand() * 2.0) * 2 - 1;
         if ((p.d > 3) && (p.d < 15))
-          p.coms = 0;
+          p.coms = plane::Coms::ACTION;
         break;
       }
-      case 5: {
+      case plane::Coms::GO_DOWN: {
         // Go down
         if (p.d < 9)
           jx = -1;
@@ -304,11 +297,10 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
         if (p.d == 1)
           jx = int(drand() * 2.0) * 2 - 1;
         if ((p.d == 9) && (p.s > 3.0 * GAME_SPEED))
-          p.coms = 0;
+          p.coms = plane::Coms::ACTION;
         break;
       }
-      case 6: {
-        // Go upwards lots
+      case plane::Coms::GO_UP_LOTS: {
         if ((p.d > 1) && (p.d < 9))
           jx = 1;
         if (p.d > 9)
@@ -325,54 +317,50 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
               jx = int(drand() * 2.0) * 2 - 1;
           }
         }
-        p.coms = 0;
+        p.coms = plane::Coms::ACTION;
         break;
       }
-      case 7: {
-        // Go right +ve
+      case plane::Coms::GO_RIGHT_PLUS: {
         if (p.d != 13) {
           jx = 1;
         } else {
-          p.coms = 0;
+          p.coms = plane::Coms::ACTION;
         }
         break;
       }
-      case 8: {
+      case plane::Coms::GO_RIGHT_MINUS: {
         // Go right -ve
         if (p.d != 13) {
           jx = -1;
         } else {
-          p.coms = 0;
+          p.coms = plane::Coms::ACTION;
         }
         break;
       }
-      case 9: {
-        // Go left +ve
+      case plane::Coms::GO_LEFT_PLUS: {
         if (p.d != 5) {
           jx = 1;
         } else {
-          p.coms = 0;
+          p.coms = plane::Coms::ACTION;
         }
         break;
       }
-      case 10: {
-        // Go left -ve
+      case plane::Coms::GO_LEFT_MINUS: {
         if (p.d != 5) {
           jx = -1;
         } else {
-          p.coms = 0;
+          p.coms = plane::Coms::ACTION;
         }
         break;
       }
-      case 11: {
-        // Landing
+      case plane::Coms::START_LANDING: {
         if (p.d == 6)
           jx = -1;
         if (p.d == 12)
           jx = 1;
         int dx = int(p.x) - 32 * g.base[p.side].mapx - g.base[p.side].runwayx;
         if ((dx < 10) || (dx > -10 + g.base[p.side].runwaylength))
-          p.coms = 0;
+          p.coms = plane::Coms::ACTION;
         break;
       }
       default:
@@ -421,6 +409,8 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
         }
       }
     }
+    break;
+  case plane::LandingState::LANDING:
     break;
   default:
     switch_bad_default("plane.land", __FILE__, __LINE__);

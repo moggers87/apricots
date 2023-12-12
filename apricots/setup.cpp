@@ -8,54 +8,23 @@
 
 #include "apricots.h"
 
-// Create airbases
-
-void create_airbases(airbase base[], info planeinfo[], int planes) {
-
-  base[0] = EMPTY_AIRBASE;
-  for (int n = 1; n <= planes; n++) {
-    switch (planeinfo[n].basetype) {
-    case 1:
-      base[n] = STANDARD_AIRBASE;
-      break;
-    case 2:
-      base[n] = REVERSED_AIRBASE;
-      break;
-    case 3:
-      base[n] = LITTLE_AIRBASE;
-      break;
-    case 4:
-      base[n] = LONG_AIRBASE;
-      break;
-    case 5:
-      base[n] = ORIGINAL_AIRBASE;
-      break;
-    case 6:
-      base[n] = SHOOTY_AIRBASE;
-      break;
-    case 7:
-      base[n] = TWOGUN_AIRBASE;
-      break;
-    default:
-      switch_bad_default("info.basetype", __FILE__, __LINE__);
-      break;
-    }
-  }
-}
-
 // Land generation randomizer
-
-int randomland(int landa, int landb) {
-
+LandType randomland(LandType landa, LandType landb) {
   if (drand() > 0.5)
     return landa;
   return landb;
 }
 
+// Create airbases
+void create_airbases(airbase base[], info planeinfo[], int planes) {
+  base[0] = EMPTY_AIRBASE;
+  for (int n = 1; n <= planes; n++) {
+    base[n] = AIRBASES[planeinfo[n].basetype];
+  }
+}
+
 // Create the game map
-
 void setup_map(map &gamemap, int planes, airbase base[], bool flatground[]) {
-
   // Arrange airbase flags (to pin out airbase locations)
   int airbaseflag[MAP_W];
   for (int x1 = 0; x1 < MAP_W; x1++) {
@@ -87,16 +56,8 @@ void setup_map(map &gamemap, int planes, airbase base[], bool flatground[]) {
     }
   }
 
-  // Setup landtypes
-  const int HILAND = 0;
-  const int LOLAND = 1;
-  const int BEACH = 2;
-  const int PORTLEFT = 3;
-  const int PORTRIGHT = 4;
-  const int SEA = 5;
-
   int height = 0;
-  int land = 0;
+  LandType land = HILAND;
 
   // Do left of map
   int r;
@@ -362,6 +323,9 @@ void setup_map(map &gamemap, int planes, airbase base[], bool flatground[]) {
     gamemap.image[MAP_W - 1][height] = 29;
     gamemap.groundheight[MAP_W - 1] = GAME_HEIGHT - 2;
     break;
+  case BEACH:
+  case PORTLEFT:
+  case PORTRIGHT:
   default:
     switch_bad_default("land", __FILE__, __LINE__);
     break;
@@ -723,21 +687,7 @@ void setup_planes(linkedlist<plane> &p, linkedlist<planeclone> &dp, airbase base
 
   for (int n = 1; n <= planes; n++) {
     // Create plane
-    plane newplane;
-    switch (planeinfo[n].planetype) {
-    case 1:
-      newplane = SPITFIRE;
-      break;
-    case 2:
-      newplane = JET;
-      break;
-    case 3:
-      newplane = STEALTH;
-      break;
-    default:
-      switch_bad_default("info.planetype", __FILE__, __LINE__);
-      break;
-    }
+    plane newplane = PLANES[planeinfo[n].planetype];
     newplane.x = base[n].planex;
     newplane.y = base[n].planey;
     newplane.d = base[n].planed;

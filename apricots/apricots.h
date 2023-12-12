@@ -23,6 +23,7 @@
 #include "shape.h"
 #include <SDL.h>
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
@@ -79,10 +80,17 @@ const building FIRTREE = {1, 0, 0, 0, 258, 259, -10, 0, 0, 143, 143};
 const building PALMTREE = {1, 0, 0, 0, 192, 193, -10, 0, 0, 143, 222};
 
 struct firetype {
+  enum Type {
+    ZERO,
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+  };
   int x;
   int y;
   int time = 0;
-  int type = 0;
+  Type type = ZERO;
 };
 
 struct smoketype {
@@ -150,12 +158,6 @@ struct map {
   int smoothheight[MAP_W * 2 + 1];
   int steepheight[MAP_W * 2 + 1];
   shape ground;
-};
-
-struct info {
-  int planetype;
-  int basetype;
-  int control;
 };
 
 struct drakmstype {
@@ -231,14 +233,39 @@ struct airbase {
 };
 
 struct plane {
+  enum LandingState {
+    LANDED,
+    TAKING_OFF,
+    FLYING,
+    LANDING,
+  };
+  enum Coms {
+    ACTION,
+    GO_UP,
+    GO_RIGHT,
+    GO_LEFT,
+    LEVEL_OFF,
+    GO_DOWN,
+    GO_UP_LOTS,
+    GO_RIGHT_PLUS,
+    GO_RIGHT_MINUS,
+    GO_LEFT_PLUS,
+    GO_LEFT_MINUS,
+    START_LANDING,
+  };
+  enum Control {
+    COMPUTER,
+    PLAYER_ONE,
+    PLAYER_TWO,
+  };
   double x;
   double y;
   double xs;
   double ys;
   double s;
   int d;
-  int control;
-  int land;
+  Control control;
+  LandingState land;
   int state;
   int crash;
   int id;
@@ -260,7 +287,7 @@ struct plane {
   bool drak;
   int score;
   int targetscore;
-  int coms;         //
+  Coms coms;        //
   int targetx;      //
   int targety;      // Computer AI stuff
   int cruiseheight; //
@@ -281,6 +308,12 @@ struct planeclone {
   bool collide;
   int scoreloss;
   int buildingwin;
+};
+
+struct info {
+  int planetype;
+  int basetype;
+  plane::Control control;
 };
 
 struct gamedata {
@@ -342,34 +375,79 @@ const airbase SHOOTY_AIRBASE(80, 80, 6, 80, 13, 0, 0, 0, GUN, FUEL, GUN, CONTROL
                              HANGAR, GUN, FUEL, GUN);
 const airbase TWOGUN_AIRBASE(48, 96, 5, 128, 5, 0, 0, 0, RADAR, GUN, HANGAR, NB, NB, NB, NB, NB, NB, NB, CONTROLTOWER,
                              GUN, RADAR);
+const array<airbase, 8> AIRBASES = {
+    EMPTY_AIRBASE, STANDARD_AIRBASE, REVERSED_AIRBASE, LITTLE_AIRBASE,
+    LONG_AIRBASE,  ORIGINAL_AIRBASE, SHOOTY_AIRBASE,   TWOGUN_AIRBASE,
+};
 
 // Sample definitions
+enum Sounds {
+  SOUND_ENGINE,
+  SOUND_JET,
+  SOUND_EXPLODE,
+  SOUND_GROUNDHIT,
+  SOUND_FUELEXPLODE,
+  SOUND_SHOT,
+  SOUND_GUNSHOT,
+  SOUND_BOMB,
+  SOUND_SPLASH,
+  SOUND_LASER,
+  SOUND_STALL,
+  SOUND_GUNSHOT2,
+  SOUND_BURNER,
+  SOUND_FINISH,
+};
+const int SOUNDS_COUNT = 14;
 
-const int SOUND_ENGINE = 0;
-const int SOUND_JET = 1;
-const int SOUND_EXPLODE = 2;
-const int SOUND_GROUNDHIT = 3;
-const int SOUND_FUELEXPLODE = 4;
-const int SOUND_SHOT = 5;
-const int SOUND_GUNSHOT = 6;
-const int SOUND_BOMB = 7;
-const int SOUND_SPLASH = 8;
-const int SOUND_LASER = 9;
-const int SOUND_STALL = 10;
-const int SOUND_GUNSHOT2 = 11;
-const int SOUND_BURNER = 12;
-const int SOUND_FINISH = 13;
+inline const array<const char *, SOUNDS_COUNT> SOUND_NAMES = {
+    "engine.wav", "jet.wav",    "explode.wav", "groundhit.wav", "fuelexplode.wav", "shot.wav",        "gunshot.wav",
+    "bomb.wav",   "splash.wav", "laser.wav",   "stall.wav",     "gunshot2.wav",    "afterburner.wav", "finish.wav",
+};
 
 // Plane definitions
 
+const plane NULLPLANE = {0.0,
+                         0.0,
+                         0.0,
+                         0.0,
+                         0.0,
+                         0,
+                         plane::Control::COMPUTER,
+                         plane::LandingState::LANDED,
+                         0,
+                         0,
+                         0,
+                         0,
+                         0,
+                         0,
+                         0,
+                         false,
+                         false,
+                         false,
+                         false,
+                         0,
+                         0,
+                         0,
+                         0,
+                         0,
+                         0,
+                         SOUND_ENGINE,
+                         false,
+                         0,
+                         0,
+                         plane::Coms::ACTION,
+                         0,
+                         0,
+                         0,
+                         0};
 const plane SPITFIRE = {0.0,
                         0.0,
                         0.0,
                         0.0,
                         0.0,
                         0,
-                        0,
-                        0,
+                        plane::Control::COMPUTER,
+                        plane::LandingState::LANDED,
                         0,
                         0,
                         0,
@@ -391,26 +469,87 @@ const plane SPITFIRE = {0.0,
                         false,
                         0,
                         0,
-                        0,
+                        plane::Coms::ACTION,
                         0,
                         0,
                         0,
                         0};
-const plane JET = {0.0,   0.0,  0.0,   0.0,   0.0, 0,  0,  0, 0, 0,   0,         0,     76, 0, int(2 / GAME_SPEED) - 1,
-                   false, true, false, false, 0,   12, 12, 5, 5, 140, SOUND_JET, false, 0,  0, 0,
-                   0,     0,    0,     0};
-const plane STEALTH = {
-    0.0,   0.0,   0.0,   0.0,  0.0, 0, 0, 0, 0, 0,   0,         0,     174, 0, int(4 / GAME_SPEED) - 1,
-    false, false, false, true, 0,   3, 3, 6, 6, 235, SOUND_JET, false, 0,   0, 0,
-    0,     0,     0,     0};
+const plane JET = {0.0,
+                   0.0,
+                   0.0,
+                   0.0,
+                   0.0,
+                   0,
+                   plane::Control::COMPUTER,
+                   plane::LandingState::LANDED,
+                   0,
+                   0,
+                   0,
+                   0,
+                   76,
+                   0,
+                   int(2 / GAME_SPEED) - 1,
+                   false,
+                   true,
+                   false,
+                   false,
+                   0,
+                   12,
+                   12,
+                   5,
+                   5,
+                   140,
+                   SOUND_JET,
+                   false,
+                   0,
+                   0,
+                   plane::Coms::ACTION,
+                   0,
+                   0,
+                   0,
+                   0};
+const plane STEALTH = {0.0,
+                       0.0,
+                       0.0,
+                       0.0,
+                       0.0,
+                       0,
+                       plane::Control::COMPUTER,
+                       plane::LandingState::LANDED,
+                       0,
+                       0,
+                       0,
+                       0,
+                       174,
+                       0,
+                       int(4 / GAME_SPEED) - 1,
+                       false,
+                       false,
+                       false,
+                       true,
+                       0,
+                       3,
+                       3,
+                       6,
+                       6,
+                       235,
+                       SOUND_JET,
+                       false,
+                       0,
+                       0,
+                       plane::Coms::ACTION,
+                       0,
+                       0,
+                       0,
+                       0};
 const plane DRAK_FIGHTER = {0.0,
                             0.0,
                             0.0,
                             2.0 * GAME_SPEED,
                             2.0 * GAME_SPEED,
                             9,
-                            0,
-                            2,
+                            plane::Control::COMPUTER,
+                            plane::LandingState::FLYING,
                             1,
                             0,
                             0,
@@ -432,11 +571,15 @@ const plane DRAK_FIGHTER = {0.0,
                             true,
                             0,
                             0,
-                            0,
+                            plane::Coms::ACTION,
                             0,
                             0,
                             0,
                             0};
+
+const array<plane, 5> PLANES = {
+    NULLPLANE, SPITFIRE, JET, STEALTH, DRAK_FIGHTER,
+};
 
 // Drak mothership initial state
 
@@ -454,13 +597,23 @@ const drakguntype DGUN_SIDE_LEFT = {
 const drakguntype DGUN_SIDE_RIGHT = {
     0, 84, 20, 11, 0, 0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 303, 302, 301, 300, 299, 298, 297, 296, 0, 0}};
 
+// Land types
+enum LandType {
+  HILAND,
+  LOLAND,
+  BEACH,
+  PORTLEFT,
+  PORTRIGHT,
+  SEA,
+};
+
 // Function prototypes
 
 Uint32 time_left(Uint32);
 bool fall_collision(gamedata &, falltype &);
 double drand();
 int getConfig(string, string, int, int, int);
-int randomland(int, int);
+LandType randomland(LandType, LandType);
 int sign(int);
 int wrap(int, int, int);
 string find_config_file();

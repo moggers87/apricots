@@ -11,9 +11,9 @@ bool fall_collision(gamedata &g, falltype &fall) {
   if ((g.gamemap.ground.collide(0, 0, g.images[fall.image], (int)fall.x, (int)fall.y)) || (int(fall.x) < -16) ||
       (int(fall.x) > GAME_WIDTH) || (int(fall.y) > GAME_HEIGHT)) {
     switch (fall.type) {
-    case 0:
+    case firetype::Type::ZERO:
       break;
-    case 1: // Shrapnel
+    case firetype::Type::ONE: // Shrapnel
     {
       int px = clamp(int((fall.x + 18.0) / 32), 0, MAP_W - 1);
       if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) && (fall.y > GAME_HEIGHT - 11)) { // hits sea
@@ -21,45 +21,37 @@ bool fall_collision(gamedata &g, falltype &fall) {
         splash.x = int(fall.x) - 5;
         splash.y = GAME_HEIGHT - 20;
         splash.time = 0;
-        splash.type = 4;
+        splash.type = firetype::Type::FOUR;
         g.explosion.add(splash);
       } else { // hits land
         firetype boom;
         boom.x = int(fall.x);
         boom.y = int(fall.y);
         boom.time = 0;
-        boom.type = 2;
+        boom.type = firetype::Type::TWO;
         g.explosion.add(boom);
       }
     } break;
 
-    case 2:
-    case 3: // Large bits and bombs
+    case firetype::Type::TWO:
+    case firetype::Type::THREE: // Large bits and bombs
       if (fall.type == 3)
         fall.x -= 5;
       {
         int px = clamp(int((fall.x + 24.0) / 32), 0, MAP_W - 1);
         if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) && (fall.y > GAME_HEIGHT - 21)) { // hits sea
-          firetype splash;
-          splash.x = int(fall.x);
-          splash.y = GAME_HEIGHT - 20;
-          splash.time = 0;
-          splash.type = 3;
+          firetype splash = {int(fall.x), GAME_HEIGHT - 20, 0, firetype::Type::THREE};
           g.explosion.add(splash);
           g.sound.play(SOUND_SPLASH);
         } else { // hits land
-          firetype boom;
-          boom.x = int(fall.x);
-          boom.y = int(fall.y);
-          boom.time = 0;
-          boom.type = 0;
+          firetype boom = {int(fall.x), int(fall.y)};
           g.explosion.add(boom);
           g.sound.play(SOUND_GROUNDHIT);
         }
       }
       break;
     default:
-      switch_bad_default("fall.type", __FILE__, __LINE__);
+      switch_bad_default("firetype", __FILE__, __LINE__);
       break;
     }
     return true;
@@ -70,28 +62,20 @@ bool fall_collision(gamedata &g, falltype &fall) {
   if ((g.drakms.exist == 1) &&
       (g.images[318].collide((int)g.drakms.x, (int)g.drakms.y, g.images[fall.image], (int)fall.x, (int)fall.y))) {
     switch (fall.type) {
-    case 0:
+    case firetype::Type::ZERO:
       break;
-    case 1: // Shrapnel
+    case firetype::Type::ONE: // Shrapnel
     {
-      firetype boom;
-      boom.x = int(fall.x);
-      boom.y = int(fall.y);
-      boom.time = 0;
-      boom.type = 2;
+      firetype boom = {int(fall.x), int(fall.y), 0, firetype::Type::TWO};
       g.explosion.add(boom);
     } break;
 
-    case 2:
-    case 3: // Large bits and bombs
+    case firetype::Type::TWO:
+    case firetype::Type::THREE: // Large bits and bombs
       if (fall.type == 3)
         fall.x -= 5;
       {
-        firetype boom;
-        boom.x = int(fall.x);
-        boom.y = int(fall.y);
-        boom.time = 0;
-        boom.type = 0;
+        firetype boom = {int(fall.x), int(fall.y)};
         g.explosion.add(boom);
       }
       g.sound.play(SOUND_GROUNDHIT);
@@ -110,7 +94,7 @@ bool fall_collision(gamedata &g, falltype &fall) {
       }
       break;
     default:
-      switch_bad_default("fall.type", __FILE__, __LINE__);
+      switch_bad_default("firetype", __FILE__, __LINE__);
       break;
     }
     return true;
@@ -195,11 +179,7 @@ bool fall_collision(gamedata &g, falltype &fall) {
           }
         }
         // Explosion
-        firetype boom;
-        boom.x = int(fall.x);
-        boom.y = int(fall.y);
-        boom.time = 0;
-        boom.type = 0;
+        firetype boom = {int(fall.x), int(fall.y)};
         g.explosion.add(boom);
         // Remove laser flags
         if (g.drakgun().type == -1)
