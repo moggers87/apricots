@@ -15,7 +15,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Linux dependencies
         if: startsWith(matrix.os, 'ubuntu-')
         run: |
@@ -45,7 +45,9 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
@@ -56,8 +58,9 @@ jobs:
           ./configure
           make dist
       - name: Upload source distribution
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: source
           path: apricots-*.tar.gz
           if-no-files-found: error
+          compression-level: 0
