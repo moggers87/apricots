@@ -33,10 +33,11 @@ private:
   int poolcount;
   void psource(int source, int sample, bool loop);
   ALboolean sourceisplaying(ALuint);
+  float base_volume;
 
 public:
   sampleio();
-  void init(int, char[][255], int, int);
+  void init(float, int, char[][255], int, int);
   void close();
   void update();
   void channel(int, int);

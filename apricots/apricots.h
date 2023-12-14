@@ -326,6 +326,7 @@ struct gamedata {
   int targetscore;
   int mission;
   int winner;
+  float volume;
   plane *player1;
   plane *player2;
   airbase base[7];
@@ -654,7 +655,7 @@ void gunshoot(guntype &, linkedlist<shottype> &, sampleio &, double[17], double[
 void init_data(gamedata &);
 void init_gameconstants(gamedata &);
 void init_gamedata(gamedata &);
-void init_sound(sampleio &);
+void init_sound(gamedata &);
 void keyboard(const Uint8 *, int &, int &, bool &, SDL_Scancode, SDL_Scancode, SDL_Scancode, SDL_Scancode,
               SDL_Scancode);
 void killbuilding(gamedata &, building &);

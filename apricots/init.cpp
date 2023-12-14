@@ -131,7 +131,7 @@ void load_shapes(gamedata &g, shape images[]) {
 
 // Sound initialization
 
-void init_sound(sampleio &sound) {
+void init_sound(gamedata &game) {
 
   char filenames[SOUNDS_COUNT][255];
   for (int i = 0; i < SOUNDS_COUNT; i++) {
@@ -139,7 +139,7 @@ void init_sound(sampleio &sound) {
     strcat(filenames[i], SOUND_NAMES[i]);
   }
 
-  sound.init(SOUNDS_COUNT, filenames, 2, 6);
+  game.sound.init(game.volume, SOUNDS_COUNT, filenames, 2, 6);
 }
 
 // Initialize the game constants
@@ -333,6 +333,9 @@ void init_gamedata(gamedata &g) {
   // Targetscore for missions 0/1
   g.targetscore = getConfig(config, "TARGET_SCORE", 1400, 100, 5000);
 
+  // Volume, 0 for mute and 100 for full volume
+  g.volume = getConfig(config, "VOLUME", 100, 0, 100) / 100.0;
+
   // Planetypes: 1=Spitfire, 2=Jet, 3=Stealth Bomber
   g.planeinfo[1].planetype = getConfig(config, "PLANE1", 1, 1, 3);
   g.planeinfo[2].planetype = getConfig(config, "PLANE2", 1, 1, 3);
@@ -430,5 +433,5 @@ void init_data(gamedata &g) {
 
   load_font(g.virtualscreen, g.whitefont, g.greenfont);
 
-  init_sound(g.sound);
+  init_sound(g);
 }
