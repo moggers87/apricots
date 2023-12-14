@@ -18,7 +18,7 @@
 sampleio ::sampleio() { initdone = false; }
 
 // Initialize OpenAL
-void sampleio ::init(int nsamples, char filenames[][255], int nsources, int npool) {
+void sampleio ::init(float the_volume, int nsamples, char filenames[][255], int nsources, int npool) {
   if (initdone) {
     cerr << "sampleio: call to init when already in use" << endl;
     exit(1);
@@ -31,6 +31,7 @@ void sampleio ::init(int nsamples, char filenames[][255], int nsources, int npoo
   samples = new ALuint[numsamples];
   sources = new ALuint[numsources + numpool];
   poolcount = numsources;
+  base_volume = the_volume;
 
   // Initialize audio device
   alureInitDevice(NULL, NULL);
@@ -46,32 +47,22 @@ void sampleio ::init(int nsamples, char filenames[][255], int nsources, int npoo
   alListenerfv(AL_ORIENTATION, front);
 
   // Load in samples
-  // ALvoid* data = malloc(5 * (512 * 3) * 1024);
   alGenBuffers(numsamples, samples);
 
   for (int i = 0; i < numsamples; i++) {
-    // ALsizei freq;
-    // ALboolean fileok;
     // Evil OpenAL portability fix done here
 #ifdef _WIN32
     ALenum format;
     ALboolean trash;
     ALsizei filelen;
     alureLoadWAVFile(filenames[i], &format, &data, &filelen, &freq, &trash);
-    fileok = (alGetError() == AL_NO_ERROR);
 #else
-    // ALsizei format;
-    // ALsizei trash;
-    // ALsizei filelen;
-    // fileok = alureLoadWAV(filenames[i],&data,&format,&filelen,&trash,&freq);
     samples[i] = alureCreateBufferFromFile(filenames[i]);
 #endif
-    // if (!fileok){
     if (samples[i] == AL_NONE) {
       cerr << "sampleio: could not open " << filenames[i] << endl;
       exit(1);
     }
-    // alBufferData(samples[i], format, data, filelen, freq);
   }
 
   // Generate Sources
@@ -81,6 +72,7 @@ void sampleio ::init(int nsamples, char filenames[][255], int nsources, int npoo
     alSourcefv(sources[j], AL_POSITION, position);
     alSourcefv(sources[j], AL_VELOCITY, zeroes);
     alSourcefv(sources[j], AL_ORIENTATION, back);
+    alSourcef(sources[j], AL_GAIN, ALfloat(base_volume));
   }
 
   // free(data);
@@ -212,8 +204,7 @@ void sampleio ::volume(int i, double vol) {
     cerr << "sampleio: attempt to volume nonexistant source " << i << endl;
     return;
   }
-  ALfloat volf = ALfloat(vol);
-  alSourcef(sources[i], AL_GAIN, volf);
+  alSourcef(sources[i], AL_GAIN, ALfloat(vol * base_volume));
 }
 
 // Check on playing sources function
