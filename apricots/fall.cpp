@@ -15,7 +15,7 @@ bool fall_collision(gamedata &g, falltype &fall) {
       break;
     case firetype::Type::ONE: // Shrapnel
     {
-      int px = clamp(int((fall.x + 18.0) / 32), 0, MAP_W - 1);
+      int px = clamp(int((fall.x + 18.0) / TILE_SIZE), 0, MAP_W - 1);
       if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) && (fall.y > GAME_HEIGHT - 11)) { // hits sea
         firetype splash;
         splash.x = int(fall.x) - 5;
@@ -38,7 +38,7 @@ bool fall_collision(gamedata &g, falltype &fall) {
       if (fall.type == 3)
         fall.x -= 5;
       {
-        int px = clamp(int((fall.x + 24.0) / 32), 0, MAP_W - 1);
+        int px = clamp(int((fall.x + 24.0) / TILE_SIZE), 0, MAP_W - 1);
         if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) && (fall.y > GAME_HEIGHT - 21)) { // hits sea
           firetype splash = {int(fall.x), GAME_HEIGHT - 20, 0, firetype::Type::THREE};
           g.explosion.add(splash);

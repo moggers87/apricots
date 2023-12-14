@@ -33,10 +33,11 @@ using namespace std;
 
 // Global constants
 
+const int TILE_SIZE = 32;
 const int GAME_WIDTH = 2400;
 const int GAME_HEIGHT = 320;
-const int MAP_W = GAME_WIDTH / 32;
-const int MAP_H = GAME_HEIGHT / 32;
+const int MAP_W = GAME_WIDTH / TILE_SIZE;
+const int MAP_H = GAME_HEIGHT / TILE_SIZE;
 const double GAME_SPEED = 0.5;
 const int TICK_INTERVAL = 20;
 const double PI = 3.141592;
@@ -621,6 +622,16 @@ enum LandType {
   PORTRIGHT,
   SEA,
 };
+
+// font info
+struct fontinfo {
+  std::filesystem::path path;
+  int height;
+  int width;
+  int count;
+};
+
+const fontinfo FONT = {std::filesystem::path(AP_PATH) / "alt-8x16.psf", 16, 8, 256};
 
 // Function prototypes
 

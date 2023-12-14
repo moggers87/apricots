@@ -15,7 +15,7 @@ void detect_collisions(gamedata &g) {
     if ((g.gamemap.ground.collide(0, 0, g.images[g.p().image + g.p().d], (int)g.p().x, (int)g.p().y)) ||
         (int(g.p().x) < -16) || (int(g.p().x) > GAME_WIDTH)) {
       // Check for landing plane
-      int dx = int(g.p().x) - 32 * g.base[g.p().side].mapx - g.base[g.p().side].runwayx;
+      int dx = int(g.p().x) - TILE_SIZE * g.base[g.p().side].mapx - g.base[g.p().side].runwayx;
       if ((dx > -5) && (dx < 5 + g.base[g.p().side].runwaylength) && (g.p().state == 0) && (!g.p().drak) &&
           ((g.p().d == 12) || (g.p().d == 11) || (g.p().d == 7) || (g.p().d == 6))) {
         g.p().land = plane::LandingState::LANDING;
@@ -36,7 +36,7 @@ void detect_collisions(gamedata &g) {
         g.p().ys = 0;
         g.p().s = 0.0;
 
-        int px = clamp(int((g.p().x + 24.0) / 32), 0, MAP_W - 1);
+        int px = clamp(int((g.p().x + 24.0) / TILE_SIZE), 0, MAP_W - 1);
         if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) &&
 
             (g.p().y > GAME_HEIGHT - 21)) { // hits sea

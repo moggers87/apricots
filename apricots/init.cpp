@@ -57,10 +57,7 @@ void setup_display(gamedata &g) {
 
 void load_font(SDL_Surface *screen, SDLfont &whitefont, SDLfont &greenfont) {
 
-  char filename[255];
-  strcpy(filename, AP_PATH);
-  strcat(filename, "alt-8x16.psf");
-  whitefont.loadpsf(filename, 8, 16);
+  whitefont.loadpsf(FONT.path, FONT.height, FONT.width, FONT.count);
   whitefont.colour(screen, 1, 0);
   greenfont = whitefont;
   greenfont.colour(screen, 13, 0);

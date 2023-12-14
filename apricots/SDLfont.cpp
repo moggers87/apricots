@@ -4,6 +4,7 @@
 // History:
 
 #include "SDLfont.h"
+#include <filesystem>
 
 // Default constructor
 
@@ -86,43 +87,44 @@ SDLfont ::~SDLfont() {
 
 // Load psf font from file
 
-void SDLfont ::loadpsf(char *filename, int w, int h) {
+void SDLfont ::loadpsf(std::filesystem::path path, int the_height, int the_width, int chars_count) {
 
   // Open file
-  ifstream fin(filename, ios::binary);
+  ifstream fin(path, ios::binary);
   if (fin.fail()) {
-    cerr << "SDLFont: File " << filename << " not found" << endl;
+    cerr << "SDLFont: File " << path << " not found" << endl;
     exit(EXIT_FAILURE);
   }
-  char *buffer = new char[w * h * 32 + 4];
-  fin.read(buffer, w * h * 32 + 4);
+
+  int file_size = std::filesystem::file_size(path);
+  char *buffer = new char[file_size];
+  fin.read(buffer, file_size);
   fin.close();
 
-  width = w;
-  height = h;
+  width = the_width;
+  height = the_height;
 
   // Expand compressed font
-  for (int i = 0; i < 256; i++) {
-
-    symbolbuffer[i] = new char[w * h];
-    int bufferpos = i * w * h / 8 + 4;
-    for (int y = 0; y < h; y++) {
-      for (int x = 0; x < w / 8; x++) {
-        int byte = (int)buffer[bufferpos + y * w / 8 + x];
-        int factor = 256;
+  for (int i = 0; i < chars_count; i++) {
+    symbolbuffer[i] = new char[width * height];
+    int bufferpos = i * width * height / 8 + 4;
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width / 8; x++) {
+        int byte = (int)buffer[bufferpos + y * width / 8 + x];
+        int factor = height * width;
         for (int bit = 0; bit < 8; bit++) {
-          factor = factor / 2;
           if ((byte & factor) == 0) {
-            symbolbuffer[i][w * y + 8 * x + bit] = 0;
+            symbolbuffer[i][width * y + 8 * x + bit] = 0;
           } else {
-            symbolbuffer[i][w * y + 8 * x + bit] = 1;
+            symbolbuffer[i][width * y + 8 * x + bit] = 1;
           }
+          factor = factor / 2;
         }
       }
     }
 
-    symbol[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i], w, h, 8, w, 0, 0, 0, 0);
-    symbolmask[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i], w, h, 8, w, 0, 0, 0, 0);
+    symbol[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i], width, height, 8, width, 0, 0, 0, 0);
+    symbolmask[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i], width, height, 8, width, 0, 0, 0, 0);
     SDL_SetColorKey(symbolmask[i], SDL_TRUE, 0);
   }
 
