@@ -4,6 +4,7 @@
 // History:
 
 #include "SDL.h"
+#include "data.h"
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
@@ -23,7 +24,7 @@ public:
   SDLfont(const SDLfont &);
   ~SDLfont();
   SDLfont &operator=(const SDLfont &);
-  void loadpsf(std::filesystem::path, int, int, int);
+  void loadpsf(fontinfo);
   void colour(SDL_Surface *, int, int);
   void writemask(SDL_Surface *, int, int, char *);
   void write(SDL_Surface *, int, int, char *);

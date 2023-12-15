@@ -623,16 +623,6 @@ enum LandType {
   SEA,
 };
 
-// font info
-struct fontinfo {
-  std::filesystem::path path;
-  int height;
-  int width;
-  int count;
-};
-
-const fontinfo FONT = {std::filesystem::path(AP_PATH) / "alt-8x16.psf", 16, 8, 256};
-
 // Function prototypes
 
 Uint32 time_left(Uint32);

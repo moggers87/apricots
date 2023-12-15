@@ -87,25 +87,25 @@ SDLfont ::~SDLfont() {
 
 // Load psf font from file
 
-void SDLfont ::loadpsf(std::filesystem::path path, int the_height, int the_width, int chars_count) {
+void SDLfont ::loadpsf(fontinfo font) {
 
   // Open file
-  ifstream fin(path, ios::binary);
+  ifstream fin(font.path, ios::binary);
   if (fin.fail()) {
-    cerr << "SDLFont: File " << path << " not found" << endl;
+    cerr << "SDLFont: File " << font.path << " not found" << endl;
     exit(EXIT_FAILURE);
   }
 
-  int file_size = std::filesystem::file_size(path);
+  int file_size = std::filesystem::file_size(font.path);
   char *buffer = new char[file_size];
   fin.read(buffer, file_size);
   fin.close();
 
-  width = the_width;
-  height = the_height;
+  width = font.width;
+  height = font.height;
 
   // Expand compressed font
-  for (int i = 0; i < chars_count; i++) {
+  for (int i = 0; i < font.chars_count; i++) {
     symbolbuffer[i] = new char[width * height];
     int bufferpos = i * width * height / 8 + 4;
     for (int y = 0; y < height; y++) {
