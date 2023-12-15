@@ -45,6 +45,8 @@ AC_CHECK_FUNCS([atexit sqrt strtol])
 
 AC_CONFIG_FILES([Makefile
                  apricots/Makefile
+                 apricots/data/Makefile
                  apricots/docs/Makefile
                  apricots/docs/en/Makefile])
+
 AC_OUTPUT
