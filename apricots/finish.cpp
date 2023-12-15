@@ -73,7 +73,7 @@ void finish_game(gamedata &g) {
     SDL_Texture *texture = SDL_CreateTextureFromSurface(g.renderer, g.virtualscreen);
     if (texture == NULL) {
       fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
-      exit(1);
+      exit(EXIT_FAILURE);
     }
     SDL_RenderCopy(g.renderer, texture, &rect, NULL);
     SDL_RenderPresent(g.renderer);

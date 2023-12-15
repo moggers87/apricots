@@ -85,7 +85,7 @@ void setup_map(map &gamemap, int planes, airbase base[], bool flatground[]) {
   for (int x = 1; x < MAP_W - 1; x++) {
     switch (land) {
     case HILAND:
-      gamemap.groundheight[x] = 32 * height + 9;
+      gamemap.groundheight[x] = TILE_SIZE * height + 9;
       flatground[x * 2] = true;
       r = int(drand() * 6.0);
       if ((airbaseflag[x] == 2) && (height == MAP_H - 3))
@@ -142,7 +142,7 @@ void setup_map(map &gamemap, int planes, airbase base[], bool flatground[]) {
       break;
 
     case LOLAND:
-      gamemap.groundheight[x] = 32 * height + 22;
+      gamemap.groundheight[x] = TILE_SIZE * height + 22;
       flatground[x * 2] = true;
       r = int(drand() * 6.0);
       if ((airbaseflag[x] == 2) && (height == MAP_H - 3))
@@ -245,7 +245,7 @@ void setup_map(map &gamemap, int planes, airbase base[], bool flatground[]) {
         switch_bad_default("drand", __FILE__, __LINE__);
         [[fallthrough]];
       case 0:
-        gamemap.image[x][height] = 32;
+        gamemap.image[x][height] = TILE_SIZE;
         flatground[x * 2 + 1] = true;
         break;
       case 1:
@@ -263,7 +263,7 @@ void setup_map(map &gamemap, int planes, airbase base[], bool flatground[]) {
       if ((airbaseflag[x] > 1) || (x == MAP_W - 2))
         r = 1;
       if (r == 0) {
-        gamemap.image[x][height] = 32;
+        gamemap.image[x][height] = TILE_SIZE;
         flatground[x * 2 + 1] = true;
       } else if (r > 0) {
         gamemap.image[x][height] = 31;
@@ -311,12 +311,12 @@ void setup_map(map &gamemap, int planes, airbase base[], bool flatground[]) {
   switch (land) {
   case HILAND:
     gamemap.image[MAP_W - 1][height] = 15;
-    gamemap.groundheight[MAP_W - 1] = 32 * height + 9;
+    gamemap.groundheight[MAP_W - 1] = TILE_SIZE * height + 9;
     flatground[(MAP_W - 1) * 2] = true;
     break;
   case LOLAND:
     gamemap.image[MAP_W - 1][height] = 6;
-    gamemap.groundheight[MAP_W - 1] = 32 * height + 22;
+    gamemap.groundheight[MAP_W - 1] = TILE_SIZE * height + 22;
     flatground[(MAP_W - 1) * 2] = true;
     break;
   case SEA:
@@ -350,14 +350,14 @@ void setup_buildings(gamedata &g, bool flatground[]) {
 
   // Clear building array
   for (int x = 0; x < MAP_W * 2; x++) {
-    g.gamemap.b[x].type = 0;
+    g.gamemap.b[x].type = building::Type::NONE;
   }
 
   // Place airbases
   int radarcount = 0;
   int guncount = 0;
   for (int n1 = 1; n1 <= g.planes; n1++) {
-    g.base[n1].planex = 32 * g.base[n1].mapx + g.base[n1].planepos;
+    g.base[n1].planex = TILE_SIZE * g.base[n1].mapx + g.base[n1].planepos;
     g.base[n1].planey = g.gamemap.groundheight[g.base[n1].mapx] - 12;
     for (int x = 0; x <= (g.base[n1].size + 1) * 2; x++) {
       int px = x + g.base[n1].mapx * 2;
@@ -524,7 +524,7 @@ void draw_mapblocks(int image[MAP_W][MAP_H], SDL_Surface *gamescreen, shape imag
   for (int x = 0; x < MAP_W; x++) {
     for (int y = 0; y < MAP_H; y++) {
       if (image[x][y] > 0) {
-        images[image[x][y]].blit(gamescreen, x * 32, y * 32);
+        images[image[x][y]].blit(gamescreen, x * TILE_SIZE, y * TILE_SIZE);
       }
     }
   }
@@ -576,7 +576,7 @@ void draw_runways(airbase base[], int planes, int groundheight[], SDL_Surface *g
   for (int n = 1; n <= planes; n++) {
     {
       SDL_Rect rect;
-      rect.x = base[n].mapx * 32 + base[n].runwayx;
+      rect.x = base[n].mapx * TILE_SIZE + base[n].runwayx;
       rect.y = groundheight[base[n].mapx] - 1;
       rect.w = base[n].runwaylength;
       rect.h = 2;
@@ -584,7 +584,7 @@ void draw_runways(airbase base[], int planes, int groundheight[], SDL_Surface *g
     }
     for (int m = 0; m < base[n].runwaylength / 16; m++) {
       SDL_Rect rect;
-      rect.x = base[n].mapx * 32 + base[n].runwayx + m * 16 + 4;
+      rect.x = base[n].mapx * TILE_SIZE + base[n].runwayx + m * 16 + 4;
       rect.y = groundheight[base[n].mapx] - 1;
       rect.w = 8;
       rect.h = 1;
@@ -629,12 +629,12 @@ void setup_intelligence(map &gamemap) {
   // Construct steepmap
   x1 = 1;
   do {
-    while (gamemap.steepheight[x1 - 1] - gamemap.steepheight[x1] > 32) {
-      gamemap.steepheight[x1 - 1] = gamemap.steepheight[x1] + 32;
+    while (gamemap.steepheight[x1 - 1] - gamemap.steepheight[x1] > TILE_SIZE) {
+      gamemap.steepheight[x1 - 1] = gamemap.steepheight[x1] + TILE_SIZE;
       x1--;
     }
-    if (gamemap.steepheight[x1 + 1] - gamemap.steepheight[x1] > 32) {
-      gamemap.steepheight[x1 + 1] = gamemap.steepheight[x1] + 32;
+    if (gamemap.steepheight[x1 + 1] - gamemap.steepheight[x1] > TILE_SIZE) {
+      gamemap.steepheight[x1 + 1] = gamemap.steepheight[x1] + TILE_SIZE;
     }
     x1++;
   } while (x1 < MAP_W * 2);
@@ -660,7 +660,7 @@ void draw_dither(SDL_Surface *gamescreen, int xbox, int ybox, int w, int h) {
       }
       int getcolour = pixels[y * gamescreen->pitch + x];
       if ((getcolour == 9) || (getcolour == 16)) { // If skyblue
-        double ditherfactor = double(y) * 25.0 / (GAME_HEIGHT - 32);
+        double ditherfactor = double(y) * 25.0 / (GAME_HEIGHT - TILE_SIZE);
         int colour = 40 - int(ditherfactor);
         double chance = ditherfactor - int(ditherfactor);
         if (drand() < chance)

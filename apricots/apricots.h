@@ -33,10 +33,11 @@ using namespace std;
 
 // Global constants
 
+const int TILE_SIZE = 32;
 const int GAME_WIDTH = 2400;
 const int GAME_HEIGHT = 320;
-const int MAP_W = GAME_WIDTH / 32;
-const int MAP_H = GAME_HEIGHT / 32;
+const int MAP_W = GAME_WIDTH / TILE_SIZE;
+const int MAP_H = GAME_HEIGHT / TILE_SIZE;
 const double GAME_SPEED = 0.5;
 const int TICK_INTERVAL = 20;
 const double PI = 3.141592;
@@ -46,7 +47,15 @@ const int SCREEN_WIDTH = 640;
 // Datatypes
 
 struct building {
-  int type; // 0 = none, 1 = tree, 2 = tower, 3 = building, 4 = radar, 5 = gun
+  enum Type {
+    NONE,
+    TREE,
+    TOWER,
+    BUILDING,
+    RADAR,
+    GUN,
+  };
+  Type type;
   int id;
   int x;
   int y;
@@ -61,23 +70,23 @@ struct building {
 
 // Building definitions
 
-const building NB = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // null building
-const building CONTROLTOWER = {3, 0, 0, 0, 69, 73, 240, 0, 0, 140, 225};
-const building FUEL = {3, 0, 0, 0, 71, 75, 60, 0, 0, 140, 140};
-const building HANGAR = {3, 0, 0, 0, 70, 74, 160, 0, 0, 228, 140};
-const building GUN = {5, 0, 0, 0, 166, 170, 200, 0, 0, 140, 140};
-const building RADAR = {4, 0, 0, 0, 238, 246, 120, 0, 0, 140, 225};
-const building TOWER = {2, 0, 0, 0, 0, 0, 0, 0, 0, 140, 140};
-const building POWERSTATION = {3, 0, 0, 0, 112, 113, 80, 0, 0, 140, 140};
-const building COOLINGTOWER_LEFT = {3, 0, 0, 0, 108, 111, 60, 0, 0, 140, 225};
-const building COOLINGTOWER_MIDDLE = {3, 0, 0, 0, 109, 111, 60, 0, 0, 140, 225};
-const building COOLINGTOWER_RIGHT = {3, 0, 0, 0, 110, 111, 60, 0, 0, 140, 225};
-const building FACTORY = {3, 0, 0, 0, 72, 76, 100, 0, 0, 140, 140};
-const building CIVILIAN_1 = {3, 0, 0, 0, 194, 195, -30, 0, 0, 222, 222};
-const building CIVILIAN_2 = {3, 0, 0, 0, 200, 201, -60, 0, 0, 225, 219};
-const building CIVILIAN_3 = {3, 0, 0, 0, 202, 203, -40, 0, 0, 219, 140};
-const building FIRTREE = {1, 0, 0, 0, 258, 259, -10, 0, 0, 143, 143};
-const building PALMTREE = {1, 0, 0, 0, 192, 193, -10, 0, 0, 143, 222};
+const building NB = {building::Type::NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // null building
+const building CONTROLTOWER = {building::Type::BUILDING, 0, 0, 0, 69, 73, 240, 0, 0, 140, 225};
+const building FUEL = {building::Type::BUILDING, 0, 0, 0, 71, 75, 60, 0, 0, 140, 140};
+const building HANGAR = {building::Type::BUILDING, 0, 0, 0, 70, 74, 160, 0, 0, 228, 140};
+const building GUN = {building::Type::GUN, 0, 0, 0, 166, 170, 200, 0, 0, 140, 140};
+const building RADAR = {building::Type::RADAR, 0, 0, 0, 238, 246, 120, 0, 0, 140, 225};
+const building TOWER = {building::Type::TOWER, 0, 0, 0, 0, 0, 0, 0, 0, 140, 140};
+const building POWERSTATION = {building::Type::BUILDING, 0, 0, 0, 112, 113, 80, 0, 0, 140, 140};
+const building COOLINGTOWER_LEFT = {building::Type::BUILDING, 0, 0, 0, 108, 111, 60, 0, 0, 140, 225};
+const building COOLINGTOWER_MIDDLE = {building::Type::BUILDING, 0, 0, 0, 109, 111, 60, 0, 0, 140, 225};
+const building COOLINGTOWER_RIGHT = {building::Type::BUILDING, 0, 0, 0, 110, 111, 60, 0, 0, 140, 225};
+const building FACTORY = {building::Type::BUILDING, 0, 0, 0, 72, 76, 100, 0, 0, 140, 140};
+const building CIVILIAN_1 = {building::Type::BUILDING, 0, 0, 0, 194, 195, -30, 0, 0, 222, 222};
+const building CIVILIAN_2 = {building::Type::BUILDING, 0, 0, 0, 200, 201, -60, 0, 0, 225, 219};
+const building CIVILIAN_3 = {building::Type::BUILDING, 0, 0, 0, 202, 203, -40, 0, 0, 219, 140};
+const building FIRTREE = {building::Type::TREE, 0, 0, 0, 258, 259, -10, 0, 0, 143, 143};
+const building PALMTREE = {building::Type::TREE, 0, 0, 0, 192, 193, -10, 0, 0, 143, 222};
 
 struct firetype {
   enum Type {
@@ -130,13 +139,19 @@ struct guntype {
 };
 
 struct falltype {
+  enum Type {
+    TREEBITS,
+    SHRAPNEL,
+    LARGE_BITS,
+    BOMB,
+  };
   double x;
   double y;
   double xs;
   double ys;
   int image;
   int side = 0;
-  int type; // 0 = treebits, 1 = shrapnel, 2 = large bits, 3 = bomb
+  Type type;
   int bombrotate = 0;
   int rotatedelay = 0;
 };

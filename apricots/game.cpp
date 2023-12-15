@@ -46,7 +46,7 @@ void drop_bomb(plane &p, linkedlist<falltype> &fall, sampleio &sound, int bombim
   bomb.ys = p.ys + (2.0 * GAME_SPEED);
   bomb.image = bombimage[p.d];
   bomb.side = p.side;
-  bomb.type = 3;
+  bomb.type = falltype::Type::BOMB;
   switch (p.d) {
   case 0:
     break;
@@ -367,13 +367,14 @@ void keyboard(const Uint8 *keys, int &jx, int &jy, bool &jb, SDL_Scancode up, SD
 void control(gamedata &g, const Uint8 *keys, int &jx, int &jy, bool &jb) {
 
   switch (g.p().control) {
-  case 1: // Player 1
+  case plane::Control::PLAYER_ONE:
     keyboard(keys, jx, jy, jb, SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT,
              SDL_SCANCODE_RETURN);
     break;
-  case 2: // Player 2
+  case plane::Control::PLAYER_TWO:
     keyboard(keys, jx, jy, jb, SDL_SCANCODE_S, SDL_SCANCODE_X, SDL_SCANCODE_Z, SDL_SCANCODE_C, SDL_SCANCODE_LCTRL);
     break;
+  case plane::Control::COMPUTER:
   default: // Computer controlled
     computer_ai(g, g.p(), jx, jy, jb);
     break;

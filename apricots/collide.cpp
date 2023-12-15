@@ -15,7 +15,7 @@ void detect_collisions(gamedata &g) {
     if ((g.gamemap.ground.collide(0, 0, g.images[g.p().image + g.p().d], (int)g.p().x, (int)g.p().y)) ||
         (int(g.p().x) < -16) || (int(g.p().x) > GAME_WIDTH)) {
       // Check for landing plane
-      int dx = int(g.p().x) - 32 * g.base[g.p().side].mapx - g.base[g.p().side].runwayx;
+      int dx = int(g.p().x) - TILE_SIZE * g.base[g.p().side].mapx - g.base[g.p().side].runwayx;
       if ((dx > -5) && (dx < 5 + g.base[g.p().side].runwaylength) && (g.p().state == 0) && (!g.p().drak) &&
           ((g.p().d == 12) || (g.p().d == 11) || (g.p().d == 7) || (g.p().d == 6))) {
         g.p().land = plane::LandingState::LANDING;
@@ -36,7 +36,7 @@ void detect_collisions(gamedata &g) {
         g.p().ys = 0;
         g.p().s = 0.0;
 
-        int px = clamp(int((g.p().x + 24.0) / 32), 0, MAP_W - 1);
+        int px = clamp(int((g.p().x + 24.0) / TILE_SIZE), 0, MAP_W - 1);
         if ((g.gamemap.groundheight[px] == GAME_HEIGHT - 2) &&
 
             (g.p().y > GAME_HEIGHT - 21)) { // hits sea
@@ -59,7 +59,7 @@ void detect_collisions(gamedata &g) {
             shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
             shrapnel.ys = (-2.0 * drand() - 1.0) * GAME_SPEED;
             shrapnel.image = g.p().shrapnelimage + int(drand() * 3);
-            shrapnel.type = 1;
+            shrapnel.type = falltype::Type::SHRAPNEL;
             g.fall.add(shrapnel);
           }
           g.sound.play(SOUND_GROUNDHIT);
@@ -94,7 +94,7 @@ void detect_collisions(gamedata &g) {
       shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
       shrapnel.ys = (-2.0 * drand()) * GAME_SPEED;
       shrapnel.image = g.p().shrapnelimage + int(drand() * 3);
-      shrapnel.type = 1;
+      shrapnel.type = falltype::Type::SHRAPNEL;
       g.fall.add(shrapnel);
     }
     g.sound.play(SOUND_EXPLODE);
@@ -290,9 +290,9 @@ void killbuilding(gamedata &g, building &b) {
       } else {
         shrapnel.image = b.shrapnelimage2 + int(drand() * 3);
       }
-      shrapnel.type = 1;
+      shrapnel.type = falltype::Type::SHRAPNEL;
       if (b.type == 1)
-        shrapnel.type = 0;
+        shrapnel.type = falltype::Type::TREEBITS;
       g.fall.add(shrapnel);
     }
     g.sound.play(SOUND_EXPLODE);
@@ -315,7 +315,7 @@ void killbuilding(gamedata &g, building &b) {
       shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
       shrapnel.ys = (-2.0 * drand() - 4.0) * GAME_SPEED;
       shrapnel.image = b.shrapnelimage + int(drand() * 3);
-      shrapnel.type = 1;
+      shrapnel.type = falltype::Type::SHRAPNEL;
       g.fall.add(shrapnel);
     }
     g.sound.play(SOUND_FUELEXPLODE);
@@ -337,7 +337,7 @@ void killbuilding(gamedata &g, building &b) {
     }
   }
   // Remove the building
-  b.type = 0;
+  b.type = building::Type::NONE;
 }
 
 // Kill a tower
@@ -361,7 +361,7 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
     fragment.ys = ys;
     fragment.image = 197;
     fragment.side = side;
-    fragment.type = 2;
+    fragment.type = falltype::Type::LARGE_BITS;
     g.fall.add(fragment);
     falltype shrapnel = {};
     shrapnel.x = double(b.x) + 6.0;
@@ -369,7 +369,7 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
     shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
     shrapnel.ys = (-1.5 * drand() - 1.5) * GAME_SPEED;
     shrapnel.image = b.shrapnelimage + int(drand() * 3);
-    shrapnel.type = 1;
+    shrapnel.type = falltype::Type::SHRAPNEL;
     g.fall.add(shrapnel);
   }
   if ((b.deadimage > 0) && (h < b.towersize)) {
@@ -379,7 +379,7 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
     roof.xs = xs;
     roof.ys = ys;
     roof.image = b.deadimage;
-    roof.type = 1;
+    roof.type = falltype::Type::SHRAPNEL;
     g.fall.add(roof);
   }
   for (int j = 0; j < 3; j++) {
@@ -389,7 +389,7 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
     shrapnel.xs = (2.0 * drand() - 1.0) * GAME_SPEED;
     shrapnel.ys = (-1.5 * drand() - 1.5) * GAME_SPEED;
     shrapnel.image = b.shrapnelimage + int(drand() * 3);
-    shrapnel.type = 1;
+    shrapnel.type = falltype::Type::SHRAPNEL;
     g.fall.add(shrapnel);
   }
   // Explosion at top
@@ -407,7 +407,7 @@ void killtower(gamedata &g, building &b, double xs, double ys, int h, int side) 
   b.towersize = h - 1;
   // Remove tower if levelled
   if (h == 0) {
-    b.type = 0;
+    b.type = building::Type::NONE;
   } else {
     b.deadimage = 199;
   }

@@ -91,7 +91,7 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
           p.coms = plane::Coms::GO_DOWN;
         // Landing runway approach
         if (p.targetx == -10) {
-          int dx = int(p.x) - 32 * g.base[p.side].mapx - g.base[p.side].runwayx;
+          int dx = int(p.x) - TILE_SIZE * g.base[p.side].mapx - g.base[p.side].runwayx;
           if ((dx > 10) && (dx < -10 + g.base[p.side].runwaylength) &&
               ((p.d == 6) || (p.d == 7) || (p.d == 11) || (p.d == 12))) {
             p.coms = plane::Coms::ACTION;
@@ -204,7 +204,8 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
         }
         // Target is runway
         if (p.targetx == -10) {
-          int rx = int(p.x) - 32 * g.base[p.side].mapx - g.base[p.side].runwayx - g.base[p.side].runwaylength / 2;
+          int rx =
+              int(p.x) - TILE_SIZE * g.base[p.side].mapx - g.base[p.side].runwayx - g.base[p.side].runwaylength / 2;
           int ry = int(p.y) - g.base[p.side].planey;
           followtarget(p, jx, jy, rx, ry, false);
         }
@@ -358,7 +359,7 @@ void computer_ai(gamedata &g, plane &p, int &jx, int &jy, bool &jb) {
           jx = -1;
         if (p.d == 12)
           jx = 1;
-        int dx = int(p.x) - 32 * g.base[p.side].mapx - g.base[p.side].runwayx;
+        int dx = int(p.x) - TILE_SIZE * g.base[p.side].mapx - g.base[p.side].runwayx;
         if ((dx < 10) || (dx > -10 + g.base[p.side].runwaylength))
           p.coms = plane::Coms::ACTION;
         break;

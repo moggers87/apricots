@@ -172,7 +172,7 @@ void plane_collisions(gamedata &g) {
             shrapnel.xs = g.p().xs;
             shrapnel.ys = g.p().ys;
             shrapnel.image = g.p().shrapnelimage + int(drand() * 3);
-            shrapnel.type = 1;
+            shrapnel.type = falltype::Type::SHRAPNEL;
             g.fall.add(shrapnel);
             g.sound.play(SOUND_EXPLODE);
           }
@@ -201,7 +201,7 @@ void plane_collisions(gamedata &g) {
       shrapnel.xs = g.p().xs;
       shrapnel.ys = g.p().ys;
       shrapnel.image = g.p().shrapnelimage + int(drand() * 3);
-      shrapnel.type = 1;
+      shrapnel.type = falltype::Type::SHRAPNEL;
       g.fall.add(shrapnel);
     }
   }

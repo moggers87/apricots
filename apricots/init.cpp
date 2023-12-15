@@ -32,24 +32,24 @@ void setup_display(gamedata &g) {
   g.renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
   if (g.renderer == NULL) {
     fprintf(stderr, "Couldn't create renderer: %s\n", SDL_GetError());
-    exit(1);
+    exit(EXIT_FAILURE);
   }
 
   if (SDL_RenderSetLogicalSize(g.renderer, SCREEN_WIDTH, SCREEN_HEIGHT) != 0) {
     fprintf(stderr, "Couldn't set logical resizing: %s\n", SDL_GetError());
-    exit(1);
+    exit(EXIT_FAILURE);
   }
 
   g.virtualscreen = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 8, 0, 0, 0, 0);
   if (g.virtualscreen == NULL) {
     fprintf(stderr, "Couldn't set 640x480x8 virtual video mode: %s\n", SDL_GetError());
-    exit(1);
+    exit(EXIT_FAILURE);
   }
 
   g.gamescreen = SDL_CreateRGBSurface(SDL_SWSURFACE, GAME_WIDTH, GAME_HEIGHT, 8, 0, 0, 0, 0);
   if (g.gamescreen == NULL) {
     fprintf(stderr, "Couldn't set game video mode: %s\n", SDL_GetError());
-    exit(1);
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -57,10 +57,7 @@ void setup_display(gamedata &g) {
 
 void load_font(SDL_Surface *screen, SDLfont &whitefont, SDLfont &greenfont) {
 
-  char filename[255];
-  strcpy(filename, AP_PATH);
-  strcat(filename, "alt-8x16.psf");
-  whitefont.loadpsf(filename, 8, 16);
+  whitefont.loadpsf(FONT);
   whitefont.colour(screen, 1, 0);
   greenfont = whitefont;
   greenfont.colour(screen, 13, 0);
@@ -76,7 +73,7 @@ void load_shapes(gamedata &g, shape images[]) {
   ifstream fin(filename, ios::binary);
   if (fin.fail()) {
     fprintf(stderr, "Could not open file: %s\n", filename);
-    exit(-1);
+    exit(EXIT_FAILURE);
   }
 
   {
@@ -421,7 +418,7 @@ void init_data(gamedata &g) {
   /* Initialize defaults, Video and Audio */
   if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1)) {
     fprintf(stderr, "Could not initialize SDL: %s.\n", SDL_GetError());
-    exit(-1);
+    exit(EXIT_FAILURE);
   }
 
   setup_display(g);

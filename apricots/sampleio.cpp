@@ -21,7 +21,7 @@ sampleio ::sampleio() { initdone = false; }
 void sampleio ::init(float the_volume, int nsamples, char filenames[][255], int nsources, int npool) {
   if (initdone) {
     cerr << "sampleio: call to init when already in use" << endl;
-    exit(1);
+    exit(EXIT_FAILURE);
   }
 
   initdone = true;
@@ -61,7 +61,7 @@ void sampleio ::init(float the_volume, int nsamples, char filenames[][255], int 
 #endif
     if (samples[i] == AL_NONE) {
       cerr << "sampleio: could not open " << filenames[i] << endl;
-      exit(1);
+      exit(EXIT_FAILURE);
     }
   }
 
